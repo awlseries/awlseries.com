@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Правила пользователя</title>
+    <link rel="stylesheet" href="../styles.css">
+    <!-- Подключение Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=
+Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="rules-page">
+   <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const img = new Image();
+            img.src = '../images/rules/user-rules.webp';
+            
+            img.onload = function() {
+                const aspectRatio = img.height / img.width;
+                const bgHeight = window.innerWidth * aspectRatio;
+                const anchor = document.getElementById('background-anchor');
+                
+                // Точная подгонка высоты
+                anchor.style.height = bgHeight + 'px';
+                
+                // Корректировка для body
+                document.body.style.height = bgHeight + 'px';
+                
+                // Дополнительная проверка через ResizeObserver
+                const resizeObserver = new ResizeObserver(entries => {
+                    const newWidth = entries[0].contentRect.width;
+                    const newHeight = newWidth * aspectRatio;
+                    anchor.style.height = newHeight + 'px';
+                    document.body.style.height = newHeight + 'px';
+                });
+                
+                resizeObserver.observe(document.body);
+            };
+            
+            // Обработка ошибки загрузки изображения
+            img.onerror = function() {
+                document.body.style.height = '100vh';
+            };
+        });
+    </script>
+    <!-- Якорь для прокрутки -->
+    <div id="background-anchor"></div>
+</body>

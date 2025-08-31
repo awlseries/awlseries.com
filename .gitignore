@@ -1,0 +1,10 @@
+# Файлы операционной системы
+.DS_Store
+Thumbs.db
+
+# Логи и временные файлы
+*.log
+*.tmp
+
+# Папка node_modules (для будущего React)
+node_modules/

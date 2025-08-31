@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="../styles.css">
+    <!-- Подключение Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=
+Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" href="../ru/assets/lottie/gear-icon.json" as="fetch" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
+<script src="../ru/assets/lottie/js/lottie-loader.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyD8WVqZtzOc44onw1T_x2MsDxzaNKv9I2k",
+    authDomain: "arena-warzone-league.firebaseapp.com",
+    projectId: "arena-warzone-league",
+    storageBucket: "arena-warzone-league.firebasestorage.app",
+    messagingSenderId: "726417186809",
+    appId: "1:726417186809:web:3e707a3d4b59c5f29da728"
+  };
+  firebase.initializeApp(firebaseConfig);
+</script>
+</head>
+<body class="registration-page">
+<!-- Языковой переключатель -->
+    <div class="language-switcher">
+        <img src="../images/icons/icon-rus.png" alt="Russian" class="language-flag active" data-lang="ru">
+        <img src="../images/icons/icon-usa.png" alt="English" class="language-flag" data-lang="en">
+    </div>
+<div class="main-content">
+    <div class="registration-container">        
+        <form id="registrationForm" action="#" method="POST">
+          <h1 data-translate="registration_title">Регистрация</h1>
+            <div class="form-group">
+                <label for="fullname" data-translate="fullname_label">Имя*</label>
+                <input type="text" id="fullname" name="fullname" 
+                       required minlength="5" maxlength="30"
+                       pattern="^[А-ЯЁA-Z][а-яёa-z]+\s[А-ЯЁA-Z][а-яёa-z]+$"
+                       title="Введите ваши имя и фамилию через пробел (прим. Иван Петров)"
+                       placeholder="Имя и фамилия через пробел" data-translate-placeholder="fullname_placeholder">
+                <span class="error-message"></span>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email*</label>
+                <input type="email" id="email" name="email" 
+                       required
+                       pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                       title="Введите корректный email (Без рассылки)"
+                       placeholder="Введите вашу почту" data-translate-placeholder="email_placeholder">
+                <span class="error-message"></span>
+            </div>
+            
+            <div class="form-group">
+                <label for="password" data-translate="password_label">Пароль*
+                <button type="button" id="togglePassword" class="toggle-password">👁️</button>
+                </label>
+                <input type="password" id="password" name="password"
+                       required minlength="8" maxlength="30"
+                       pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\-]{8,}$"
+                       title="Минимум 8 символов, 1 заглавная, 1 строчная буква и 1 цифра"
+                       placeholder="Не менее 8 символов" data-translate-placeholder="password_placeholder">
+                <span class="error-message"></span>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirm-password" data-translate="confirm_password_label">Подтверждение пароля*</label>
+                <input type="password" id="confirm-password" name="confirm-password"
+                       required data-validate="match" data-match="password" placeholder="Повтор пароля"
+                       data-translate-placeholder="confirm_password_placeholder">
+                <span class="error-message"></span>
+            </div>
+            
+            <button type="submit" class="next-btn">
+                <img src="../images/icons/icon-strelka.png" alt="Иконка стрелки" class="button-icon-strelka">
+            </button>
+            <div class="login-link">
+            <span data-translate="already_account">Уже есть аккаунт?</span>
+            <a href="#" id="login-link" data-translate="login_link">Войти</a>
+            </div>
+            <img src="../images/registration/top250-eye-small.png" alt="Горящий глаз" class="registration-form-eye">
+        </form>
+
+        <!-- Изначально скрытый блок авторизации email -->
+    <div id="verification-screen" class="verification-screen" style="display:none">
+    <div class="verification-header">
+      <h2 class="verification-title" data-translate="verify_email_title">Подтвердите Email</h2>
+      <div class="verification-icon">
+        <img src="../images/icons/icon-letter-green.png" 
+             style="width:70px;height:70px" 
+             alt="Иконка письма" 
+             class="green-letter">
+      </div>
+      <p class="verification-text">
+      <span data-translate="verify_email_text">Мы отправили письмо на</span> 
+      <strong id="verification-email" style="color:#e75d00ff"></strong>
+      </p>
+      <div id="gear-animation" style="width:40px;height:40px;margin:0 auto"></div>
+      </div>
+        <button id="resend-verification" class="btn-secondary">
+          <span data-translate="resend_verification">Отправить<br>повторно</span> 
+          <span id="countdown" class="countdown-timer"></span>
+        </button>
+      <p class="verification-hint" data-translate="verify_email_hint">
+        Не получили письмо? Проверьте папку "Спам" или попробуйте отправить повторно.
+      </p>
+      </div>
+
+        <!-- Изначально скрытый блок завершения регистрации -->
+        <div id="registration-complete" class="registration-complete" style="display: none;">
+        <h2 data-translate="registration_complete_title">Регистрация завершена!</h2>
+        <img src="../images/icons/awl_icon_complete.png" alt="Complete" class="complete-icon">
+        <p class="complete-text">
+            <span data-translate="welcome_text">Добро пожаловать в киберспорт. Не забудь ознакомиться с нашими</span>
+            <a href="rules.html" target="_blank" class="rules-link" data-translate="rules_link">правилами</a> 
+            <span data-translate="wish_text">пользования ресурса. Желаем тебе успехов!</span>
+        </p>
+        <a href="/" class="complete-to-main-page-btn" data-translate="main_page_link">Главная</a>
+        </div>
+    </div> <!-- Закрывает registration-container -->
+    </div> <!-- Закрывает main-content -->
+
+    <!-- Футер -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <!-- Левый блок с контентом -->
+        <div class="footer-block">
+            <div class="footer-content">
+                <img src="../images/icons/awl-icon-gray.png" alt="Arena Warborn League" class="footer-icon">
+                <p class="footer-text"><strong>Arena Warborn League</strong> 
+                    <span data-translate="footer_description">— это новая профессиональная киберспортивная лига, учрежденная 
+                    с целью развития и структурирования соревновательной экосистемы в современных дисциплинах киберспорта</span>
+                </p>
+            </div>
+        </div>
+            <!-- Центральный блок -->
+        <div class="footer-block">
+    <!-- Иконки в центре -->
+    <div class="footer-icons">
+        <img src="../images/icons/bf-icon.png" alt="Battlefield" class="footer-center-icon" width="220px" height="47px">
+        <img src="../images/icons/ea-icon.png" alt="EA Sports" class="footer-center-icon" width="120px" height="120px">
+    </div>
+    <!-- Текст внизу -->
+    <div class="footer-bottom-text">
+        <p class="footer-copyright">© 2025 Arena Warborn League. <span data-translate="rights_reserved">Все права защищены.</span></p>
+        <p class="footer-links">
+            <strong data-translate="tournament_rules">Правила турниров</strong> | 
+            <a href="../documents/privacy-policy.pdf" download class="footer-link" data-translate="privacy_policy">Политика конфиденциальности</a>  | 
+            <a href="rules.html" target="_blank" class="footer-link" data-translate="terms_of_use">Условия использования</a>
+        </p>
+    </div>
+    </div>
+    <!-- Правый блок -->
+<div class="footer-block">
+    <h3 class="footer-right-title" data-translate="feedback_title">Обратная связь</h3>
+    
+   <p class="footer-right-text">
+        <span data-translate="feedback_text1">Обратная связь помогает нам становиться лучше.</span><br>
+        <span data-translate="feedback_text2">Будем рады любым вопросам и предложениям.</span><br>
+        <span data-translate="feedback_text3">Обработка запроса в течение</span> <strong>24 часов.</strong>
+    </p>
+    <div class="footer-buttons">
+        <button class="footer-button1">
+            <img src="../images/icons/icon-bot.png" alt="Бот" class="footer-button-icon1">
+        </button>
+        <button class="footer-button2" id="feedback-button">
+            <img src="../images/icons/icon-email-footer.png" alt="Email" class="footer-button-icon2">
+        </button>
+        <button class="footer-button3">
+          <a href="https://t.me/awlseries_bot" target="_blank">
+            <img src="../images/icons/icon-tg.png" alt="Telegram" class="footer-button-icon3">
+            </a>
+        </button>
+    </div>
+</div>
+        </div>
+        
+    </footer>
+    <!-- Модальное окно обратной связи -->
+<div id="feedback-modal" class="feedback-modal" style="display: none;">
+    <div class="feedback-modal-content">
+        <button class="feedback-close-btn">&times;</button>
+        <h3 data-translate="feedback_modal_title">Обратная связь</h3>
+        <form id="feedback-form" class="feedback-form">
+            <div class="form-group">
+                <label for="user-email" data-translate="feedback_email_label">Ваш Email*</label>
+                <input type="email" id="user-email" name="email" required placeholder="Почта, на которую вам придет ответ"
+                data-translate-placeholder="feedback_email_placeholder">
+            </div>
+            <div class="form-group">
+                <label for="user-message" data-translate="feedback_message_label">Ваше обращение*</label>
+                <textarea id="user-message" name="message" required placeholder="Опишите вопрос или предложение..." rows="4"
+                data-translate-placeholder="feedback_message_placeholder"></textarea>
+            </div>
+            <button type="submit" class="feedback-submit-btn" data-translate="send_button">Отправить</button>
+        </form>
+    </div>
+</div>
+    <!-- Модальное окно восстановления пароля -->
+<div id="password-recovery-modal" class="feedback-modal" style="display: none;">
+  <div class="feedback-modal-content">
+    <button class="feedback-close-btn">&times;</button>
+    <h3 data-translate="password_recovery_title">Восстановление пароля</h3>
+    <form id="password-recovery-form">
+      <div class="form-group">
+        <label for="recovery-email">Email*</label>
+        <input type="email" id="recovery-email" name="email" required placeholder="Введите ваш email">
+      </div>
+      <button type="submit" class="feedback-submit-btn" data-translate="recovery_send_button">Отправить ссылку</button>
+    </form>
+  </div>
+</div>
+    <!-- Подключаем JS -->
+    <script src="../language.js"></script>
+    <script src="../script.js"></script>
+</body>
+</html>
