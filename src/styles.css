@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;500;600;700&display=swap');
+
 .proverka {
   display: block;
   align-items: center;
@@ -11,6 +13,7 @@
   transition: all 0.2s ease;
   gap: 6px;
 }
+
 /* ---------------------------------------------------------------------- Стили registration.html,footer.html --------- */ 
 
 /* Стили для страницы правил */
@@ -1333,6 +1336,142 @@ backdrop-filter: blur(5px); /* Размытие фона кнопки */
 /* Убираем старый border-bottom div */
 .horizontal-block.bottom-block .border-bottom {
     display: none;
+}
+
+/* --------------------------------------------------------------- Стили для контента PROFILE ------------------------------- */
+
+.content-index {
+    position: relative;
+  width: 100%;
+  height: 1245px;
+  background-image: url('../public/images/other/profile-structure.webp');
+  background-size: cover; /* или contain в зависимости от needs */
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+.profile-awl-background {
+            position: absolute;
+            background: transparent;
+            right: -120px;
+            top: -65px;
+            width: 1012px;
+            height: 578px;
+}
+
+/* Блок с фотографией игрока */
+.fade-block {
+    position: absolute;
+    width: 509px;
+    height: 508px;
+    top: 200px;
+    right: 300px;
+    overflow: hidden;
+    /* Маска для прозрачности снизу вверх */
+    -webkit-mask-image: linear-gradient(to top, 
+                    transparent 0%, 
+                    transparent 3%,
+                    rgba(0,0,0,0.3) 10%,
+                    rgba(0,0,0,0.7) 25%,
+                    black 50%,
+                    black 100%);
+    mask-image: linear-gradient(to top, 
+                    transparent 0%, 
+                    transparent 3%,
+                    rgba(0,0,0,0.3) 10%,
+                    rgba(0,0,0,0.7) 25%,
+                    black 50%,
+                    black 100%);
+    
+    overflow: hidden;
+}
+
+.masked-image {
+    object-fit: cover; /* или contain, в зависимости от needs */
+    display: block;
+    background-color: transparent !important;
+}
+
+.player-information {
+    position: relative;
+    margin: 100px 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    justify-content: space-between;
+    overflow-x: auto;
+}
+
+.info-section {
+    flex: 1;
+    min-width: 250px;
+    text-align: left;
+    width: 50%;
+}
+
+.section-title {
+    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: semibold;
+    color: #ff6600;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.info-block {
+    position: relative;
+    padding: 20px;
+    border-radius: 8px;
+    min-height: 100px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: left;
+    /* Пентагон с правым средним углом */
+    clip-path: polygon(
+        0% 0%, 
+        95% 0%, 
+        100% 50%, 
+        95% 100%, 
+        0% 100%
+    );
+}
+.info-block::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #476c90;
+    border-radius: 8px;
+    clip-path: polygon(
+        0% 0%, 
+        95% 0%, 
+        100% 50%, 
+        95% 100%, 
+        0% 100%
+    );
+    z-index: -2;
+}
+/* Создаем псевдоэлемент для основного фона */
+.info-block::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.9;
+    background-color: #5b605f;
+    border-radius: 8px;
+    clip-path: polygon(
+        0% 0%, 
+        95% 0%, 
+        100% 50%, 
+        95% 100%, 
+        0% 100%
+    );
+    z-index: -1; /* Позади всего контента */
 }
 
 /* ------------------------------------------------------------ Модальное окно поиска ------------------------------------ */
