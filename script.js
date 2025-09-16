@@ -432,7 +432,9 @@ async function handleFormSubmit(e) {
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
       pendingEmailVerification: true,
-      emailVerified: false
+      emailVerified: false,
+      team: "free agent",
+      country: "EMPTY" // ← код страны
     });
 
     showVerificationScreen(email, user, true);
@@ -498,7 +500,7 @@ function showVerificationScreen(email, user, isNewSubmission) {
   }, 5000); // Проверка каждые 5 секунд
 }
 
-function showSingleNotification(message, isError = false) {
+function showSingleNotification(message, isError = false, duration = 3000) {
   // Удаляем предыдущие уведомления
   const existingAlerts = document.querySelectorAll('.custom-alert');
   existingAlerts.forEach(alert => alert.remove());
@@ -506,13 +508,16 @@ function showSingleNotification(message, isError = false) {
   // Создаем новое уведомление
   const alert = document.createElement('div');
   alert.className = `custom-alert ${isError ? 'error' : ''}`;
-  alert.textContent = message;
+  
+  // Поддерживаем HTML-разметку
+  alert.innerHTML = message;
+  
   document.body.appendChild(alert);
   
-  // Автоматическое скрытие
+  // Автоматическое скрытие с указанной длительностью
   setTimeout(() => {
     alert.remove();
-  }, 3000);
+  }, duration);
 }
 
 function setupVerificationHandlers(user) {
@@ -783,6 +788,11 @@ function setActiveMenuItem() {
         case 'support.html':
             document.querySelector('.right-side-block .menu-item a[href="support.html"]')?.closest('.menu-item')?.classList.add('current');
             break;
+            case 'profile.html':
+            document.querySelector('.right-side-block .menu-item a[href="profile.html"]')?.closest('.menu-item')?.classList.add('current');
+            // ДОБАВЛЯЕМ ЗДЕСЬ ↓
+            disableProfileButtonOnProfilePage();
+            break;
     }
 }
 
@@ -886,6 +896,7 @@ function initPasswordRecoveryModal() {
   // Обработка отправки формы
   form?.addEventListener('submit', handlePasswordRecoverySubmit);
 }
+// ----------------------------------------------------------------------------------------- Поиск
 
 // Поиск - добавьте эти переменные
 const searchToggle = document.getElementById('search-toggle');
@@ -1350,7 +1361,8 @@ function highlightElement(element) {
     }, 2000);
 }
 
-// Инициализация поиска
+// ---------------------------------------------------------------------- Инициализация поиска ---------------------------------
+
 function initSearch() {
     if (!searchToggle || !searchModal) return;
     
@@ -1398,6 +1410,754 @@ document.addEventListener('DOMContentLoaded', function() {
   initFeedbackModal();
   initPasswordRecoveryModal(); // Добавьте эту строку
   initSearchModal();
+});
+
+// Функция проверки аутентификации пользователя
+async function checkUserAuthentication() {
+    try {
+        // Проверяем, есть ли текущий пользователь в Firebase Auth
+        const user = firebase.auth().currentUser;
+        
+        if (user) {
+            // Пользователь аутентифицирован - проверяем email verification
+            await user.reload(); // Обновляем данные пользователя
+            
+            if (user.emailVerified) {
+                // Email подтвержден - перенаправляем на профиль
+                return { authenticated: true, emailVerified: true, user: user };
+            } else {
+                // Email не подтвержден - показываем сообщение
+                return { authenticated: true, emailVerified: false, user: user };
+            }
+        } else {
+            // Пользователь не аутентифицирован
+            // Проверяем, есть ли сохраненные данные в localStorage
+            const savedData = localStorage.getItem(STORAGE_KEYS.VERIFICATION);
+            const password = localStorage.getItem(STORAGE_KEYS.TEMP_PASSWORD);
+            
+            if (savedData && password) {
+                const { email, uid } = JSON.parse(savedData);
+                
+                try {
+                    // Пытаемся автоматически войти с сохраненными данными
+                    const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+                    const authedUser = userCredential.user;
+                    
+                    await authedUser.reload();
+                    
+                    if (authedUser.emailVerified) {
+                        return { authenticated: true, emailVerified: true, user: authedUser };
+                    } else {
+                        return { authenticated: true, emailVerified: false, user: authedUser };
+                    }
+                } catch (error) {
+                    console.error("Ошибка автоматического входа:", error);
+                    // Очищаем невалидные данные
+                    clearAuthData();
+                    return { authenticated: false, emailVerified: false, user: null };
+                }
+            }
+            
+            return { authenticated: false, emailVerified: false, user: null };
+        }
+    } catch (error) {
+        console.error("Ошибка проверки аутентификации:", error);
+        return { authenticated: false, emailVerified: false, user: null };
+    }
+}
+
+// Обработчик клика на кнопку профиля (череп)
+function setupProfileButtonHandler() {
+    const profileButton = document.querySelector('.right-free-space');
+    
+    if (profileButton) {
+        profileButton.addEventListener('click', async function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            try {
+                // Проверяем аутентификацию
+                const authStatus = await checkUserAuthentication();
+                
+                if (authStatus.authenticated) {
+                    if (authStatus.emailVerified) {
+                        // Пользователь аутентифицирован и верифицирован - переходим в профиль
+                        showSingleNotification('✓ Добро пожаловать в ваш профиль!');
+                        setTimeout(() => {
+                            window.location.href = 'profile.html';
+                        }, 1000);
+                    } else {
+                        // Email не подтвержден - отправляем письмо и показываем уведомление
+                        try {
+                            await authStatus.user.sendEmailVerification();
+                            
+                            // Показываем уведомление с переносом строки и цветным email
+                            const message = `✗ Подтвердите email для доступа к профилю<br>Мы отправили письмо на 
+                            <span style="color: #ff9900; font-weight: bold;">${escapeHtml(authStatus.user.email)}
+                            </span>, не забудьте проверить папку спам!`;
+                            showSingleNotification(message, true, 6000);
+                            
+                        } catch (error) {
+                            console.error('Ошибка отправки письма:', error);
+                            showSingleNotification('✗ Ошибка отправки письма подтверждения', true);
+                        }
+                        
+                        // Показываем экран верификации
+                        const email = authStatus.user.email;
+                        showVerificationScreen(email, authStatus.user, false);
+                    }
+                } else {
+                    // Пользователь не аутентифицирован - переходим на регистрацию
+                    showSingleNotification('⚠️ Для доступа к профилю требуется регистрация');
+                    setTimeout(() => {
+                        window.location.href = 'registration.html';
+                    }, 1500);
+                }
+            } catch (error) {
+                console.error('Ошибка при обработке клика:', error);
+                showSingleNotification('✗ Ошибка доступа к профилю', true);
+            }
+        });
+    }
+}
+
+// Функция отображения данных профиля
+function displayProfileData(profileData) {
+    if (!profileData) return;
+    
+    // Обновляем основные данные
+    const playerNameElement = document.querySelector('.name-player-style');
+    const playerInfoElement = document.querySelector('.info-player-style');
+    const ageElement = document.querySelector('.age-and-status-player-style');
+    const statusElement = document.querySelector('.age-and-status-player-style:last-child');
+    
+    if (playerNameElement) playerNameElement.textContent = profileData.fullname || 'Ник игрока';
+    if (playerInfoElement) playerInfoElement.textContent = profileData.fullname || 'Имя игрока';
+
+    // Обновляем возраст - ТОЛЬКО ЧИСЛО
+    if (ageElement) {
+        const age = calculateAge(profileData.birthDate);
+        ageElement.textContent = displayAge(age); // Только число с правильным склонением
+        if (age) ageElement.dataset.age = age;
+    }
+
+    // ОБНОВЛЯЕМ СТАТУС ИГРОКА (КОМАНДА)
+if (statusElement) {
+    if (profileData.team && profileData.team !== "free agent") {
+        statusElement.textContent = profileData.team; // Название команды
+        statusElement.style.color = '#22b327'; // Зеленый цвет
+    } else {
+        statusElement.textContent = 'Свободный агент'; // Статус free agent
+        statusElement.style.color = '#b2ad9c'; // Серый цвет
+    }
+}
+
+// Обновляем страну
+    const countryElement = document.querySelector('.country-player');
+    if (countryElement && profileData.country) {
+        const countryData = getCountryByCode(profileData.country);
+        countryElement.src = countryData.flag;
+        countryElement.alt = countryData.name;
+        countryElement.title = countryData.name;
+    }
+    
+    // Обновляем статистику
+    const statElements = {
+        'У/С': profileData.stats?.kdRatio || 0,
+        '% Побед': profileData.stats?.winRate || '0%',
+        'Время в игре': profileData.stats?.playTime || '0 часов',
+        'Любимое оружие': profileData.stats?.favoriteWeapon || 'Не указано'
+    };
+    
+    // Обновляем элементы статистики
+    document.querySelectorAll('.stat-item').forEach((item, index) => {
+        const label = item.querySelector('.stat-label');
+        const value = item.querySelector('.stat-value');
+        
+        if (label && value) {
+            const statKey = Object.keys(statElements)[index];
+            if (statKey) {
+                value.textContent = statElements[statKey];
+            }
+        }
+    });
+    
+    // Обновляем MMR и дивизион
+    const mmrElement = document.querySelector('.info-sections-container .info-section:first-child .info-block');
+    const divisionElement = document.querySelector('.svg-division-content');
+    
+    if (mmrElement) mmrElement.textContent = profileData.mmr || 0;
+    if (divisionElement) divisionElement.textContent = profileData.division || 'Без дивизиона';
+}
+
+// Добавляем инициализацию в DOMContentLoaded
+document.addEventListener('DOMContentLoaded', function() {
+    setupProfileButtonHandler();
+    if (window.location.pathname.includes('profile.html')) {
+        initProfileEditing();
+    }
+});
+
+// Конфигурация Tracker Network API
+const TRACKER_NETWORK_CONFIG = {
+    API_KEY: 'your_api_key_here', // Нужно получить на tracker.gg/developers
+    BASE_URL: 'https://public-api.tracker.gg/v2/bfv/standard'
+};
+
+// Функция получения данных игрока из Tracker Network
+async function getPlayerStatsFromTracker(nickname, platform = 'origin') {
+    try {
+        const response = await fetch(
+            `${TRACKER_NETWORK_CONFIG.BASE_URL}/profile/${platform}/${encodeURIComponent(nickname)}`,
+            {
+                headers: {
+                    'TRN-Api-Key': TRACKER_NETWORK_CONFIG.API_KEY
+                }
+            }
+        );
+        
+        if (!response.ok) {
+            throw new Error(`API error: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        return processTrackerData(data);
+    } catch (error) {
+        console.error('Ошибка получения данных из Tracker Network:', error);
+        return null;
+    }
+}
+
+// Обработка данных от Tracker Network
+function processTrackerData(data) {
+    if (!data || !data.data) return null;
+    
+    const stats = data.data.stats;
+    const segments = data.data.segments;
+    
+    return {
+        nickname: data.data.platformUserHandle,
+        platform: data.data.platformSlug,
+        stats: {
+            wins: stats.find(stat => stat.metadata.key === 'wins')?.value || 0,
+            losses: stats.find(stat => stat.metadata.key === 'losses')?.value || 0,
+            kills: stats.find(stat => stat.metadata.key === 'kills')?.value || 0,
+            deaths: stats.find(stat => stat.metadata.key === 'deaths')?.value || 0,
+            kdRatio: stats.find(stat => stat.metadata.key === 'kdRatio')?.value || 0,
+            scorePerMinute: stats.find(stat => stat.metadata.key === 'scorePerMinute')?.value || 0,
+            playTime: formatPlayTime(stats.find(stat => stat.metadata.key === 'timePlayed')?.value || 0)
+        },
+        // Дополнительные данные можно добавить по необходимости
+    };
+}
+
+// Форматирование времени игры
+function formatPlayTime(seconds) {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    return `${hours}ч ${minutes}м`;
+}
+
+// Пример структуры данных пользователя
+const userDataStructure = {
+    uid: 'string', // ID пользователя
+    email: 'string', // Email
+    fullname: 'string', // Полное имя
+    battlefieldNickname: 'string', // Nickname в Battlefield
+    platform: 'string', // Платформа: origin, steam, xbox, psn
+    createdAt: 'timestamp', // Дата создания
+    lastLogin: 'timestamp', // Последний вход
+    emailVerified: 'boolean', // Подтвержден ли email
+    stats: {
+        wins: 'number',
+        losses: 'number',
+        kills: 'number',
+        deaths: 'number',
+        kdRatio: 'number',
+        scorePerMinute: 'number',
+        playTime: 'string',
+        favoriteWeapon: 'string',
+        winRate: 'string' // Процент побед
+    },
+    division: 'string', // Текущий дивизион
+    mmr: 'number', // Рейтинг
+    achievements: 'array', // Достижения
+    mvpAwards: 'array', // MVP награды
+    team: 'string', // Команда
+    country: 'string', // Страна
+    lastStatsUpdate: 'timestamp' // Когда обновлялась статистика
+};
+
+// Функция автоматического обновления статистики
+async function updatePlayerStatsAutomatically(userId, battlefieldNickname) {
+    try {
+        const stats = await getPlayerStatsFromTracker(battlefieldNickname);
+        
+        if (stats) {
+            await firebase.firestore().collection('users').doc(userId).update({
+                stats: stats,
+                lastStatsUpdate: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            
+            console.log('Статистика обновлена для пользователя:', userId);
+            return true;
+        }
+    } catch (error) {
+        console.error('Ошибка автоматического обновления статистики:', error);
+        return false;
+    }
+}
+
+// Запуск автоматического обновления при входе
+firebase.auth().onAuthStateChanged(async (user) => {
+    if (user) {
+        const userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
+        
+        if (userDoc.exists) {
+            const userData = userDoc.data();
+            // Обновляем статистику каждые 30 минут
+            const lastUpdate = userData.lastStatsUpdate?.toDate();
+            const now = new Date();
+            
+            if (!lastUpdate || (now - lastUpdate) > 30 * 60 * 1000) {
+                if (userData.battlefieldNickname) {
+                    await updatePlayerStatsAutomatically(user.uid, userData.battlefieldNickname);
+                }
+            }
+        }
+    }
+});
+
+// Функция вычисления возраста из даты рождения
+function calculateAge(birthDate) {
+    if (!birthDate) return null;
+    
+    const birth = birthDate.toDate();
+    const today = new Date();
+    let age = today.getFullYear() - birth.getFullYear();
+    const monthDiff = today.getMonth() - birth.getMonth();
+    
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+        age--;
+    }
+    
+    return age;
+}
+
+// Функция для отображения возраста
+function displayAge(age) {
+    if (!age) return 'Не указан';
+    
+    // Правильное склонение слова "год"
+    let yearsText = 'лет';
+    if (age % 10 === 1 && age % 100 !== 11) {
+        yearsText = 'год';
+    } else if ([2, 3, 4].includes(age % 10) && ![12, 13, 14].includes(age % 100)) {
+        yearsText = 'года';
+    }
+    
+    return `${age} ${yearsText}`;
+}
+
+// Функция создания календаря для выбора даты рождения
+function createDatePicker(currentAge) {
+    const modal = document.createElement('div');
+    modal.className = 'date-picker-modal';
+    modal.innerHTML = `
+        <div class="date-picker-content">
+            <h3>Выберите дату рождения</h3>
+            
+            <div class="date-picker-fields">
+                <div class="date-field">
+                    <label>День</label>
+                    <select class="day-select">
+                        <option value="">День</option>
+                        ${Array.from({length: 31}, (_, i) => `<option value="${i + 1}">${i + 1}</option>`).join('')}
+                    </select>
+                </div>
+                
+                <div class="date-field">
+                    <label>Месяц</label>
+                    <select class="month-select">
+                        <option value="">Месяц</option>
+                        <option value="1">Январь</option>
+                        <option value="2">Февраль</option>
+                        <option value="3">Март</option>
+                        <option value="4">Апрель</option>
+                        <option value="5">Май</option>
+                        <option value="6">Июнь</option>
+                        <option value="7">Июль</option>
+                        <option value="8">Август</option>
+                        <option value="9">Сентябрь</option>
+                        <option value="10">Октябрь</option>
+                        <option value="11">Ноябрь</option>
+                        <option value="12">Декабрь</option>
+                    </select>
+                </div>
+                
+                <div class="date-field">
+                    <label>Год</label>
+                    <select class="year-select">
+                        <option value="">Год</option>
+                        ${Array.from({length: 100}, (_, i) => {
+                            const year = new Date().getFullYear() - 15 - i; // Минимум 15 лет
+                            return `<option value="${year}">${year}</option>`;
+                        }).join('')}
+                    </select>
+                </div>
+            </div>
+            
+            <div class="date-picker-preview">
+                <span>Возраст: </span>
+                <span class="age-preview">-</span>
+            </div>
+            
+            <div class="date-picker-buttons">
+                <button class="cancel-btn">Отмена</button>
+                <button class="save-btn" disabled>Сохранить</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Устанавливаем текущие значения если есть
+    if (currentAge) {
+        const birthYear = new Date().getFullYear() - currentAge;
+        modal.querySelector('.year-select').value = birthYear;
+    }
+    
+    return modal;
+}
+
+// Функция для редактирования возраста
+async function editAge() {
+    const ageElement = document.querySelector('.age-and-status-player-style');
+    if (!ageElement) return;
+    
+    // Получаем текущий возраст из текста
+    const currentAgeText = ageElement.textContent.replace('Возраст: ', '').trim();
+    let currentAge = null;
+    
+    if (currentAgeText !== 'Не указан') {
+        currentAge = parseInt(currentAgeText);
+    }
+    
+    // Создаем модальное окно выбора даты
+    const datePicker = createDatePicker(currentAge);
+    datePicker.style.display = 'flex';
+    
+    const daySelect = datePicker.querySelector('.day-select');
+    const monthSelect = datePicker.querySelector('.month-select');
+    const yearSelect = datePicker.querySelector('.year-select');
+    const agePreview = datePicker.querySelector('.age-preview');
+    const saveBtn = datePicker.querySelector('.save-btn');
+    const cancelBtn = datePicker.querySelector('.cancel-btn');
+    
+    // Функция обновления предпросмотра возраста
+    function updateAgePreview() {
+        const day = daySelect.value;
+        const month = monthSelect.value;
+        const year = yearSelect.value;
+        
+        if (day && month && year) {
+            const birthDate = new Date(year, month - 1, day);
+            const age = calculateAge(firebase.firestore.Timestamp.fromDate(birthDate));
+            
+            if (age < 16) {
+                agePreview.textContent = 'Меньше 16 лет';
+                agePreview.style.color = '#ce2727';
+                saveBtn.disabled = true;
+            } else {
+                agePreview.textContent = displayAge(age);
+                agePreview.style.color = '#22b327';
+                saveBtn.disabled = false;
+            }
+        } else {
+            agePreview.textContent = '-';
+            agePreview.style.color = '#b2ad9c';
+            saveBtn.disabled = true;
+        }
+    }
+    
+    // Слушатели изменений
+    daySelect.addEventListener('change', updateAgePreview);
+    monthSelect.addEventListener('change', updateAgePreview);
+    yearSelect.addEventListener('change', updateAgePreview);
+    
+    // Кнопка отмены
+    cancelBtn.addEventListener('click', () => {
+        document.body.removeChild(datePicker);
+    });
+    
+    // Кнопка сохранения
+    saveBtn.addEventListener('click', async () => {
+        const day = daySelect.value;
+        const month = monthSelect.value;
+        const year = yearSelect.value;
+        
+        if (day && month && year) {
+            const birthDate = new Date(year, month - 1, day);
+            const birthTimestamp = firebase.firestore.Timestamp.fromDate(birthDate);
+            const age = calculateAge(birthTimestamp);
+            
+            if (age < 16) {
+                showSingleNotification('✗ Минимальный возраст - 16 лет', true);
+                return;
+            }
+            
+            try {
+                const user = firebase.auth().currentUser;
+                if (!user) throw new Error('Пользователь не авторизован');
+                
+                // Сохраняем в Firestore
+                await firebase.firestore().collection('users').doc(user.uid).update({
+                    birthDate: birthTimestamp,
+                    lastUpdate: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                // Обновляем отображение
+                ageElement.textContent = displayAge(age);
+                ageElement.dataset.age = age;
+                
+                showSingleNotification('✓ Возраст обновлен');
+                document.body.removeChild(datePicker);
+                
+            } catch (error) {
+                console.error('Ошибка сохранения возраста:', error);
+                showSingleNotification('✗ Ошибка сохранения возраста', true);
+            }
+        }
+    });
+    
+    // Закрытие по клику вне модального окна
+    datePicker.addEventListener('click', (e) => {
+        if (e.target === datePicker) {
+            document.body.removeChild(datePicker);
+        }
+    });
+    
+    // Закрытие по Escape
+    document.addEventListener('keydown', function closeOnEscape(e) {
+        if (e.key === 'Escape') {
+            document.body.removeChild(datePicker);
+            document.removeEventListener('keydown', closeOnEscape);
+        }
+    });
+}
+
+// Инициализация редактирования возраста
+function initProfileEditing() {
+    const ageElement = document.querySelector('.age-and-status-player-style');
+    if (!ageElement) return;
+    
+    // Делаем кликабельным
+    ageElement.style.cursor = 'pointer';
+    ageElement.title = 'Кликните для изменения возраста';
+    
+    ageElement.addEventListener('click', editAge);
+}
+
+// Функция загрузки данных пользователя
+async function loadUserProfile(user) {
+    try {
+        const userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
+        return userDoc.exists ? userDoc.data() : null;
+    } catch (error) {
+        console.error('Ошибка загрузки профиля:', error);
+        return null;
+    }
+}
+
+// --------------------------------------------------------------------------- Функция модального окна выбора страны
+
+function createCountryPickerModal() {
+    const modal = document.createElement('div');
+    modal.className = 'country-picker-modal';
+    modal.innerHTML = `
+        <div class="country-picker-content">
+            <div class="country-picker-header">
+                <h3>Выберите страну</h3>
+                <button class="country-picker-close">&times;</button>
+            </div>
+            <div class="country-search-container">
+                <input type="text" class="country-search-input" placeholder="Поиск страны...">
+            </div>
+            <div class="countries-list">
+                ${COUNTRIES.map(country => `
+                    <div class="country-item" data-code="${country.code}">
+                        <img src="${country.flag}" alt="${country.name}" class="country-flag">
+                        <span class="country-name">${country.name}</span>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+    
+    return modal;
+}
+
+// ---------------------------------------------------------------------------------------------------- Функция выбора страны
+
+async function selectCountry(countryCode) {
+    try {
+        const user = firebase.auth().currentUser;
+        if (!user) throw new Error('Пользователь не авторизован');
+        
+        await firebase.firestore().collection('users').doc(user.uid).update({
+            country: countryCode,
+            lastUpdate: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+        // Обновляем отображение
+        const countryElement = document.querySelector('.country-player');
+        const countryData = getCountryByCode(countryCode);
+        
+        if (countryElement && countryData) {
+            countryElement.src = countryData.flag;
+            countryElement.alt = countryData.name;
+            countryElement.title = countryData.name;
+        }
+        
+        showSingleNotification(`✓ Страна изменена на ${countryData.name}`);
+        return true;
+    } catch (error) {
+        console.error('Ошибка изменения страны:', error);
+        showSingleNotification('✗ Ошибка изменения страны', true);
+        return false;
+    }
+}
+
+// ---------------------------------------------------------------------------------------- Обработчик клика на флаг
+
+function initCountrySelection() {
+    const countryElement = document.querySelector('.country-player');
+    if (!countryElement) return;
+    
+    // Делаем кликабельным
+    countryElement.style.cursor = 'pointer';
+    countryElement.title = 'Кликните для изменения страны';
+    
+    countryElement.addEventListener('click', openCountryPicker);
+}
+
+// Функция открытия модального окна выбора страны
+function openCountryPicker() {
+    const modal = createCountryPickerModal();
+    document.body.appendChild(modal);
+    modal.style.display = 'flex';
+    
+    // Элементы модального окна
+    const closeBtn = modal.querySelector('.country-picker-close');
+    const searchInput = modal.querySelector('.country-search-input');
+    const countryItems = modal.querySelectorAll('.country-item');
+    const countriesList = modal.querySelector('.countries-list');
+    
+    // Поиск стран
+    searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        
+        countryItems.forEach(item => {
+            const countryName = item.querySelector('.country-name').textContent.toLowerCase();
+            if (countryName.includes(searchTerm)) {
+                item.style.display = 'flex';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
+    
+    // Выбор страны
+    countryItems.forEach(item => {
+        item.addEventListener('click', function() {
+            const countryCode = this.getAttribute('data-code');
+            selectCountry(countryCode);
+            document.body.removeChild(modal);
+        });
+    });
+    
+    // Закрытие модального окна
+    closeBtn.addEventListener('click', () => {
+        document.body.removeChild(modal);
+    });
+    
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            document.body.removeChild(modal);
+        }
+    });
+    
+    document.addEventListener('keydown', function closeOnEscape(e) {
+        if (e.key === 'Escape') {
+            document.body.removeChild(modal);
+            document.removeEventListener('keydown', closeOnEscape);
+        }
+    });
+    
+    // Фокусируемся на поиске
+    setTimeout(() => searchInput.focus(), 100);
+}
+
+// ---------------------------------------------------------- Функция для отключения кнопки профиля на странице профиля
+
+function disableProfileButtonOnProfilePage() {
+    if (!window.location.pathname.includes('profile.html')) return;
+    
+    const profileButton = document.querySelector('.right-free-space');
+    if (!profileButton) return;
+    
+    // Отключаем функционал
+    profileButton.style.cursor = 'default';
+    profileButton.style.pointerEvents = 'none';
+    profileButton.style.borderBottom = '4px solid #ff6600'; // Конкретно нижнюю границу
+    
+    // Убираем hover-эффекты
+    profileButton.classList.add('disabled-profile-button');
+    
+    // Удаляем обработчики событий (если они были добавлены ранее)
+    const newButton = profileButton.cloneNode(true);
+    profileButton.parentNode.replaceChild(newButton, profileButton);
+    
+    console.log('Кнопка профиля отключена (текущая страница - профиль)');
+}
+
+// ----------------------------------------------------------------- Функция для периодического обновления возраста
+
+function startAgeAutoUpdate() {
+    setInterval(() => {
+        const ageElement = document.querySelector('.age-style');
+        const birthDateElement = document.querySelector('.birth-date-style');
+        
+        if (ageElement && birthDateElement && birthDateElement.dataset.originalDate) {
+            const birthDate = new Date(birthDateElement.dataset.originalDate);
+            const birthTimestamp = firebase.firestore.Timestamp.fromDate(birthDate);
+            const age = calculateAge(birthTimestamp);
+            
+            if (age) {
+                ageElement.textContent = `Возраст: ${age}`;
+            }
+        }
+    }, 24 * 60 * 60 * 1000); // Проверяем раз в сутки
+}
+
+// Инициализируйте в DOMContentLoaded
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.location.pathname.includes('profile.html')) {
+        startAgeAutoUpdate();
+    }
+    if (window.location.pathname.includes('profile.html')) {
+    firebase.auth().onAuthStateChanged(async (user) => {
+        if (user && user.emailVerified) {
+            const userData = await loadUserProfile(user);
+            if (userData) {
+                displayProfileData(userData);
+            }
+        }
+    });
+}
+if (window.location.pathname.includes('profile.html')) {
+        initCountrySelection();
+      }
 });
 
 // Функция показа ошибок регистрации

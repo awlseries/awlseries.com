@@ -3,11 +3,9 @@ import React from 'react';
 const Rating = () => {
   return (
     <div>
-      <h1>Профиль пользователя</h1>
-      <p>Страница профиля в разработке</p>
+      {/* Пока оставляем пустым */}
     </div>
   );
 };
 
-// ОБЯЗАТЕЛЬНО добавьте эту строку:
 export default Rating;
