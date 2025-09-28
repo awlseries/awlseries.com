@@ -662,7 +662,7 @@ const handlePasswordChange = (e) => {
     </div>
     
     <img src="../images/other/skull-for-registration.png" alt="Skull-registration-awl" className="registration-form-skull" />
-    <img src="../images/registration/top250-eye-small.png" alt="Горящий глаз" className="registration-form-eye" />
+    <img src="../images/other/top250-eye-small.png" alt="Горящий глаз" className="registration-form-eye" />
   </form>
 )}
 
