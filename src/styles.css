@@ -11,7 +11,7 @@
 
 /* Стили для страницы правил */
 body.rules-page {
-  background-image: url('../images/rules/user-rules.webp');
+  background-image: url('../images/other/user-rules.webp');
   background-color: #a1a194;
   background-repeat: no-repeat;
   background-size: 100% auto; /* Полное заполнение по ширине и высоте */
@@ -116,7 +116,7 @@ img[loading="lazy"].loaded {
 
 /* фон для страницы регистрации */
 .registration-page {
-    background-image: url('../images/registration/registration-bg88tr.webp');
+    background-image: url('../images/other/registration-bg88tr.webp');
     background-color: #a1a194; /* подложка */
     background-repeat: no-repeat;
     background-size: 100% auto;  /* Ширина 100%, высота auto */
@@ -1184,7 +1184,7 @@ backdrop-filter: blur(5px); /* Размытие фона кнопки */
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url('../images/header/main-logo5.webp');
+    background-image: url('../images/other/main-logo5.webp');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

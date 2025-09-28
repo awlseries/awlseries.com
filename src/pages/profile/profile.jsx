@@ -162,27 +162,27 @@ const Profile = () => {
         <div class="achievements-row">
             {/* Блок 1 */}
             <div class="achievement-item">
-                <img src="../public/images/achievements/achieve1.png" class="achievement-icon" alt="Достижение 1"/>
+                <img src="../public/images/medals/achieve1.png" class="achievement-icon" alt="Достижение 1"/>
             </div>
             {/* Блок 2 */}
             <div class="achievement-item">
-                <img src="../public/images/achievements/achieve2.png" class="achievement-icon" alt="Достижение 2"/>
+                <img src="../public/images/medals/achieve2.png" class="achievement-icon" alt="Достижение 2"/>
             </div>
             {/* Блок 3 */}
             <div class="achievement-item">
-                <img src="../public/images/achievements/achieve3.png" class="achievement-icon" alt="Достижение 3"/>
+                <img src="../public/images/medals/achieve3.png" class="achievement-icon" alt="Достижение 3"/>
             </div>
             {/* Блок 4 */}
             <div class="achievement-item">
-                <img src="../public/images/achievements/achieve4.png" class="achievement-icon" alt="Достижение 4"/>
+                <img src="../public/images/medals/achieve4.png" class="achievement-icon" alt="Достижение 4"/>
             </div>
             {/* Блок 5 */}
             <div class="achievement-item">
-                <img src="../public/images/achievements/achieve5.png" class="achievement-icon" alt="Достижение 5"/>
+                <img src="../public/images/medals/achieve5.png" class="achievement-icon" alt="Достижение 5"/>
             </div>
             {/* Блок 6 */}
             <div class="achievement-item">
-                <img src="../public/images/achievements/achieve6.png" class="achievement-icon" alt="Достижение 6"/>
+                <img src="../public/images/medals/achieve6.png" class="achievement-icon" alt="Достижение 6"/>
             </div>
         </div>
     </div>
