@@ -7,21 +7,7 @@
 }
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;500;600;700&display=swap');
 
-.proverka {
-  display: block;
-  align-items: center;
-  padding: 6px 12px;
-  font-size: 13px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  gap: 6px;
-}
-
-/* ---------------------------------------------------------------------- Стили registration.html,footer.html --------- */ 
+/* ---------------------------------------------------------------------- Стили registration  ----------------------------------------------------------------- */ 
 
 /* Стили для страницы правил */
 body.rules-page {
@@ -39,7 +25,7 @@ body.rules-page {
   padding: 0;
 }
 .rules-link {
-        color: #ff6600;
+        color: #ff7e28;
         text-decoration: none; /* Убираем стандартное подчеркивание */
         cursor: pointer;
         transition: text-decoration 0.2s ease;
@@ -110,10 +96,6 @@ img[loading="lazy"].loaded {
     background: #1a2a3a;
 }
 
-.language-switcher {
-    margin-left: 20px;
-}
-
 .lang-btn {
     background: #333;
     color: white;
@@ -133,7 +115,7 @@ img[loading="lazy"].loaded {
 }
 
 /* фон для страницы регистрации */
-body.registration-page {
+.registration-page {
     background-image: url('../images/registration/registration-bg88tr.webp');
     background-color: #a1a194; /* подложка */
     background-repeat: no-repeat;
@@ -141,13 +123,13 @@ body.registration-page {
     background-position: center top;  /* Выравнивание по верху */
     background-attachment: scroll;  /* Фиксируем фон при скролле */
     display: flex;
-    min-height: 100vh; /* Важно оставить */
+    min-height: 170vh; /* Важно оставить */
     height: auto; /* Гарантируем, что body растягивается на весь контент */
     flex-direction: column;
 }
 
 @media (max-width: 768px) {
-    body.registration-page {
+    .registration-page {
         background-size: auto 100%;  /* На узких экранах заполняем по высоте */
     }
 }
@@ -161,14 +143,17 @@ body.registration-page {
 .registration-container {
     position: relative;
     overflow: hidden; /* Предотвращает скачки при переключении */
-    background-image: url('../images/registration/registration-form-bg.png');
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     border-radius: 10px;
     padding: 40px;
     width: 333px; /* Точная ширина формы */
-    height: 426px; /* Точная высота формы */
-    border-radius: 6px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  margin: 600px auto 0; /* top | по-горизонтали | bottom */
+    min-height: 426px; /* Точная высота формы */
+    border-radius: 14px;
+    border: 1px solid #444;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    margin: 0 auto;
     /* Базовые стили контейнера невидимка*/
     opacity: 0;
   transform: translateY(20px);
@@ -185,11 +170,17 @@ body.registration-page {
     pointer-events: none; /* Позволяет кликать сквозь изображение */
     z-index: -1;
 }
-.registration-container:hover .registration-form-eye {
-    opacity: 1;
+.registration-form-skull {
+    background: transparent; /* Убираем фон у самой иконки */
+    position: absolute;
+    pointer-events: none;
+    opacity: 0.1;
+    top: 149px;
+    left: -124px;
+    z-index: -1;
 }
-.registration-form-eye {
-    opacity: 0;
+.registration-container:hover .registration-form-eye {
+    opacity: 0.5;
 }
 
 /* Появление формы регистрации*/
@@ -208,6 +199,7 @@ body.registration-page {
 
 /* Поля ввода */
 .form-group {
+    position: relative;
     margin-bottom: 16px;
     padding: 0 20px; /* 0 — сверху/снизу, 20px — слева/справа */
 }
@@ -215,9 +207,12 @@ body.registration-page {
 /* Названия полей ввода */
 .form-group label {
     font-size: 12px;
-    color: #d0cbba;
+    color: #f6efd9;
     display: block;
     margin-bottom: 6px;
+    font-family: 'Montserrat', sans-serif;
+  font-weight: 500; /* Полужирные заголовки */
+  letter-spacing: 0.5px;
 }
 
 /* Поля ввода */
@@ -230,10 +225,13 @@ body.registration-page {
     padding-bottom: 4px;
     margin-bottom: 8px;
     background-color: transparent;
-    color: #ce7235;
-    font-size: 14px;
+    color: #d0cbba;
+    font-size: 13px;
+    font-family: 'Open Sans', sans-serif;
+    line-height: 1.35;
     outline: none;
     transition: border-color 0.3s ease;
+    letter-spacing: 0.4px;
     
     /* Убираем браузерные стили */
     -webkit-appearance: none;
@@ -241,10 +239,7 @@ body.registration-page {
     appearance: none;
     box-shadow: none;
 }
-/* Стиль для активного состояния */
-.form-group input:focus {
-    border-bottom-color: #d0cbba !important; /* Цветная линия при фокусе */
-}
+
 /* Стиль для placeholder */
 .form-group input::placeholder {
     color: #a0a0a0; /* Серый цвет для подсказки */
@@ -256,9 +251,10 @@ body.registration-page {
 .form-group input:-webkit-autofill,
 .form-group input:-webkit-autofill:hover,
 .form-group input:-webkit-autofill:focus {
-    -webkit-text-fill-color: #ce7235;
+    -webkit-text-fill-color: #d0cbba;
     -webkit-box-shadow: 0 0 0px 1000px transparent inset;
     border-bottom: 2px solid #424242;
+    background: none;
     transition: background-color 5000s ease-in-out 0s, 
                 border-bottom-color 0.3s ease;
 }
@@ -271,14 +267,14 @@ body.registration-page {
 /* Общие стили для автозаполнения (включая Firefox) */
 .form-group input:autofill,
 .form-group input:-moz-autofill {
-    color: #ce7235;
     background-color: transparent;
+    background: none;
     border-bottom: 2px solid #424242;
 }
 
 /* Класс для JavaScript-обработки */
 .form-group input.autofilled {
-    color: #ce7235;
+    background: none;
     background-color: transparent;
     border-bottom-color: #424242;
 }
@@ -347,31 +343,48 @@ input:-webkit-autofill { animation-name: onAutoFillStart }
 }
 
 .login-link a {
+    font-size: 13px;
     color: #ff6600;
     text-decoration: none;
+    letter-spacing: 0.5px;
 }
 
-/* Состояния валидации */
-.form-group input:not(:placeholder-shown):not(:focus):invalid {
+/* Состояния валидации для всех полей КРОМЕ подтверждения пароля */
+.form-group input:not(:placeholder-shown):not(:focus):invalid:not(#confirm-password) {
     border-bottom-color: #ce2727;
 }
-
-.form-group input:not(:placeholder-shown):not(:focus):valid {
+/* Стиль для активного состояния */
+.form-group input:focus {
+    border-bottom-color: #d0cbba; /* Цветная линия при фокусе */
+}
+.form-group input:not(:placeholder-shown):not(:focus):valid:not(#confirm-password) {
+    border-bottom-color: #22b327;
+}
+/* Красный только при несовпадении паролей */
+#confirm-password.invalid-password {
+    border-bottom-color: #ce2727;
+}
+/* Зеленый только при совпадении паролей */
+#confirm-password.valid-password {
     border-bottom-color: #22b327;
 }
 
+
 /* Сообщения об ошибках */
 .error-message {
-    display: none;
-    color: #ce2727;
-    font-size: 12px;
-    margin-top: 5px;
+  color: #ff4444;
+  font-size: 12px;
+  margin-top: 5px;
+  display: block;
 }
-.form-group.error .error-message {
-    display: block;
+
+.global-error {
+  margin-bottom: 15px;
+  text-align: left;
 }
-.form-group.error input {
-    border-bottom-color: #ce2727 !important;
+
+.form-group {
+  margin-bottom: 15px;
 }
 /* Стиль для пустого поля */
 #confirm-password:placeholder-shown {
@@ -393,9 +406,10 @@ input:-webkit-autofill { animation-name: onAutoFillStart }
         margin: 0;
     }
 
-/* Стили для блока верификации почты */
+/* --------------------------------------------------------------------- Стили для блока верификации почты ----------------------------------------- */
+
 .verification-screen {
-  position: relative; /* Важно для абсолютного позиционирования дочерних элементов */
+  position: relative; 
   font-family: 'Montserrat', sans-serif;
   max-width: 300px;
   width: 100%;
@@ -407,7 +421,24 @@ input:-webkit-autofill { animation-name: onAutoFillStart }
   opacity: 0;
   z-index: 100;
   display: none;
-  transition: opacity 0.7s ease; /* Добавлено */
+  transition: opacity 0.7s ease;
+}
+
+/* почта пользователя на верификации почты */
+.email-highlight {
+  color: #ff7a22;
+}
+/* Стили для отображения экранов в React */
+.verification-screen.show,
+.registration-complete.show {
+  display: block !important;
+  opacity: 1 !important;
+}
+/* Показываем активный экран */
+.verification-screen.active,
+.registration-complete.active {
+  display: block;
+  opacity: 1;
 }
 /* Оглавление блока verification-screen */
 .verification-title {
@@ -432,17 +463,16 @@ input:-webkit-autofill { animation-name: onAutoFillStart }
 }
 /* Текст-подсказка блока verification-screen */
 .verification-hint {
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1;
-  color: #333;
+  color: #5b605f;
   display: block;
   width: 160px;
   margin: 0px;
   text-align: left;
   position: absolute;
   left: -30px; 
-  bottom: -35px; 
-  text-shadow: 0 0 10px rgba(255,255,255,0.5);
+  bottom: -95px; 
 }
 /* Кнопка "Отправить повторно" блока verification-screen */
 .btn-secondary {
@@ -458,7 +488,7 @@ input:-webkit-autofill { animation-name: onAutoFillStart }
   line-height: 1.3;
   position: absolute;
   right: -35px;
-  bottom: -35px;
+  bottom: -95px;
   width: 110px;
   height: 50px;
   margin: 0px;
@@ -482,7 +512,64 @@ input:-webkit-autofill { animation-name: onAutoFillStart }
 .btn-secondary:focus-visible {
             outline: 2px solid #ff6600;
         }
-/* Стили для блока завершения регистрации */
+/* Отключаем анимации при disabled состоянии */
+.btn-secondary.disabled {
+  pointer-events: none;
+}
+
+.btn-secondary.disabled:hover {
+  transform: none !important;
+  border-color: #d0cbba !important;
+}
+
+.btn-secondary.disabled:active {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Стили для фона таймера */
+.countdown-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+/* Стили для цифр таймера */
+.countdown-number {
+  color: #ff6600;
+  font-weight: bold;
+  font-size: 1.4em;
+  font-family: 'Montserrat', sans-serif;
+  text-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
+}
+
+/* Текст кнопки */
+.button-text {
+  position: relative;
+  z-index: 2;
+  transition: opacity 0.3s ease;
+}
+
+/* Состояние кнопки при таймере */
+.btn-secondary:disabled .button-text {
+  opacity: 0.3;
+}
+
+/* Убираем стандартные стили disabled */
+.btn-secondary:disabled {
+  opacity: 1;
+}
+
+/* --------------------------------------------------------- Стили для блока завершения регистрации */
+
 .registration-complete {
   display: none;
   opacity: 0;
@@ -492,7 +579,7 @@ input:-webkit-autofill { animation-name: onAutoFillStart }
   margin: 0 auto;
   box-sizing: border-box;
   width: 100%;
-  transition: opacity 0.7s ease; /* Для плавности */
+  transition: opacity 0.7s ease;
 }
 .registration-complete h2 {
       font-size: 24px; /* Компактный, но читаемый */
@@ -582,22 +669,7 @@ backdrop-filter: blur(5px); /* Размытие фона кнопки */
   opacity: 0.7;
   cursor: not-allowed;
 }
-/* Стили для фона таймера */
-.countdown-overlay {
-  display: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.2); /* Полупрозрачный фон */
-  color: #ff6600;
-  font-weight: bold;
-  font-size: 1.2em;
-  align-items: center;
-  justify-content: center;
-  border-radius: inherit; /* Наследуем скругление углов кнопки */
-}
+
 @keyframes pulse {
   0% { opacity: 1; }
   50% { opacity: 0.5; }
@@ -624,7 +696,8 @@ backdrop-filter: blur(5px); /* Размытие фона кнопки */
   from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
   to { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
-/* ------------------------------------------------------- Стили футера ------------------------------------------------ */
+/* ----------------------------------------------------------------------- Стили футера ------------------------------------------------------------------------------- */
+
 .main-footer {
     width: 100%;
     height: 360px;
@@ -854,9 +927,12 @@ backdrop-filter: blur(5px); /* Размытие фона кнопки */
     flex: 1;
     display: flex;
     flex-direction: column;
-    margin-bottom: 68px; /* Увеличиваем отступ снизу перед футером */
+    justify-content: flex-end; /* Прижимаем контент к низу */
+    padding-bottom: 70px; /* Отступ от футера */
 }
-/* -------------------------------------------- Модальное окно обратной связи --------------------------------------- */
+
+/* -------------------------------------------- Модальное окно обратной связи --------------------------------------------------------------------------- */
+
 .feedback-modal {
     position: fixed;
     top: 0;
@@ -1008,17 +1084,19 @@ backdrop-filter: blur(5px); /* Размытие фона кнопки */
 .recover-password-btn:active {
   transform: translateY(2px);
 }
- /* Стили для языкового переключателя */
-        .language-switcher {
+
+/* --------------------------- Стили для языкового переключателя */
+
+.language-switcher {
             position: absolute;
             top: 20px;
             right: 20px;
             display: flex;
             gap: 10px;
             z-index: 1000;
-        }
+}
         
-        .language-flag {
+.language-flag {
             width: 30px;
             height: 20px;
             cursor: pointer;
@@ -1026,17 +1104,44 @@ backdrop-filter: blur(5px); /* Размытие фона кнопки */
             border-radius: 3px;
             transition: all 0.3s ease;
             object-fit: cover;
-        }
+            opacity: 0.6;
+}
         
-        .language-flag.active {
+.language-flag.active {
             border-color: #e75d00;
             box-shadow: 0 0 5px rgba(231, 93, 0, 0.5);
-        }
+            opacity: 1;
+}
         
-        .language-flag:hover {
+.language-flag:hover {
             transform: scale(1.1);
-        }
-/* ------------------------------------------------------------------------------- Стили HEADER -------------------- */ 
+}
+
+.header-side-blocks .language-switcher {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+    margin-right: 20px;
+}
+
+.header-side-blocks .language-flag {
+    width: 25px;
+    height: 16px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+    object-fit: cover;
+    opacity: 0.6;
+}
+
+.header-side-blocks .language-flag.active {
+     border-color: #e75d00;
+     box-shadow: 0 0 5px rgba(231, 93, 0, 1);
+     opacity: 1;
+}
+
+/* ------------------------------------------------------------------------------- Стили HEADER -------------------------------------------------------------- */ 
 
 /* Header с трапециевидным блоком */
 .main-header {
@@ -1106,13 +1211,13 @@ backdrop-filter: blur(5px); /* Размытие фона кнопки */
     flex-shrink: 0;
 }
 .left-side-block {
-    width: calc(47% - 135px - 50px); /* 50% - половина трапеции - отступ */
+    width: calc(50% - 135px - 50px); /* 50% - половина трапеции - отступ */
     border-right: none;
     clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 10% 100%);
     margin-left: -40px; /* Перекрываем зазор */
 }
 .right-side-block {
-    width: calc(47% - 135px - 50px); /* 50% - половина трапеции - отступ */
+    width: calc(50% - 135px - 50px); /* 50% - половина трапеции - отступ */
     border-left: none;
     clip-path: polygon(0% 0%, 100% 0%, 90% 100%, 0% 100%);
     margin-right: -40px; /* Перекрываем зазор */
@@ -1150,8 +1255,8 @@ backdrop-filter: blur(5px); /* Размытие фона кнопки */
 /* Стили для иконок */
 .header-icon-skull,
 .header-icon-skull-complete {
-    width: 62px;
-    height: 80px;
+    width: 52px;
+    height: 70px;
     position: absolute;
     transition: all 0.3s ease;
 }
@@ -1189,7 +1294,7 @@ backdrop-filter: blur(5px); /* Размытие фона кнопки */
     clip-path: polygon(0% 0%, 90% 0%, 100% 100%, 10% 100%);
     justify-content: flex-end; /* Изменяем на flex-end */
     padding-right: 110px; /* Добавляем отступ от правого края */
-    margin-right: -30px; /* Перекрываем зазор */
+    margin-right: -55px; /* Перекрываем зазор */
 }
 
 .right-free-space {
@@ -1197,7 +1302,7 @@ backdrop-filter: blur(5px); /* Размытие фона кнопки */
     clip-path: polygon(10% 0%, 100% 0%, 100% 100%, 0% 100%);
     justify-content: flex-start; /* Центрируем содержимое */
     padding-left: 100px; /* Добавляем отступ от правого края */
-    margin-left: -30px; /* Перекрываем зазор */
+    margin-left: -55px; /* Перекрываем зазор */
 }
 
 /* Эффекты при наведении на блок */
@@ -1340,8 +1445,231 @@ backdrop-filter: blur(5px); /* Размытие фона кнопки */
 .horizontal-block.bottom-block .border-bottom {
     display: none;
 }
+/* Стили для отключенного пункта меню */
+.horizontal-block.bottom-block .menu-item.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: none;
+}
 
-/* --------------------------------------------------------------- Стили для контента PROFILE ------------------------------- */
+/* ------------------------------------------ Стили для информации о пользователе */
+
+.user-info-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 60px;
+  border: 1px solid #444;
+  border-radius: 12px;
+  padding: 5px 10px;
+  transition: all 0.3s ease;
+   flex-wrap: wrap;
+  min-height: 30px;
+}
+
+.user-icon-status {
+  display: flex;
+  align-items: center;
+}
+
+.user-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  background: transparent;
+  transition: all 0.3s ease;
+}
+
+.user-email {
+  display: flex;
+  align-items: center;
+}
+
+.email-text {
+  font-size: 11px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+}
+
+/* СЕРЫЙ цвет для неверифицированного email */
+.email-text.not-verified {
+  color: #a0a0a0; /* Серый цвет */
+}
+
+/* ЖЕЛТЫЙ фильтр для иконки при неверифицированном email */
+.user-icon.not-verified {
+  filter: brightness(0) saturate(100%) invert(76%) sepia(90%) saturate(500%) hue-rotate(5deg) brightness(105%) contrast(105%) !important;
+}
+
+/* Зеленый для верифицированных (существующий стиль) */
+.email-text.authenticated {
+  color: #22b327;
+}
+
+.user-icon.authenticated {
+  filter: brightness(0) saturate(100%) invert(48%) sepia(79%) saturate(2476%) hue-rotate(90deg) brightness(118%) contrast(119%) !important;
+}
+
+/* Красный для неавторизованных (существующий стиль) */
+.email-text.not-authenticated {
+  color: #f44336;
+}
+
+.user-icon.not-authenticated {
+  filter: brightness(0) saturate(100%) invert(26%) sepia(79%) saturate(2476%) hue-rotate(340deg) brightness(118%) contrast(119%) !important;
+}
+
+/* ----------------------------- Стили для кнопки подтверждения email */
+.verify-email-btn {
+  background: transparent;
+  color: #e7e414;
+  padding: 4px 10px;
+  font-size: 10px;
+  cursor: pointer;
+  margin-left: 8px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  border: 1px solid #e7e414;
+  border-radius: 8px;
+}
+
+.verify-email-btn:hover:not(:disabled) {
+  color: white;
+}
+
+.verify-email-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* -------------------------- Стили для кнопки выхода */
+.logout-btn,
+.login-btn {
+  background: transparent;
+  border: 1px solid #a1a194;
+  color: #a1a194;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  cursor: pointer;
+  margin-left: 6px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.logout-btn:hover {
+  border: 1px solid #f44336;
+  color: #f44336;
+}
+
+/* Фокус-стили для доступности */
+.logout-btn:focus-visible {
+  outline: 2px solid #f44336;
+  outline-offset: 1px;
+}
+
+.login-btn:hover {
+  border: 1px solid #22b327;
+  color: #22b327;
+}
+
+/* Фокус-стили для доступности */
+.login-btn:focus-visible {
+  outline: 2px solid #22b327;
+  outline-offset: 1px;
+}
+
+/* ---------------------------------------------------------------------------------------- Стили для бегущей строки ---------------------------------------------- */
+
+/* Стиль BATTLEFIELD */
+.ticker-container {
+    background: linear-gradient(90deg, #1a1a1a, #2d2d2d, #1a1a1a);
+    padding: 14px 0;
+    border-bottom: 1px solid #444;
+    border-top: 1px solid #444;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.ticker-item {
+    color: #a1a194;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    padding: 8px 18px 8px 40px; /* Увеличиваем left padding для иконки */
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 102, 0, 0.2);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.ticker-item:hover {
+    background: rgba(255, 102, 0, 0.1);
+}
+
+.ticker-item::before {
+    content: '';
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    background: url('../public/images/icons/icon-promo-line-news.png') center/contain no-repeat;
+}
+
+.ticker-wrapper {
+    display: flex;
+    width: max-content;
+    animation: ticker-scroll 40s linear infinite;
+    transform: translateZ(0); /* Аппаратное ускорение */
+}
+
+.ticker-content {
+    display: flex;
+    gap: 60px;
+    padding: 0 30px;
+}
+@keyframes ticker-scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* Пауза при наведении */
+.ticker-container:hover .ticker-wrapper {
+    animation-play-state: paused;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .ticker-item {
+        font-size: 12px;
+    }
+    
+    .ticker-content {
+        gap: 40px;
+        padding: 0 20px;
+    }
+    
+    @keyframes ticker-scroll {
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(-100%);
+        }
+    }
+}
+
+/* --------------------------------------------------------------- Стили для контента PROFILE ---------------------------------------------------------- */
 
 .content-index {
     position: relative;
@@ -1885,7 +2213,7 @@ border-bottom: 2px solid #ff6600;
     object-fit: contain;
 }
 
-/* -------------------------------------------------------------- Модальное окно выбора ДАТЫ РОЖДЕНИЯ ----------------------- */
+/* -------------------------------------------------------------- Модальное окно выбора ДАТЫ РОЖДЕНИЯ ----------------------------------------------------- */
 
 .date-picker-modal {
     position: fixed;
@@ -2033,7 +2361,7 @@ border-bottom: 2px solid #ff6600;
     border-radius: 1px;
 }
 
-/* ------------------------------------------------------ Стили для модального окна выбора страны ---------------------------- */
+/* ------------------------------------------------------ Стили для модального окна выбора страны -------------------------------------------------------- */
 
 .country-picker-modal {
     position: fixed;
@@ -2131,7 +2459,7 @@ border-bottom: 2px solid #ff6600;
     }
 }
 
-/* ------------------------------------------------------------ Модальное окно поиска ------------------------------------ */
+/* ------------------------------------------------------------ Модальное окно поиска -------------------------------------------------------------- */
 
 .search-modal {
     position: fixed;
@@ -2558,4 +2886,364 @@ search-mark {
     font-family: 'Montserrat', sans-serif;
     color: #e75d00;
     margin-bottom: 15px;
+}
+
+/* ------------------------------------------------------------------------------------- Стили СТРАНИЦЫ ТРАНСФЕРЫ ----------------------------------------------- */
+
+.content-index-transfers {
+    position: relative;
+    padding-top: 150px;
+  width: 100%;
+  height: 1100px;
+  background-repeat: no-repeat;
+  background-size: 100% auto; /* Полное заполнение по ширине и высоте */
+  background-position: center;
+  overflow: hidden;
+}
+.centered-container {
+    position: relative;
+            width: 1200px;
+            margin: 0 auto;
+            min-height: 800px;
+            backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 8px;
+}
+
+.centered-container::before {
+    content: '';
+    position: absolute;
+    top: -10px; /* Отступ наружу */
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border: 2px solid #f6efd9; /* линия 2px */
+    border-radius: 12px; /* Немного больше радиус чтобы соответствовать отступу */
+    pointer-events: none; /* Чтобы не блокировал клики */
+    z-index: -1; /* Под основным контентом */
+    box-shadow: 
+        0 10px 25px rgba(3, 3, 3, 0.3),  /* Основная оранжевая тень */
+        0 5px 15px rgba(0, 0, 0, 0.5),       /* Глубокая тень */
+        0 15px 35px rgba(35, 31, 29, 0.2);  /* Рассеянная световая тень */
+}
+
+.centered-container .top-block {
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+}
+
+.centered-container .middle-block {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            gap: 6px;
+}
+
+.centered-container .bottom-block {
+            min-height: 530px;
+            width: 100%;
+}
+.centered-container .top-left-block {
+            position: relative;
+            width: 40%;
+            padding-left: 60px;
+            padding-right: 60px;
+}
+.centered-container .top-left-block::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    width: 0.5px;
+    height: 110px;
+    background-color: #5b605f;
+}
+
+.centered-container .top-left-block h2 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+            color: #ff6600;
+}
+
+.centered-container .top-left-block p {
+            margin: 0;
+            font-size: 12px;
+            color: #a1a194;
+            line-height: 1.3;
+}
+.centered-container .top-right-block {
+            width: 60%;
+            display: flex;
+            position: relative;
+}
+
+.centered-container .stat-block {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            padding-left: 30px;
+            padding-right: 30px;
+            position: relative;
+}
+.centered-container .stat-block::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    width: 0.5px;
+    height: 110px;
+    background-color: #5b605f;
+}
+.centered-container .stat-block:last-child::after {
+    display: none;
+}
+
+.centered-container .stat-block h3 {
+            margin: 0;
+            font-size: 26px;
+            color: #ff6600;
+            font-weight: bold;
+}
+
+.centered-container .stat-block p {
+            margin: 5px 0 0 0;
+            font-size: 11px;
+            color: #a1a194;
+            text-align: left;
+}
+
+/* Блок "Все игроки" - 40% */
+.players-block {
+    display: flex;
+    flex: 0 0 40%;
+    padding-left: 60px;
+    background-color: rgba(107, 107, 107, 0.1);
+    justify-content: left;
+    align-items: center; /* Добавьте это для вертикального центрирования */
+    height: 100%; /* Занимает всю высоту родителя */
+}
+
+/* Блок "Данные" - 60% */
+.data-block {
+    display: flex;
+    flex: 0 0 60%;
+    padding-left: 30px;
+    background-color: rgba(107, 107, 107, 0.1);
+    justify-content: left;
+    align-items: center; /* Добавьте это для вертикального центрирования */
+    height: 100%; /* Занимает всю высоту родителя */
+}
+
+/* Заголовки блоков */
+.block-title {
+    color: #575757;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+}
+/* Контейнер фильтров */
+.filters-container {
+    display: flex;
+    width: 100%;
+    border-bottom: 2px solid #343434;
+    background-color: rgba(43, 43, 43, 0.8);
+    padding: 0;
+}
+
+.filters-block-left,
+.filters-block-right {
+    display: flex;
+    align-items: center;
+    padding: 15px 0;
+    gap: 20px;
+    height: 100%;
+}
+
+.filters-block-left {
+    flex: 0 0 40%;
+    justify-content: flex-start;
+    border-right: 3px solid #343434;
+}
+
+.filters-block-right {
+    flex: 0 0 60%;
+    justify-content: flex-start;
+    padding-left: 22px;
+    border-left: 3px solid #343434;
+}
+/* 4-й элемент - отступ справа 100px */
+.filters-block-right .filter-item:first-child {
+    margin-right: 90px;
+}
+/* 5-й элемент - отступ справа 100px */
+.filters-block-right .filter-item:nth-child(2) {
+    margin-right: 90px;
+}
+/* 2-й элемент - отступ справа 50px */
+.filters-block-left .filter-item:nth-child(2) {
+    margin-right: 10px;
+}
+.filter-item {
+    color: #a1a194;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    min-width: 30px;
+    text-align: center;
+    position: relative;
+    padding-right: 20px; /* Место для стрелочки */
+}
+.filter-item.active::after {
+    content: '';
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+}
+
+.filter-item.active.asc::after {
+    border-bottom: 5px solid #ff6600;
+    border-top: none;
+}
+
+.filter-item.active.desc::after {
+    border-top: 5px solid #ff6600;
+    border-bottom: none;
+}
+
+.filter-item:hover,
+.filter-item.active {
+    color: #ff6600;
+    background-color: rgba(255, 102, 0, 0.1);
+}
+/* Контейнер игроков */
+.players-container {
+    width: 100%;
+    height: auto;
+    background-color: rgba(107, 107, 107, 0.1);
+}
+
+/* Строка игрока */
+.player-row {
+    display: flex;
+    min-height: 80px;
+    align-items: stretch;
+    justify-content: flex-start;
+    border-bottom: 2px solid #343434;
+    width: 100%;
+}
+
+.player-number,
+.player-class,
+.player-nickname,
+.player-kd,
+.player-mmr,
+.player-playtime {
+    display: flex;
+    align-items: center;
+    color: #575757;
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+}
+/* Изменяем цвет текста у всех дочерних элементов при hover */
+.player-row:hover .player-number,
+.player-row:hover .player-nickname,
+.player-row:hover .player-kd,
+.player-row:hover .player-mmr,
+.player-row:hover .player-playtime {
+    color: #f6efd9;
+}
+
+.player-row:hover {
+    border-bottom: 2px solid #ff6600;
+     border-top: 2px solid #ff6600;
+}
+/* Элементы игрока */
+.player-number {
+    min-width: 30px;
+    text-align: center;
+    margin-right: 30px;
+    padding-left: 15px;
+}
+
+.player-class {
+    min-width: 50px;
+    text-align: left;
+    margin-right: 55px; /* Отступ как между фильтрами */
+}
+
+.class-icon {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.player-nickname {
+    min-width: 315px;
+    border-right: 3px solid #292929;
+}
+
+.player-kd {
+    min-width: 195px;
+    padding-left: 30px;
+    border-left: 3px solid #292929;
+}
+
+.player-mmr {
+    min-width: 175px;
+    text-align: center;
+    font-weight: 700;
+}
+
+.player-playtime {
+    min-width: 30px;
+    text-align: center;
+}
+/* Кнопка "Подробнее" */
+.player-details-btn {
+  display: none;
+  min-width: 130px;
+  padding: 10px;
+  margin: auto; 
+  color: #d0cbba;
+  border: 1px solid #ff6600;
+  background: transparent;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  opacity: 0.4;
+}
+/* Показываем кнопку при наведении на строку игрока */
+.player-row:hover .player-details-btn {
+    display: block;
+}
+
+.player-details-btn:hover {
+  opacity: 1;
+  transform: translateY(-2px);
+
+}
+
+.player-details-btn:active {
+  transform: translateY(2px);
 }

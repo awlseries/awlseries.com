@@ -1,7 +1,9 @@
 import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '/utils/language-context.jsx'; // Добавляем хук языка
 
 const SearchResults = ({ results, onClose, query }) => {
   const navigate = useNavigate();
+  const { t } = useLanguage(); // Добавляем хук языка
 
   const scrollToElement = (element) => {
     if (element && element.scrollIntoView) {
@@ -46,7 +48,7 @@ const SearchResults = ({ results, onClose, query }) => {
   return (
     <div className="search-results-container">
       <h3 className="search-results-count">
-        Результаты поиска: {results.length}
+        {t('search_results.count', { count: results.length })}
       </h3>
       
       {results.map((result, index) => (
@@ -64,7 +66,7 @@ const SearchResults = ({ results, onClose, query }) => {
           {result.type === 'current' ? (
             <>
               <div className="search-result-title">
-                📍 Найдено на текущей странице
+                📍 {t('search_results.current_page')}
               </div>
               <div 
                 className="search-result-text"
@@ -82,7 +84,7 @@ const SearchResults = ({ results, onClose, query }) => {
                 {result.description}
               </div>
               <div className="search-result-action">
-                Перейти в раздел →
+                {t('search_results.go_to_section')} →
               </div>
             </>
           )}

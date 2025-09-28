@@ -1,7 +1,17 @@
-// src/components/footer/footer.jsx
+// src/components/Footer/Footer.jsx
 import '/src/styles.css';
+import { useLanguage } from '/utils/language-context.jsx'; // Добавляем хук
 
-const Footer = ({ onFeedbackClick }) => {
+const Footer = ({ onFeedbackClick }) => { // Убираем t из пропсов
+const { t } = useLanguage(); // Используем хук
+  
+  const handleFeedbackClick = () => {
+    // Блокируем скролл при открытии модального окна
+    document.body.style.overflow = 'hidden';
+    document.body.style.touchAction = 'none';
+    onFeedbackClick();
+  };
+
   return (
     <footer className="main-footer">
       <div className="footer-container">
@@ -10,8 +20,7 @@ const Footer = ({ onFeedbackClick }) => {
           <div className="footer-content">
             <img src="/images/icons/awl-icon-gray.png" alt="Arena Warborn League" className="footer-icon"/>
             <p className="footer-text"><strong>Arena Warborn League</strong> 
-              <span data-translate="footer_description"> — это новая профессиональная киберспортивная лига, учрежденная 
-              с целью развития и структурирования соревновательной экосистемы в современных дисциплинах киберспорта</span>
+              <span>{t('footer_description')}</span>
             </p>
           </div>
         </div>
@@ -25,23 +34,23 @@ const Footer = ({ onFeedbackClick }) => {
           </div>
           {/* Текст внизу */}
           <div className="footer-bottom-text">
-            <p className="footer-copyright">© 2025 Arena Warborn League. <span data-translate="rights_reserved">Все права защищены.</span></p>
+            <p className="footer-copyright">© 2025 Arena Warborn League. <span>{t('rights_reserved')}</span></p>
             <p className="footer-links">
-              <strong data-translate="tournament_rules">Правила турниров</strong> &nbsp; | &nbsp; 
-              <a href="../documents/privacy-policy.pdf" download className="footer-link" data-translate="privacy_policy">Политика конфиденциальности</a> &nbsp; | &nbsp;
-              <a href="rules.html" target="_blank" className="footer-link" data-translate="terms_of_use">Условия использования</a>
+              <strong>{t('tournament_rules')}</strong> &nbsp; | &nbsp; 
+              <a href="../documents/privacy-policy.pdf" download className="footer-link">{t('privacy_policy')}</a> &nbsp; | &nbsp;
+              <a href="/rules" target="_blank" rel="noopener noreferrer" className="footer-link">{t('terms_of_use')}</a>
             </p>
           </div>
         </div>
         
         {/* Правый блок */}
         <div className="footer-block">
-          <h3 className="footer-right-title" data-translate="feedback_title">Обратная связь</h3>
+          <h3 className="footer-right-title">{t('feedback_modal_title')}</h3>
           
           <p className="footer-right-text">
-            <span data-translate="feedback_text1">Обратная связь помогает нам становиться лучше.</span><br/>
-            <span data-translate="feedback_text2">Будем рады любым вопросам и предложениям.</span><br/>
-            <span data-translate="feedback_text3">Обработка запроса в течение</span> <strong>24 часов.</strong>
+            <span>{t('feedback_text1')}</span><br/>
+            <span>{t('feedback_text2')}</span><br/>
+            <span>{t('feedback_text3')}</span> <strong>{t('feedback_text3_part2')}</strong>
           </p>
           
           <div className="footer-buttons">
@@ -52,8 +61,8 @@ const Footer = ({ onFeedbackClick }) => {
             {/* Кнопка обратной связи с обработчиком */}
             <button 
               className="footer-button2" 
-              onClick={onFeedbackClick}
-              aria-label="Обратная связь"
+              onClick={handleFeedbackClick}
+              aria-label={t('feedback_modal_title')}
             >
               <img src="/images/icons/icon-email-footer.png" alt="Email" className="footer-button-icon2"/>
             </button>
