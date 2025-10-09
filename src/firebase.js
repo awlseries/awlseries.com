@@ -3,12 +3,12 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyD8WVqZtzOc44onw1T_x2MsDxzaNKv9I2k",
-    authDomain: "arena-warzone-league.firebaseapp.com",
-    projectId: "arena-warzone-league",
-    storageBucket: "arena-warzone-league.firebasestorage.app",
-    messagingSenderId: "726417186809",
-    appId: "1:726417186809:web:3e707a3d4b59c5f29da728"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
 // Инициализация Firebase

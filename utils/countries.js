@@ -1,19 +1,31 @@
-// countries.js - список всех стран с кодами и флагами
-const COUNTRIES = [
-    { code: 'KZ', name: 'Казахстан', flag: '../public/images/icons/icon-kazakhstan.png' },
-    { code: 'RU', name: 'Россия', flag: '../public/images/icons/icon-russia.png' },
-    { code: 'US', name: 'США', flag: '../public/images/icons/icon-usa.png' },
-    { code: 'DE', name: 'Германия', flag: '../public/images/icons/icon-germany.png' },
-    { code: 'FR', name: 'Франция', flag: '../public/images/icons/icon-france.png' },
-    { code: 'GB', name: 'Великобритания', flag: '../public/images/icons/icon-uk.png' },
-    { code: 'CN', name: 'Китай', flag: '../public/images/icons/icon-china.png' },
-    { code: 'JP', name: 'Япония', flag: '../public/images/icons/icon-japan.png' },
-    { code: 'KR', name: 'Корея', flag: '../public/images/icons/icon-korea.png' },
-    { code: 'BR', name: 'Бразилия', flag: '../public/images/icons/icon-brazil.png' },
-    // Добавьте остальные страны...
+// utils/countries.js
+export const countryList = [
+  { code: 'ru', name: 'Россия', flag: '🇷🇺' },
+  { code: 'us', name: 'США', flag: '🇺🇸' },
+  { code: 'de', name: 'Германия', flag: '🇩🇪' },
+  { code: 'fr', name: 'Франция', flag: '🇫🇷' },
+  { code: 'gb', name: 'Великобритания', flag: '🇬🇧' },
+  { code: 'jp', name: 'Япония', flag: '🇯🇵' },
+  { code: 'kr', name: 'Корея', flag: '🇰🇷' },
+  { code: 'cn', name: 'Китай', flag: '🇨🇳' },
+  { code: 'br', name: 'Бразилия', flag: '🇧🇷' },
+  { code: 'in', name: 'Индия', flag: '🇮🇳' },
+  { code: 'ca', name: 'Канада', flag: '🇨🇦' },
+  { code: 'au', name: 'Австралия', flag: '🇦🇺' },
+  { code: 'it', name: 'Италия', flag: '🇮🇹' },
+  { code: 'es', name: 'Испания', flag: '🇪🇸' },
+  { code: 'ua', name: 'Украина', flag: '🇺🇦' },
+  { code: 'kz', name: 'Казахстан', flag: '🇰🇿' },
+  { code: 'by', name: 'Беларусь', flag: '🇧🇾' },
+  { code: 'pl', name: 'Польша', flag: '🇵🇱' },
+  { code: 'tr', name: 'Турция', flag: '🇹🇷' },
+  { code: 'nl', name: 'Нидерланды', flag: '🇳🇱' },
+  { code: 'se', name: 'Швеция', flag: '🇸🇪' },
+  { code: 'no', name: 'Норвегия', flag: '🇳🇴' },
+  { code: 'fi', name: 'Финляндия', flag: '🇫🇮' },
+  { code: 'dk', name: 'Дания', flag: '🇩🇰' },
 ];
 
-// Функция поиска страны по коду
-function getCountryByCode(code) {
-    return COUNTRIES.find(country => country.code === code) || COUNTRIES[0];
-}
+export const getCountryByCode = (code) => {
+  return countryList.find(country => country.code === code) || countryList[0];
+};
