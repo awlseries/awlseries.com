@@ -357,7 +357,10 @@ const validateLoginForm = (formData) => {
         pendingEmailVerification: true,
         emailVerified: false,
         team: "free agent",
-        country: "EMPTY"
+        battlefieldNickname: "",
+        country: "EMPTY",
+        division: "calibration",
+        mmr: 0
       });
 
       showVerificationScreen(formData.email, user);
@@ -561,7 +564,7 @@ const handlePasswordChange = (e) => {
             />
           </div>
       
-      <div className="main-content">
+      <div className="main-content-registration">
         <div className="registration-container" ref={registrationContainerRef}>
 
           {/* Форма регистрации */}

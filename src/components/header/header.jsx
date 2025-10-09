@@ -67,9 +67,13 @@ const handleSendVerification = async () => {
   try {
     await sendEmailVerification(auth.currentUser);
     showSingleNotification(t('notifications.verification_sent'), false);
+    console.log('Письмо отправлено успешно');
   } catch (error) {
     console.error('Ошибка отправки верификации:', error);
     showSingleNotification(t('notifications.resend_error'), 'error');
+    console.error('Ошибка отправки верификации:', error);
+    console.error('Код ошибки:', error.code);
+    console.error('Сообщение ошибки:', error.message);
   } finally {
     setIsSendingVerification(false);
   }
@@ -132,7 +136,18 @@ const handleLogout = async () => {
     // Также обновляем ключ при каждом открытии
     setSearchKey(prev => prev + 1);
   };
-  const handleSkullClick = () => navigate('/Profile');
+
+  // Функция для перехода в профиль с проверкой авторизации
+const handleSkullClick = () => {
+  if (isAuthenticated && isEmailVerified) {
+    navigate('/profile');
+  } else if (isAuthenticated && !isEmailVerified) {
+    showSingleNotification('✗ Подтвердите email для доступа к профилю', true);
+  } else {
+    showSingleNotification('✗ Для доступа к профилю требуется авторизация', true);
+  }
+};
+
   const handleSearch = (results, query) => {
     setSearchResults(results);
     setSearchQuery(query);
