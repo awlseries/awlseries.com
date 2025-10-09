@@ -7,4 +7,7 @@ Thumbs.db
 *.tmp
 
 # Папка node_modules (для будущего React)
-node_modules/
+node_modules
+dist
+.env
+.env.*

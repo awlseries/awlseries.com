@@ -1,7 +1,7 @@
 // src/App.jsx
 import { createBrowserRouter, RouterProvider, createRoutesFromElements, Route } from 'react-router-dom';
 import { useEffect } from 'react';
-import MainLayout from './components/Layout/MainLayout'; // ИМПОРТИРУЕМ MainLayout
+import MainLayout from './components/Layout/MainLayout';
 import Home from './pages/Home/Home';
 import Tournaments from './pages/Tournaments/Tournaments.jsx';
 import Teams from './pages/Teams/Teams';
