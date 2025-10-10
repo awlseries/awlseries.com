@@ -1,18 +1,32 @@
 // src/App.jsx
 import { createBrowserRouter, RouterProvider, createRoutesFromElements, Route } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, Suspense, lazy } from 'react';
 import MainLayout from './components/Layout/MainLayout';
 import Home from './pages/Home/Home';
-import Tournaments from './pages/Tournaments/Tournaments.jsx';
-import Teams from './pages/Teams/Teams';
-import Rating from './pages/Rating/Rating';
-import Profile from './pages/Profile/Profile';
-import Transfers from './pages/Transfers/Transfers.jsx';
-import Registration from './pages/Registration/Registration.jsx'; 
-import Rules from './pages/Rules/Rules';
 import { LanguageProvider } from '/utils/language-context.jsx';
 import './firebase';
 import '/src/styles.css';
+
+// Ленивая загрузка только тяжелых компонентов
+const Tournaments = lazy(() => import('./pages/Tournaments/Tournaments.jsx'));
+const Teams = lazy(() => import('./pages/Teams/Teams'));
+const Rating = lazy(() => import('./pages/Rating/Rating'));
+const Profile = lazy(() => import('./pages/Profile/Profile'));
+const Transfers = lazy(() => import('./pages/Transfers/Transfers.jsx'));
+const Rules = lazy(() => import('./pages/Rules/Rules'));
+const Registration = lazy(() => import('./pages/Registration/Registration.jsx'));
+
+// Простой inline компонент для загрузки
+function LoadingFallback() {
+  return (
+    <div className="loading-container">
+      <div className="spinner">
+        <div className="spinner-circle"></div>
+      </div>
+      <p>Загрузка...</p>
+    </div>
+  );
+}
 
 // Создаем отдельный компонент для контента с роутингом
 function AppContent() {
@@ -20,22 +34,68 @@ function AppContent() {
     console.log('App initialized');
   }, []);
 
-  // Создаем роутер с future flags
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
-        {/* Страница регистрации без Header и Footer */}
-        <Route path="/registration" element={<Registration />} />
+        <Route 
+          path="/registration" 
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <Registration />
+            </Suspense>
+          } 
+        />
         
-        {/* Страницы с Header и Footer */}
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
-          <Route path="tournaments" element={<Tournaments />} />
-          <Route path="teams" element={<Teams />} />
-          <Route path="rating" element={<Rating />} />
-          <Route path="profile" element={<Profile />} />
-          <Route path="transfers" element={<Transfers />} />
-          <Route path="rules" element={<Rules />} />
+          <Route 
+            path="tournaments" 
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <Tournaments />
+              </Suspense>
+            } 
+          />
+          <Route 
+            path="teams" 
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <Teams />
+              </Suspense>
+            } 
+          />
+          <Route 
+            path="rating" 
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <Rating />
+              </Suspense>
+            } 
+          />
+          <Route 
+            path="profile" 
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <Profile />
+              </Suspense>
+            } 
+          />
+          <Route 
+            path="transfers" 
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <Transfers />
+              </Suspense>
+            } 
+          />
+          <Route 
+            path="rules" 
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <Rules />
+              </Suspense>
+            } 
+          />
         </Route>
       </>
     ),
@@ -54,7 +114,6 @@ function AppContent() {
   );
 }
 
-// Главный компонент App только оборачивает в провайдеры
 function App() {
   return (
     <LanguageProvider>
