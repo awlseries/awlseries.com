@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { useState, useEffect } from 'react';
 import { showSingleNotification } from '/utils/notifications';
 import CountryPicker from '../../components/CountryPicker';
 import '/src/styles.css';
 
-// Импорт react-world-flags
-import Flag from 'react-world-flags';
+// Ленивая загрузка react-world-flags
+const Flag = lazy(() => import('react-world-flags').then(module => {
+  return { default: module.default };
+}));
 
 // Правильные пути импорта для структуры проекта
 import { auth, db } from '../../firebase';
@@ -516,16 +518,32 @@ if (!userData) {
               opacity: hasCountryBeenSet ? 0.7 : 1
             }}
           >
-            {/* Используем react-world-flags вместо эмодзи */}
+            {/* Ленивая загрузка флагов с fallback */}
             {selectedCountry && selectedCountry !== 'EMPTY' ? (
-              <Flag 
-                code={selectedCountry} 
-                style={{ 
+              <Suspense fallback={
+                <div style={{
+                  width: '30px',
+                  height: '23px',
+                  backgroundColor: '#b2ad9c',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   borderRadius: '2px',
-                  objectFit: 'cover'
-                }}
-                title={userData?.countryName || getCountryName(selectedCountry)}
-              />
+                  color: '#333',
+                  fontSize: '12px'
+                }}>
+                  🌐
+                </div>
+              }>
+                <Flag 
+                  code={selectedCountry} 
+                  style={{ 
+                    borderRadius: '2px',
+                    objectFit: 'cover'
+                  }}
+                  title={userData?.countryName || getCountryName(selectedCountry)}
+                />
+              </Suspense>
             ) : (
               <div style={{
                 width: '30px',
@@ -539,24 +557,6 @@ if (!userData) {
                 fontSize: '12px'
               }}>
                 ?
-              </div>
-            )}
-            {hasCountryBeenSet && (
-              <div style={{
-                position: 'absolute',
-                top: '-5px',
-                right: '-5px',
-                background: '#22b327',
-                borderRadius: '50%',
-                width: '12px',
-                height: '12px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '8px',
-                color: 'white'
-              }}>
-                ✓
               </div>
             )}
           </div>
@@ -785,6 +785,38 @@ const getCountryName = (countryCode) => {
     { code: 'no', name: 'Норвегия' },
     { code: 'fi', name: 'Финляндия' },
     { code: 'dk', name: 'Дания' },
+    { code: 'mx', name: 'Мексика' },
+    { code: 'id', name: 'Индонезия' },
+    { code: 'sa', name: 'Саудовская Аравия' },
+    { code: 'za', name: 'Южная Африка' },
+    { code: 'eg', name: 'Египет' },
+    { code: 'ar', name: 'Аргентина' },
+    { code: 'pt', name: 'Португалия' },
+    { code: 'gr', name: 'Греция' },
+    { code: 'cz', name: 'Чехия' },
+    { code: 'ch', name: 'Швейцария' },
+    { code: 'at', name: 'Австрия' },
+    { code: 'be', name: 'Бельгия' },
+    { code: 'il', name: 'Израиль' },
+    { code: 'th', name: 'Таиланд' },
+    { code: 'vn', name: 'Вьетнам' },
+    { code: 'my', name: 'Малайзия' },
+    { code: 'sg', name: 'Сингапур' },
+    { code: 'ph', name: 'Филиппины' },
+    { code: 'ie', name: 'Ирландия' },
+    { code: 'hu', name: 'Венгрия' },
+    { code: 'ro', name: 'Румыния' },
+    { code: 'bg', name: 'Болгария' },
+    { code: 'hr', name: 'Хорватия' },
+    { code: 'rs', name: 'Сербия' },
+    { code: 'sk', name: 'Словакия' },
+    { code: 'si', name: 'Словения' },
+    { code: 'ee', name: 'Эстония' },
+    { code: 'lv', name: 'Латвия' },
+    { code: 'lt', name: 'Литва' },
+    { code: 'is', name: 'Исландия' },
+    { code: 'lu', name: 'Люксембург' },
+    { code: 'mt', name: 'Мальта' },
   ];
   
   const country = countryList.find(c => c.code === countryCode);
