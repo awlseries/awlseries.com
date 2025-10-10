@@ -55,7 +55,7 @@ const Transfers = () => {
                 <div className="player-row">
                     <div className="player-number">1</div>
                     <div className="player-class">
-                        <img src="../public/images/icons/icon-class-sniper.png" alt="class-sniper" class="class-icon"/>
+                        <img src="/images/icons/icon-class-sniper.png" alt="class-sniper" class="class-icon"/>
                     </div>
                     <div className="player-nickname">SpYd3R-</div>
                     <div className="player-kd">2.23</div>
@@ -68,7 +68,7 @@ const Transfers = () => {
                     <div className="player-row">
                         <div className="player-number">2</div>
                         <div className="player-class">
-                            <img src="../public/images/icons/icon-class-engineer.png" alt="Поддержка" class="class-icon"/>
+                            <img src="/images/icons/icon-class-engineer.png" alt="Поддержка" class="class-icon"/>
                         </div>
                         <div className="player-nickname">ArenaMaster</div>
                         <div className="player-kd">1.78</div>

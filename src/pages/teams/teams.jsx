@@ -247,7 +247,7 @@ const Teams = () => {
             </div>
           </div>
           <img 
-            src="../public/images/icons/icon-updown.png" 
+            src="/public/images/icons/icon-updown.png" 
             alt="Развернуть" 
             className={`division-toggle ${expandedDivision === division.id ? '' : 'collapsed'}`}
           />
@@ -278,7 +278,7 @@ const Teams = () => {
                               ) : (
                                 <button className="team-view-btn">
                                   <img 
-                                    src="../public/images/icons/icon-eye.png" 
+                                    src="/images/icons/icon-eye.png" 
                                     alt="Просмотр команды" 
                                     className="team-view-icon"
                                   />

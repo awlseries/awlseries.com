@@ -3,7 +3,7 @@ import '/src/styles.css';
 
 const Rules = () => {
   return (
-        <img src="../public/images/other/user-rules.webp" alt="Условия использования" />
+        <img src="/images/other/user-rules.webp" alt="Условия использования" />
   );
 };
 

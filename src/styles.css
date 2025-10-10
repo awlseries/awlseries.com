@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;500;600;700&display=swap');
 @font-face {
     font-family: 'BlackOpsOneType';
-    src: url('fonts/BlackOpsOne.otf') format('opentype');
+    src: url('/fonts/BlackOpsOne.otf') format('opentype');
     font-weight: 400; /* normal */
     font-style: normal;
     font-display: swap; /* чтобы текст не был невидимым во время загрузки */
@@ -11,7 +11,7 @@
 
 /* Стили для страницы правил */
 body.rules-page {
-  background-image: url('../images/other/user-rules.webp');
+  background-image: url('/images/other/user-rules.webp');
   background-color: #a1a194;
   background-repeat: no-repeat;
   background-size: 100% auto; /* Полное заполнение по ширине и высоте */
@@ -116,7 +116,7 @@ img[loading="lazy"].loaded {
 
 /* фон для страницы регистрации */
 .registration-page {
-    background-image: url('../images/other/registration-bg88tr.webp');
+    background-image: url('/images/other/registration-bg88tr.webp');
     background-color: #a1a194; /* подложка */
     background-repeat: no-repeat;
     background-size: 100% auto;  /* Ширина 100%, высота auto */
@@ -1185,7 +1185,7 @@ backdrop-filter: blur(5px); /* Размытие фона кнопки */
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url('../images/other/main-logo5.webp');
+    background-image: url('/images/other/main-logo5.webp');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -1620,7 +1620,7 @@ backdrop-filter: blur(5px); /* Размытие фона кнопки */
     transform: translateY(-50%);
     width: 20px;
     height: 20px;
-    background: url('../public/images/icons/icon-promo-line-news.png') center/contain no-repeat;
+    background: url('/images/icons/icon-promo-line-news.png') center/contain no-repeat;
 }
 
 .ticker-wrapper {
@@ -1685,7 +1685,7 @@ backdrop-filter: blur(5px); /* Размытие фона кнопки */
     position: relative;
   width: 100%;
   height: 1245px;
-  background-image: url('../public/images/other/profile-structure.webp');
+  background-image: url('/images/other/profile-structure.webp');
   background-size: cover; /* или contain в зависимости от needs */
   background-position: center;
   background-repeat: no-repeat;
@@ -3040,7 +3040,7 @@ search-mark {
     position: relative;
     height: 70vh;
     min-height: 500px;
-    background-image: url('../images/banners/slider-processing-works.webp');
+    background-image: url('/images/banners/slider-processing-works.webp');
     background-color: #a1a194; /* подложка */
     background-repeat: no-repeat;
     background-size: 100% auto;  /* Ширина 100%, высота auto */
@@ -3543,7 +3543,7 @@ search-mark {
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url('../images/medals/medal-weeknd-challenge-prizer.png');
+    background-image: url('/images/medals/medal-weeknd-challenge-prizer.png');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center top -60px; /* Поднимаем на 20px от верха */
@@ -3552,11 +3552,11 @@ search-mark {
 }
 
 .tournament-item:nth-child(2)::before {
-    background-image: url('../images/tournaments/tournament-bg-2.jpg');
+    background-image: url('/images/tournaments/tournament-bg-2.jpg');
 }
 
 .tournament-item:nth-child(3)::before {
-    background-image: url('../images/tournaments/tournament-bg-3.jpg');
+    background-image: url('/images/tournaments/tournament-bg-3.jpg');
 }
 
 /* Контейнер для форматов на одной строке */
@@ -4479,19 +4479,19 @@ border-radius: 12px;
 }
 /* Для разных игроков можно использовать data-атрибуты */
 .player-photo[data-player="1"]::before {
-    background-image: url('../public/images/other/team-player-example.png');
+    background-image: url('/images/other/team-player-example.png');
 }
 .player-photo[data-player="2"]::before {
-    background-image: url('../public/images/other/team-player-example2.png');
+    background-image: url('/images/other/team-player-example2.png');
 }
 .player-photo[data-player="3"]::before {
-    background-image: url('../public/images/other/team-player-example3.png');
+    background-image: url('/images/other/team-player-example3.png');
 }
 .player-photo[data-player="4"]::before {
-    background-image: url('../public/images/other/team-player-example4.png');
+    background-image: url('/images/other/team-player-example4.png');
 }
 .player-photo[data-player="5"]::before {
-    background-image: url('../public/images/other/team-player-empty.png');
+    background-image: url('/images/other/team-player-empty.png');
 }
 
 .captain-badge {
@@ -4631,11 +4631,15 @@ border-radius: 12px;
   bottom: 20px;
   top: -60px;
   transition: none; /* Убираем любые переходы */
+  pointer-events: none;
+  user-select: none;
 }
 /* Второй дивизион (справа) */
 .division-with-icon:nth-child(2) .division-external-icon {
     right: -120px;
     left: auto; /* Сбрасываем left */
+    pointer-events: none;
+  user-select: none;
 }
 
 .division-wrapper {
@@ -4872,7 +4876,7 @@ border-radius: 12px;
 
 .divisions-hero {
     background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)), 
-                url('../public/images/banners/banner-divisions-bg.jpg');
+                url('/images/banners/banner-divisions-bg.webp');
     background-size: cover;
     background-position: center;
     padding: 80px 20px;

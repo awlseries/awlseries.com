@@ -146,7 +146,7 @@ const Home = () => {
               <div className="news-list">
                 <div className="news-item">
                   <div className="news-image">
-                    <img src="/images/banners/news-bf6-1.jpg" alt="news-one-awl" />
+                    <img src="/images/banners/news-bf6-1.webp" alt="news-one-awl" />
                     <div className="news-content-overlay">
                       <div className="news-content-wrapper">
                         <h3 className="news-title">Важная информация о подтверждении результатов на стартовых турнирах</h3>
@@ -168,7 +168,7 @@ const Home = () => {
 
                 <div className="news-item">
                   <div className="news-image">
-                    <img src="/images/banners/news-awlandvk-two.jpg" alt="news-awl-and-vk" />
+                    <img src="/images/banners/news-awlandvk-two.webp" alt="news-awl-and-vk" />
                     <div className="news-content-overlay">
                       <div className="news-content-wrapper">
                         <h3 className="news-title">Возможное стратегическое партнерство с крупными группами VK</h3>

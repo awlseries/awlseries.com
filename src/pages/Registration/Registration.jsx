@@ -549,14 +549,14 @@ const handlePasswordChange = (e) => {
         <>
       <div className="language-switcher">
             <img 
-              src="../images/icons/icon-rus.png" 
+              src="/images/icons/icon-rus.png" 
               alt="Russian" 
               className={`language-flag ${currentLanguage === 'ru' ? 'active' : ''}`} 
               data-lang="ru" 
               onClick={() => handleLanguageChange('ru')}
             />
             <img 
-              src="../images/icons/icon-usa.png" 
+              src="/images/icons/icon-usa.png" 
               alt="English" 
               className={`language-flag ${currentLanguage === 'en' ? 'active' : ''}`} 
               data-lang="en" 
@@ -655,7 +655,7 @@ const handlePasswordChange = (e) => {
     
     <button type="submit" className="next-btn" disabled={loading}>
       {loading ? '...' : (
-        <img src="../images/icons/icon-strelka.png" alt="Иконка стрелки" className="button-icon-strelka" />
+        <img src="/images/icons/icon-strelka.png" alt="Иконка стрелки" className="button-icon-strelka" />
       )}
     </button>
     
@@ -664,8 +664,8 @@ const handlePasswordChange = (e) => {
       <a href="#" onClick={handleLoginClick}> {t('login_link')}</a>
     </div>
     
-    <img src="../images/other/skull-for-registration.png" alt="Skull-registration-awl" className="registration-form-skull" />
-    <img src="../images/other/top250-eye-small.png" alt="Горящий глаз" className="registration-form-eye" />
+    <img src="/images/other/skull-for-registration.png" alt="Skull-registration-awl" className="registration-form-skull" />
+    <img src="/images/other/top250-eye-small.png" alt="Горящий глаз" className="registration-form-eye" />
   </form>
 )}
 
@@ -714,7 +714,7 @@ const handlePasswordChange = (e) => {
     
     <button type="submit" className="next-btn" disabled={loading}>
       {loading ? '...' : (
-        <img src="../images/icons/icon-strelka.png" alt="Иконка стрелки" className="button-icon-strelka" />
+        <img src="/images/icons/icon-strelka.png" alt="Иконка стрелки" className="button-icon-strelka" />
       )}
     </button>
 
@@ -740,7 +740,7 @@ const handlePasswordChange = (e) => {
       <h2 className="verification-title">{t('verify_email_title')}</h2>
       <div className="verification-icon">
         <img 
-          src="../images/icons/icon-letter-green.png" 
+          src="/images/icons/icon-letter-green.png" 
           style={{width: '70px', height: '70px'}} 
           alt="Иконка письма" 
           className="green-letter"
@@ -780,7 +780,7 @@ const handlePasswordChange = (e) => {
           {currentScreen === 'complete' && (
   <div id="registration-complete" className="registration-complete active">
     <h2>{t('registration_complete_title')}</h2>
-    <img src="../images/icons/awl_icon_complete.png" alt="Complete" className="complete-icon" />
+    <img src="/images/icons/awl_icon_complete.png" alt="Complete" className="complete-icon" />
     <p className="complete-text">
       <span>{t('welcome_text')} </span>
       <a href="/rules" target="_blank" rel="noopener noreferrer" className="rules-link">

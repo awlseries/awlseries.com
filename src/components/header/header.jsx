@@ -250,13 +250,13 @@ const handleSkullClick = () => {
               {/* Языковой переключатель */}
               <div className="language-switcher">
                 <img 
-                  src="../images/icons/icon-rus.png" 
+                  src="/images/icons/icon-rus.png" 
                   alt="Russian" 
                   className={`language-flag ${currentLanguage === 'ru' ? 'active' : ''}`}
                   onClick={() => handleLanguageChange('ru')}
                 />
                 <img 
-                  src="../images/icons/icon-usa.png" 
+                  src="/images/icons/icon-usa.png" 
                   alt="English" 
                   className={`language-flag ${currentLanguage === 'en' ? 'active' : ''}`}
                   onClick={() => handleLanguageChange('en')}

@@ -37,7 +37,7 @@ const { t } = useLanguage(); // Используем хук
             <p className="footer-copyright">© 2025 Arena Warborn League. <span>{t('rights_reserved')}</span></p>
             <p className="footer-links">
               <strong>{t('tournament_rules')}</strong> &nbsp; | &nbsp; 
-              <a href="../documents/privacy-policy.pdf" download className="footer-link">{t('privacy_policy')}</a> &nbsp; | &nbsp;
+              <a href="/documents/privacy-policy.pdf" download className="footer-link">{t('privacy_policy')}</a> &nbsp; | &nbsp;
               <a href="/rules" target="_blank" rel="noopener noreferrer" className="footer-link">{t('terms_of_use')}</a>
             </p>
           </div>

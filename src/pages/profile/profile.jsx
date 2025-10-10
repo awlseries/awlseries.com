@@ -435,10 +435,10 @@ if (!userData) {
 
   return (
     <div className="content-index">
-      <img className="profile-awl-background" src="../public/images/other/profile-background-awl.webp" alt="awl-logo-profile"/>
+      <img className="profile-awl-background" src="/images/other/profile-background-awl.webp" alt="awl-logo-profile"/>
 
       <div className="fade-block">
-        <img src="../public/images/other/profile-player-example.png" alt="awl-player-photo" className="masked-image"/>
+        <img src="/images/other/profile-player-example.png" alt="awl-player-photo" className="masked-image"/>
       </div>
 
       <div className="player-information">
@@ -462,7 +462,7 @@ if (!userData) {
                       className="nickname-save-btn"
                       onClick={saveNickname}
                     >
-                      <img className="icons-redactor" src="/public/images/icons/icon-save.png" alt="save-options"/>
+                      <img className="icons-redactor" src="/images/icons/icon-save.png" alt="save-options"/>
                     </button>
                     <button 
                       className="nickname-cancel-btn"
@@ -471,7 +471,7 @@ if (!userData) {
                         setEditedNickname(userData.battlefieldNickname || '');
                       }}
                     >
-                      <img className="icons-redactor" src="/public/images/icons/icon-redactor2.png" alt="back"/>
+                      <img className="icons-redactor" src="/images/icons/icon-redactor2.png" alt="back"/>
                     </button>
                   </div>
                 </div>
@@ -486,12 +486,12 @@ if (!userData) {
                       onClick={() => setIsEditingNickname(true)}
                       title="Редактировать никнейм"
                     >
-                      <img className="icons-redactor" src="/public/images/icons/icon-redactor1.png" alt="choose-options"/>
+                      <img className="icons-redactor" src="/images/icons/icon-redactor1.png" alt="choose-options"/>
                     </button>
                   )}
                   {!canEditNickname && nicknameCooldown && (
                     <span className="nickname-cooldown" title={`Следующее изменение через ${nicknameCooldown} дней`}>
-                      <img className="icons-redactor-time" src="/public/images/icons/icon-timeless.png" alt="change-time-is"/> {nicknameCooldown}д
+                      <img className="icons-redactor-time" src="/images/icons/icon-timeless.png" alt="change-time-is"/> {nicknameCooldown}д
                     </span>
                   )}
                 </div>
@@ -614,19 +614,19 @@ if (!userData) {
           <div className="info-block">
             <div className="mvp-rewards-grid">
               <div className="mvp-reward-item">
-                <img src="../public/images/medals/icon-medal1.png" className="reward-icon" alt="Награда"/>
+                <img src="/images/medals/icon-medal1.png" className="reward-icon" alt="Награда"/>
                 <span className="reward-text">Название турнира с призовым местом</span>
               </div>
               <div className="mvp-reward-item">
-                <img src="../public/images/medals/icon-medal2.png" className="reward-icon" alt="Награда"/>
+                <img src="/images/medals/icon-medal2.png" className="reward-icon" alt="Награда"/>
                 <span className="reward-text">Название турнира с призовым местом</span>
               </div>
               <div className="mvp-reward-item">
-                <img src="../public/images/medals/icon-medal3.png" className="reward-icon" alt="Награда"/>
+                <img src="/images/medals/icon-medal3.png" className="reward-icon" alt="Награда"/>
                 <span className="reward-text">Название турнира с призовым местом</span>
               </div>
               <div className="mvp-reward-item">
-                <img src="../public/images/medals/icon-medal2.png" className="reward-icon" alt="Награда"/>
+                <img src="/images/medals/icon-medal2.png" className="reward-icon" alt="Награда"/>
                 <span className="reward-text">Название турнира с призовым местом</span>
               </div>
             </div>
@@ -725,22 +725,22 @@ if (!userData) {
           <div className="info-block achievements-block">
             <div className="achievements-row">
               <div className="achievement-item">
-                <img src="../public/images/icons/icon-not-information.png" className="achievement-icon" alt="Достижение 1"/>
+                <img src="/images/icons/icon-not-information.png" className="achievement-icon" alt="Достижение 1"/>
               </div>
               <div className="achievement-item">
-                <img src="../public/images/icons/icon-not-information.png" className="achievement-icon" alt="Достижение 2"/>
+                <img src="/images/icons/icon-not-information.png" className="achievement-icon" alt="Достижение 2"/>
               </div>
               <div className="achievement-item">
-                <img src="../public/images/icons/icon-not-information.png" className="achievement-icon" alt="Достижение 3"/>
+                <img src="/images/icons/icon-not-information.png" className="achievement-icon" alt="Достижение 3"/>
               </div>
               <div className="achievement-item">
-                <img src="../public/images/icons/icon-not-information.png" className="achievement-icon" alt="Достижение 4"/>
+                <img src="/images/icons/icon-not-information.png" className="achievement-icon" alt="Достижение 4"/>
               </div>
               <div className="achievement-item">
-                <img src="../public/images/icons/icon-not-information.png" className="achievement-icon" alt="Достижение 5"/>
+                <img src="/images/icons/icon-not-information.png" className="achievement-icon" alt="Достижение 5"/>
               </div>
               <div className="achievement-item">
-                <img src="../public/images/icons/icon-not-information.png" className="achievement-icon" alt="Достижение 6"/>
+                <img src="/images/icons/icon-not-information.png" className="achievement-icon" alt="Достижение 6"/>
               </div>
             </div>
           </div>
