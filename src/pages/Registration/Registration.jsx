@@ -1,7 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
-import { doc, setDoc, serverTimestamp, getDoc } from 'firebase/firestore';
-import { auth, db } from '../../firebase';
+import { supabase } from '../../supabase';
 import Footer from '../../components/Footer/Footer';
 import FeedbackModal from '../../components/FeedbackModal/FeedbackModal.jsx';
 import { showSingleNotification } from '/utils/notifications';
@@ -32,34 +30,36 @@ const Registration = () => {
   const STORAGE_KEYS = {
     VERIFICATION: "email_verification_pending",
     TEMP_EMAIL: "temp_email_for_verification",
-    TEMP_PASSWORD: "temp_password_for_verification"
+    TEMP_PASSWORD: "temp_password_for_verification",
+    CURRENT_SCREEN: "current_screen"
   };
   const handleLanguageChange = (lang) => {
     changeLanguage(lang);
   };
 
-  // Проверка авторизации при загрузке страницы
+  // ------------------------------------------------- Проверка авторизации при загрузке страницы
+
   useEffect(() => {
     const checkUserAuth = async () => {
       try {
-        // Проверяем текущего авторизованного пользователя
-        const currentUser = auth.currentUser;
+        const { data: { session }, error } = await supabase.auth.getSession();
         
-        if (currentUser) {
-          // Пользователь авторизован, получаем его данные из Firestore
-          const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
-          
-          if (userDoc.exists()) {
-            const userData = userDoc.data();
+        if (session?.user) {
+          // Пользователь авторизован, получаем его данные
+          const { data: userData, error: userError } = await supabase
+            .from('users')
+            .select('*')
+            .eq('id', session.user.id)
+            .single();
+
+          if (userData && !userError) {
             const displayName = userData.fullname || userData.email || 'Пользователь';
-            
             // Показываем уведомление
             showSingleNotification(
   `${t('notifications.auth_already')} <span style="color: #d0cbba; font-weight: bold;">${displayName}</span>`,
   false,  // isError = false
   3000    // duration = 3000
 );
-            
             setIsUserAuthenticated(true);
             
             // Через 3 секунды перенаправляем на главную
@@ -78,39 +78,39 @@ const Registration = () => {
     checkUserAuth();
   }, []);
 
-  // Слушатель изменения состояния авторизации
+  // ------------------------------- Слушатель изменения состояния авторизации
+
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      if (user && !isUserAuthenticated) {
-        // Пользователь авторизован
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
-        
-        if (userDoc.exists()) {
-          const userData = userDoc.data();
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (session?.user && !isUserAuthenticated) {
+        const { data: userData, error: userError } = await supabase
+          .from('users')
+          .select('*')
+          .eq('id', session.user.id)
+          .single();
+
+        if (userData && !userError && window.location.pathname === '/registration') {
           const displayName = userData.fullname || userData.email || 'Пользователь';
           
           // Показываем уведомление только если мы еще на странице регистрации
           if (window.location.pathname === '/registration') {
             showSingleNotification(
-  `${t('notifications.auth_already')} <span style="color: #d0cbba; font-weight: bold;">${displayName}</span>`,
-  false,  // isError = false
-  3000    // duration = 3000
-);
-            
-            setIsUserAuthenticated(true);
-            
-            setTimeout(() => {
-              window.location.href = '/';
-            }, 3000);
-          }
+            `${t('notifications.auth_already')} <span style="color: #d0cbba; font-weight: bold;">${displayName}</span>`,
+            false,
+            3000
+          );
+          
+          setIsUserAuthenticated(true);
         }
+      }
       }
     });
 
-    return () => unsubscribe();
+    return () => subscription.unsubscribe();
   }, [isUserAuthenticated]);
 
-  // Таймер для обратного отсчета
+  // --------------------------------------------- Таймер для обратного отсчета
+
   useEffect(() => {
     let interval;
     if (resendCooldown > 0) {
@@ -127,7 +127,8 @@ const Registration = () => {
     return () => clearInterval(interval);
   }, [resendCooldown]);
 
-  // Запуск таймера при показе экрана верификации
+  // ------------------------------------- Запуск таймера при показе экрана верификации
+
   useEffect(() => {
     if (currentScreen === 'verification') {
       startCountdown();
@@ -139,7 +140,8 @@ const Registration = () => {
     setIsResendDisabled(true);
   };
 
-  // Плавное появление при скролле
+  // ------------------------------------------------------- Плавное появление при скролле
+
   useEffect(() => {
     const checkScroll = () => {
       if (registrationContainerRef.current) {
@@ -162,48 +164,69 @@ const Registration = () => {
     };
   }, []);
 
-  // Проверка состояния при загрузке
-  useEffect(() => {
-    const checkAuthState = async () => {
-      try {
-        const savedData = localStorage.getItem(STORAGE_KEYS.VERIFICATION);
+  // ------------------------------------------------------ Проверка состояния при загрузке
+
+useEffect(() => {
+  const checkAuthState = async () => {
+    try {
+      // Проверяем сохраненный экран верификации
+      const savedScreen = localStorage.getItem(STORAGE_KEYS.CURRENT_SCREEN);
+      if (savedScreen === 'verification') {
+        // Если был сохранен экран верификации, проверяем сессию
+        const { data: { session }, error } = await supabase.auth.getSession();
         
-        if (savedData) {
-          const { email, uid } = JSON.parse(savedData);
-          const password = localStorage.getItem(STORAGE_KEYS.TEMP_PASSWORD);
-          
-          if (email && password) {
-            try {
-              const userCredential = await signInWithEmailAndPassword(auth, email, password);
-              const currentUser = userCredential.user;
-              await currentUser.reload();
-              
-              if (currentUser.emailVerified) {
-                setCurrentScreen('complete');
-              } else {
-                setUser(currentUser);
-                setUserEmail(email);
-                setCurrentScreen('verification');
-                startVerificationCheck(currentUser);
-              }
-            } catch (error) {
-              console.error("Ошибка проверки состояния:", error);
-              clearAuthData();
-            }
+        if (session?.user && !session.user.email_confirmed_at) {
+          // Пользователь все еще не подтвердил email, показываем экран верификации
+          setUser(session.user);
+          setUserEmail(session.user.email);
+          setCurrentScreen('verification');
+          startVerificationCheck(session.user);
+          return;
+        } else {
+          // Если email подтвержден или сессии нет, очищаем
+          localStorage.removeItem(STORAGE_KEYS.CURRENT_SCREEN);
+        }
+      }
+
+      const savedData = localStorage.getItem(STORAGE_KEYS.VERIFICATION);
+      
+      if (savedData) {
+        const { email, userId, timestamp } = JSON.parse(savedData);
+        
+        // Проверяем актуальность данных (не старше 24 часов)
+        if (timestamp && Date.now() - new Date(timestamp).getTime() > 24 * 60 * 60 * 1000) {
+          clearAuthData();
+          return;
+        }
+        
+        // Проверяем текущую сессию
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (session?.user) {
+          if (session.user.email_confirmed_at) {
+            setCurrentScreen('complete');
+            clearAuthData();
+          } else {
+            setUser(session.user);
+            setUserEmail(session.user.email || email);
+            setCurrentScreen('verification');
+            startVerificationCheck(session.user);
           }
         }
-      } catch (error) {
-        console.error("Ошибка проверки состояния:", error);
-        clearAuthData();
-      } finally {
-        setIsCheckingAuth(false);
       }
-    };
+    } catch (error) {
+      console.error("Ошибка проверки состояния:", error);
+      clearAuthData();
+    } finally {
+      setIsCheckingAuth(false);
+    }
+  };
 
-    checkAuthState();
-  }, []);
+  checkAuthState();
+}, []);
 
-  // Отключение браузерных подсказок валидации
+  // ----------------------------------------------------- Отключение браузерных подсказок валидации
+
   useEffect(() => {
     const disableBrowserValidation = () => {
       const forms = document.querySelectorAll('form');
@@ -215,14 +238,8 @@ const Registration = () => {
     disableBrowserValidation();
   }, [currentScreen, isLoginForm]);
 
-  // Очистка данных аутентификации
-  const clearAuthData = () => {
-    Object.values(STORAGE_KEYS).forEach(key => {
-      localStorage.removeItem(key);
-    });
-  };
+  // ------------------------------------------------------------------ Валидация полей формы
 
-  // Валидация полей формы
 const validateRegistrationForm = (formData) => {
   const errors = {};
   const { fullname, email, password, confirmPassword } = formData;
@@ -262,7 +279,8 @@ const validateRegistrationForm = (formData) => {
   return errors;
 };
 
-  // Валидация формы входа
+  // -------------------------------------------------------------- Валидация формы входа
+
 const validateLoginForm = (formData) => {
   const errors = {};
   const { email, password } = formData;
@@ -280,39 +298,106 @@ const validateLoginForm = (formData) => {
   return errors;
 };
 
-  // Показать экран верификации
+  // ----------------------------------------------------------------- Показать экран верификации
+
   const showVerificationScreen = (email, user) => {
     setUserEmail(email);
     setUser(user);
     setCurrentScreen('verification');
+    // Сохраняем текущий экран
+    localStorage.setItem(STORAGE_KEYS.CURRENT_SCREEN, 'verification');
     
     startVerificationCheck(user);
     startCountdown();
     showSingleNotification(`✓ ${t('notifications.verification_sent')}`);
   };
 
-  // Проверка верификации email
+  // -------------------------------------------------------------------- Проверка верификации email
+
   const startVerificationCheck = (user) => {
-    const checkInterval = setInterval(async () => {
-      try {
-        await user.reload();
-        if (user.emailVerified) {
+  const checkInterval = setInterval(async () => {
+    try {
+      // Получаем актуальную сессию
+      const { data: { session }, error } = await supabase.auth.getSession();
+      
+      if (error) throw error;
+
+      // Проверяем подтверждение в auth
+      if (session?.user) {
+        // Получаем свежие данные пользователя из auth
+        const { data: { user: currentUser }, error: userError } = await supabase.auth.getUser();
+        
+        if (userError) throw userError;
+
+        // Проверяем различные возможные поля подтверждения
+        const isEmailConfirmed = 
+          currentUser?.email_confirmed_at || 
+          currentUser?.confirmed_at ||
+          currentUser?.email_verified;
+        
+        if (isEmailConfirmed) {
           clearInterval(checkInterval);
+          
+          // ОБНОВЛЯЕМ запись в таблице users
+          await supabase
+            .from('users')
+            .update({ 
+              email_confirmed_at: new Date().toISOString(),
+              last_login: new Date().toISOString()
+            })
+            .eq('id', currentUser.id);
+
           setCurrentScreen('complete');
+          localStorage.removeItem(STORAGE_KEYS.CURRENT_SCREEN);
           clearAuthData();
           showSingleNotification(`✓ ${t('notifications.email_verified')}`);
         }
-      } catch (error) {
-        console.error('Ошибка проверки верификации:', error);
-        clearInterval(checkInterval);
       }
-    }, 5000);
+    } catch (error) {
+      console.error('Ошибка проверки верификации:', error);
+      clearInterval(checkInterval);
+    }
+  }, 5000);
+};
+
+  // -------------------------------------------------------- Обработчик отправки повторного письма верификации
+
+  const handleResendVerification = async () => {
+    if (isResendDisabled) return;
+    
+    try {
+      setIsResendDisabled(true);
+      
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email: userEmail,
+      });
+
+      if (error) throw error;
+      showSingleNotification(`✓ ${t('notifications.resend_success')}`);
+      
+      // Запускаем таймер
+      startCountdown();
+    } catch (error) {
+      console.error("Ошибка отправки:", error);
+      setIsResendDisabled(false);
+      showSingleNotification(`✗ ${t('notifications.resend_error')} ${error.message}`, true);
+    }
   };
 
-  // Обработчик отправки формы регистрации
+  // ------------------------------------------------------- Очистка данных аутентификации
+
+  const clearAuthData = () => {
+    Object.values(STORAGE_KEYS).forEach(key => {
+      localStorage.removeItem(key);
+    });
+  };
+
+  // ------------------------------------------------------------- Обработчик отправки формы регистрации
+
   const handleRegistrationSubmit = async (e) => {
     e.preventDefault();
-    e.stopPropagation(); // Добавить эту строку
+    e.stopPropagation();
     setLoading(true);
     setError('');
     setFieldErrors({});
@@ -325,7 +410,8 @@ const validateLoginForm = (formData) => {
       confirmPassword: form['confirm-password'].value
     };
 
-    // Валидация формы
+    // -------------------------------------------------------------- Валидация формы регистрации
+
     const errors = validateRegistrationForm(formData);
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
@@ -334,48 +420,75 @@ const validateLoginForm = (formData) => {
     }
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
-      const user = userCredential.user;
+      // Регистрация в Supabase
+      const { data, error } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+        options: {
+          data: {
+            full_name: formData.fullname
+          }
+        }
+      });
+
+      if (error) {
+      // Проверяем, является ли ошибка "email уже существует"
+      if (error.message?.includes('already registered') || error.code === 'user_already_exists' || error.message?.includes('User already registered')) {
+        throw new Error('EMAIL_ALREADY_EXISTS');
+      }
+      throw error;
+    }
       
       // Сохраняем данные в localStorage
       localStorage.setItem(STORAGE_KEYS.VERIFICATION, JSON.stringify({
         email: formData.email,
-        uid: user.uid
+        userId: data.user.id
       }));
       localStorage.setItem(STORAGE_KEYS.TEMP_EMAIL, formData.email);
-      localStorage.setItem(STORAGE_KEYS.TEMP_PASSWORD, formData.password);
       
-      // Отправляем письмо верификации
-      await sendEmailVerification(user);
-      
-      // Сохраняем данные пользователя в Firestore
-      await setDoc(doc(db, 'users', user.uid), {
-        fullname: formData.fullname,
-        email: formData.email,
-        createdAt: serverTimestamp(),
-        lastLogin: serverTimestamp(),
-        pendingEmailVerification: true,
-        emailVerified: false,
-        team: "free agent",
-        battlefieldNickname: "",
-        country: "EMPTY",
-        division: "calibration",
-        mmr: 0
-      });
+      // Создаем запись в таблице users supabase
+      const { error: dbError } = await supabase
+        .from('users')
+        .insert({
+          id: data.user.id,
+          fullname: formData.fullname,
+          email: formData.email,
+          created_at: new Date().toISOString(),
+          last_login: new Date().toISOString(),
+          email_confirmed_at: null,
+          team: "free agent",
+          battlefield_nickname: "",
+          country: "EMPTY",
+          division: "calibration",
+          mmr: 0,
+          stats: null,
+          player_class: "assault"
+        });
 
-      showVerificationScreen(formData.email, user);
+      if (dbError) throw dbError;
+
+      showVerificationScreen(formData.email, data.user);
       
     } catch (error) {
-      console.error('Ошибка регистрации:', error);
+    console.error('Ошибка регистрации:', error);
+    
+    // Обрабатываем случай существующего email
+    if (error.message === 'EMAIL_ALREADY_EXISTS') {
+      const errorMessage = t('email_already_exists');
+      setError(errorMessage);
+      showSingleNotification(errorMessage, true);
+    } else {
       const errorMessage = getErrorMessage(error);
       setError(errorMessage);
       showSingleNotification(errorMessage, true);
-    } finally {
-      setLoading(false);
     }
-  };
+  } finally {
+    setLoading(false);
+  }
+};
 
-  // Обработчик входа
+  // ----------------------------------------------------------------- Обработчик входа
+  
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -388,7 +501,8 @@ const validateLoginForm = (formData) => {
       password: form.password.value
     };
 
-    // Валидация формы
+    // ----------------------------------------------------------------- Валидация формы логина
+
     const errors = validateLoginForm(formData);
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
@@ -397,7 +511,19 @@ const validateLoginForm = (formData) => {
     }
 
     try {
-      const { user } = await signInWithEmailAndPassword(auth, formData.email, formData.password);
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password
+      });
+
+      if (error) throw error;
+
+      // Обновляем last_login
+      await supabase
+        .from('users')
+        .update({ last_login: new Date().toISOString() })
+        .eq('id', data.user.id);
+
       showSingleNotification(`✓ ${t('notifications.login_success')}`);
       window.location.href = '/';
     } catch (error) {
@@ -410,7 +536,8 @@ const validateLoginForm = (formData) => {
     }
   };
 
-  // Обработчик восстановления пароля - обновите проверку email
+  // ---------------------------------------------------------------- Обработчик восстановления пароля
+
 const handlePasswordRecoverySubmit = async (e) => {
   e.preventDefault();
   setRecoveryLoading(true);
@@ -426,7 +553,12 @@ const handlePasswordRecoverySubmit = async (e) => {
   }
 
     try {
-      await sendPasswordResetEmail(auth, email);
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/update-password`,
+      });
+
+      if (error) throw error;
+
       showSingleNotification(`✓ ${t('notifications.recovery_instructions')}`);
       setPasswordRecoveryOpen(false);
       setError('');
@@ -440,14 +572,14 @@ const handlePasswordRecoverySubmit = async (e) => {
     }
   };
 
-  // Переключение на форму входа
+  // -------------------------------------------------------------- Переключение на форму входа
+
   const handleLoginClick = (e) => {
     e.preventDefault();
     setIsLoginForm(true);
     setError('');
     setFieldErrors({});
   };
-
   // Переключение обратно на форму регистрации
   const handleRegisterClick = (e) => {
     e.preventDefault();
@@ -456,45 +588,57 @@ const handlePasswordRecoverySubmit = async (e) => {
     setFieldErrors({});
   };
 
-  // Получение понятного сообщения об ошибке для регистрации
-const getErrorMessage = (error) => {
-  const errorMessage = t(`firebase_errors.${error.code}`);
-  return errorMessage || `Ошибка регистрации: ${error.message}`;
+  // ------------------------------------------------- Получение понятных сообщений об ошибке регистрации
+
+  const getErrorMessage = (error) => {
+    const supabaseErrorMap = {
+      'user_already_exists': t('firebase_errors.auth/email-already-in-use'),
+      'weak_password': t('firebase_errors/auth/weak-password'),
+      'invalid_email': t('firebase_errors/auth/invalid-email'),
+      'email_rate_limit_exceeded': t('email_rate_limit'),
+    '23505': t('email_already_exists'), // unique violation
+    '23503': t('email_already_exists') // foreign key violation - тоже означает что пользователь существует
+  };
+  
+  // сообщение об ошибке на наличие ключевых фраз
+  if (error.message?.includes('already registered') || 
+      error.message?.includes('already exists') ||
+      error.code === '23505' || 
+      error.code === '23503') {
+    return t('email_already_exists');
+  }
+  // на лимит писем
+  if (error.message?.includes('rate limit') || error.code === 'email_rate_limit_exceeded') {
+    return t('email_rate_limit');
+  }
+  
+  const errorMessage = supabaseErrorMap[error.code] || 
+                      t(`firebase_errors.${error.code}`) || 
+                      t('errors.registration_failed');
+  
+  return errorMessage;
 };
 
-// Получение понятного сообщения об ошибке для входа
-const getLoginErrorMessage = (error) => {
-  const errorMessage = t(`firebase_errors.${error.code}`);
-  return errorMessage || `Ошибка входа: ${error.message}`;
-};
-
-// Получение понятного сообщения об ошибке для восстановления
-const getRecoveryErrorMessage = (error) => {
-  const errorMessage = t(`firebase_errors.${error.code}`);
-  return errorMessage || `Ошибка восстановления: ${error.message}`;
-};
-
-  // Обработчик отправки повторного письма верификации
-
-  const handleResendVerification = async () => {
-    if (isResendDisabled) return;
+  // Ошибки для входа
+  const getLoginErrorMessage = (error) => {
+    const supabaseErrorMap = {
+      'invalid_credentials': t('firebase_errors.auth/wrong-password'),
+      'email_not_confirmed': t('firebase_errors/auth/email-not-verified'),
+      'invalid_email': t('firebase_errors/auth/invalid-email')
+    };
     
-    try {
-      setIsResendDisabled(true);
-      
-      await sendEmailVerification(user);
-      showSingleNotification(`✓ ${t('notifications.resend_success')}`);
-      
-      // Запускаем таймер
-      startCountdown();
-    } catch (error) {
-      console.error("Ошибка отправки:", error);
-      setIsResendDisabled(false);
-      showSingleNotification(`✗ ${t('notifications.resend_error')} ${error.message}`, true);
-    }
+    const errorMessage = supabaseErrorMap[error.code] || t(`firebase_errors.${error.code}`) || `Ошибка входа: ${error.message}`;
+    return errorMessage;
   };
 
-  // Очистка ошибки поля при фокусе
+  // Ошибки для восстановления
+  const getRecoveryErrorMessage = (error) => {
+    const errorMessage = t(`firebase_errors.${error.code}`) || `Ошибка восстановления: ${error.message}`;
+    return errorMessage;
+  };
+
+  // ------------------------------------------------------------ Очистка ошибки поля при фокусе
+
   const handleFieldFocus = (fieldName) => {
     setFieldErrors(prev => ({
       ...prev,
@@ -502,7 +646,8 @@ const getRecoveryErrorMessage = (error) => {
     }));
   };
 
-  // Простая проверка совпадения паролей
+  // ---------------------------------------------------------------- Простая проверка совпадения паролей
+
 const checkPasswordMatch = () => {
   const password = document.getElementById('password')?.value;
   const confirmPassword = document.getElementById('confirm-password')?.value;
@@ -523,7 +668,8 @@ const checkPasswordMatch = () => {
   }
 };
 
-// Обработчик изменения поля подтверждения пароля
+// --------------------------------------------------------------- Обработчик изменения поля подтверждения пароля
+
 const handleConfirmPasswordChange = (e) => {
   checkPasswordMatch();
   
@@ -541,7 +687,7 @@ const handlePasswordChange = (e) => {
   setError('');
 };
 
-  // ----------------------------------------------------------------------------------------------------------------- HTML
+  // ------------------------------------------------------------------------------------------ HTML
 
   return (
     <div className="registration-page">

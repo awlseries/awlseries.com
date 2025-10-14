@@ -1,9 +1,9 @@
 // components/CountryPicker.jsx
-import React, { useState, useEffect } from 'react';
-import { updateDoc, doc, serverTimestamp } from 'firebase/firestore';
-import { db, auth } from '../firebase';
-import Flag from 'react-world-flags';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
+import { supabase } from '../supabase';
 import { showSingleNotification } from '/utils/notifications';
+
+const Flag = lazy(() => import('react-world-flags'));
 
 const CountryPicker = ({ isOpen, onClose, currentCountry, onCountrySelect, disabled = false }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -83,45 +83,40 @@ const CountryPicker = ({ isOpen, onClose, currentCountry, onCountrySelect, disab
     }
   }, [searchTerm]);
 
-  const handleCountryClick = (country) => {
-    if (disabled) {
-      return; // Не делаем ничего, если компонент заблокирован
-    }
-    onCountrySelect(country);
-  };
-
-  const handleCountrySelect = async (country) => {
-    try {
-      const user = auth.currentUser;
-      if (user) {
-        await updateDoc(doc(db, 'users', user.uid), {
+  const handleCountryClick = async (country) => {
+  if (disabled) {
+    return; // Не делаем ничего, если компонент заблокирован
+  }
+  
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      const { error } = await supabase
+        .from('users')
+        .update({
           country: country.code,
           countryName: country.name,
-          lastUpdate: serverTimestamp()
-        });
-        
-        onCountrySelect(country);
-        showSingleNotification(`✓ Страна изменена на ${country.name}`);
-        onClose();
-      }
-    } catch (error) {
-      console.error('Ошибка сохранения страны:', error);
-      showSingleNotification('✗ Ошибка сохранения страны', true);
-    }
-  };
+          lastUpdate: new Date().toISOString()
+        })
+        .eq('id', user.id);
 
-  // Функция для получения отображаемого названия страны
-  const getDisplayCountry = () => {
-    if (!currentCountry || currentCountry === 'EMPTY') {
-      return 'Выберите страну';
+      if (error) {
+        throw error;
+      }
+      
+      onCountrySelect(country);
+      showSingleNotification(`✓ Страна изменена на ${country.name}`);
+      onClose();
     }
-    const country = countryList.find(c => c.code === currentCountry);
-    return country ? country.name : 'Неизвестно';
-  };
+  } catch (error) {
+    console.error('Ошибка сохранения страны:', error);
+    showSingleNotification('✗ Ошибка сохранения страны', true);
+  }
+};
 
   if (!isOpen) return null;
 
-  return (
+ return (
     <div className="country-picker-modal" style={{ display: 'flex' }}>
       <div className="country-picker-content">
         <button 
@@ -153,35 +148,43 @@ const CountryPicker = ({ isOpen, onClose, currentCountry, onCountrySelect, disab
           )}
           
           {countries.map((country) => (
-    <div
-      key={country.code}
-      className={`country-item ${currentCountry === country.code ? 'selected' : ''} ${disabled ? 'disabled' : ''}`}
-      onClick={() => handleCountryClick(country)}
-      style={{
-        cursor: disabled ? 'not-allowed' : 'pointer',
-        opacity: disabled ? 0.5 : 1
-      }}
-    >
-            {/* Замените эмодзи на react-world-flags */}
-            <span className="country-flag">
-              <Flag 
-                code={country.code} 
-                style={{ 
-                  width: '25px', 
-                  height: '18px',
-                  borderRadius: '2px',
-                  objectFit: 'cover'
-                }}
-              />
-            </span>
-            <span className="country-name">{country.name}</span>
-            {currentCountry === country.code && (
-              <span className="country-selected-badge">✓</span>
-            )}
-          </div>
-        ))}
+            <div
+              key={country.code}
+              className={`country-item ${currentCountry === country.code ? 'selected' : ''} ${disabled ? 'disabled' : ''}`}
+              onClick={() => handleCountryClick(country)}
+              style={{
+                cursor: disabled ? 'not-allowed' : 'pointer',
+                opacity: disabled ? 0.5 : 1
+              }}
+            >
+              <span className="country-flag">
+                <Suspense fallback={
+                  <div style={{
+                    width: '25px',
+                    height: '18px',
+                    backgroundColor: '#b2ad9c',
+                    borderRadius: '2px'
+                  }}></div>
+                }>
+                  <Flag 
+                    code={country.code} 
+                    style={{ 
+                      width: '25px', 
+                      height: '18px',
+                      borderRadius: '2px',
+                      objectFit: 'cover'
+                    }}
+                  />
+                </Suspense>
+              </span>
+              <span className="country-name">{country.name}</span>
+              {currentCountry === country.code && (
+                <span className="country-selected-badge">✓</span>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
     </div>
   );
 };

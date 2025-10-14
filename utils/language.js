@@ -30,6 +30,8 @@ export const translations = {
     password_recovery_placeholder: "Введите ваш email",
     recovery_send_button: "Отправить ссылку",
     recovery_loading: 'Отправка...',
+    email_already_exists: 'Пользователь с таким email уже существует',
+    email_rate_limit: "Превышен лимит отправки писем. Пожалуйста, попробуйте позже.",
 
     // Модалка поиска
     search_placeholder: "Поиск по сайту...",
@@ -120,7 +122,7 @@ export const translations = {
       feedback_error: 'Ошибка отправки'
     },
     
-    // Ошибки Firebase
+    // Ошибки supabase
     firebase_errors: {
       'auth/email-already-in-use': 'Этот email уже зарегистрирован',
       'auth/weak-password': 'Пароль слишком простой',
@@ -134,6 +136,7 @@ export const translations = {
       'auth/user-disabled': 'Аккаунт заблокирован',
       'auth/user-not-found': 'Пользователь не найден'
     },
+
     // Уведомления
     notifications: {
       auth_already: 'Вы уже авторизованы как',
@@ -147,7 +150,97 @@ export const translations = {
       feedback_error: 'Ошибка отправки',
       logout_success: "Вы успешно вышли из системы",
       logout_error: "Ошибка при выходе из системы"
-    }
+    },
+
+    // СТРАНИЦА ПРОФИЛЯ
+    stats: {
+      notAvailable: "Н/д",
+      kdRatio: "У/С",
+      winRate: "% Побед", 
+      playTime: "Время в игре",
+      favoriteWeapon: "Любимое оружие",
+      wins: "Побед",
+      losses: "Поражений",
+      inDevelopment: "В разработке"
+    },
+
+    // СТРАНИЦА ТРАНСФЕРОВ
+    freeAgents: 'Свободные агенты',
+    freeAgentsDescription: 'Найдите игроков без команды, которые находятся в поиске напарников для участия в турнирах. Наша платформа помогает собрать сильную команду и начать путь к победе в турнирах.',
+    freeAgentsCount: 'свободных агентов',
+    searchPartners: 'поиск напарников',
+    formedTeams: 'сформированных команд',
+    allPlayers: 'Все игроки',
+    data: 'Данные',
+    class: 'Класс',
+    nickname: 'Никнейм',
+    kd: 'У/С',
+    playTime: 'Время в игре',
+    details: 'Подробнее',
+    loading: 'Загрузка игроков...',
+    playerInfo: 'Информация об игроке',
+
+    // СТРАНИЦА КОМАНД
+    teams: {
+    free_slot: "Свободный слот", 
+  division_1_rank: "Дивизион I ранга",
+  division_2_rank: "Дивизион II ранга", 
+  division_3_rank: "Дивизион III ранга", 
+  division_system_title: "СИСТЕМА ДИВИЗИОНОВ AWL SERIES S1",
+  division_system_description: "Продемонстрируйте свои навыки в лучшем соревновательном опыте из популярных режимов Battlefield. Поднимайтесь по рангам, получайте престижные награды и создайте свое наследие в интернациональной соревновательной системе Arena Warborn League.",
+  rating_structure_title: "СТРУКТУРА РЕЙТИНГА И НАГРАД", 
+  rating_structure_description: "Наша соревновательная система создана для признания и вознаграждения мастерства, преданности и стратегического превосходства. Зарабатывайте очки TMMR (Team Match Making Rating) через соревновательные матчи, серии турниров и открытых кубков. Поднимайтесь по дивизионам и открывайте эксклюзивные боевые достижения AWL. Каждый сезон приносит новые вызовы и престижные награды для лучших команд и MVP.",
+  
+  // СТРАНИЦА КОМАНД Награды
+  sponsor_contracts: "СПОНСОРСКИЕ КОНТРАКТЫ", 
+  contracts_with_organizations: "Контракты с игровыми организациями",
+  equipment_sponsorship: "Спонсорство оборудования и экипировки",
+  media_contracts: "Медийные контракты и стриминговые сделки",
+  exclusive_partnerships: "Эксклюзивные партнерства с лигой",
+  
+  combat_rewards: "БОЕВЫЕ НАГРАДЫ", 
+  prize_funds: "Призовые фонды до $1,000 за сезон на старте лиги",
+  unique_medals: "Уникальные медали за победы в сезонах",
+  seasonal_tokens: "Сезонные жетоны за каждое участие",
+  profile_badges: "Знаки отличия для профиля игрока",
+  invite_bonuses: "Бонусы за приглашение напарников",
+  guaranteed_prizes: "Гарантированные призы за первенство в команде и соло",
+  
+  privileged_quotas: "ПРИВИЛЕГИРОВАННЫЕ КВОТЫ",
+  automatic_qualification: "Автоматическая квалификация в Majors",
+  priority_slots: "Приоритетные слоты в больших турнирах",
+  exclusive_access: "Эксклюзивный доступ к закрытым событиям",
+  championship_quotas: "Квоты на серию чемпионатов лиги",
+  
+  career_growth: "КАРЬЕРНЫЙ РОСТ",
+  scout_programs: "Участие в скаутских программах",
+  training_sessions: "Доступ к тренировочным сессиям",
+  professional_mentorship: "Менторство от профессиональных игроков",
+  streaming_opportunities: "Возможности для стриминговой карьеры",
+  
+  // СТРАНИЦА КОМАНД Статистика
+  tmmr: "TMMR", 
+  teams: "Команды", 
+  new_teams: "Новые составы (30д)", 
+  expand: "Развернуть",
+  view_team: "Просмотр команды",
+  
+  // СТРАНИЦА КОМАНД Будущие возможности
+  future_opportunities_title: "БУДУЩИЕ СОРЕВНОВАТЕЛЬНЫЕ ВОЗМОЖНОСТИ",
+  future_features_icon: "Иконка будущих возможностей", 
+  seasonal_tournaments: "Сезонные крупные турниры:", 
+  seasonal_tournaments_desc: "Ежеквартальные чемпионские события с увеличенными призовыми фондами и специальными наградами",
+  global_leaderboards: "Глобальные таблицы лидеров:",
+  global_leaderboards_desc: "Рейтинги в реальном времени с региональными и мировыми позициями",
+  captain_announcements: "Система объявлений от капитанов",
+  captain_announcements_desc: "Поиски тиммейтов в новым команды внутри лиги качественно упростится",
+  practice_matches: "Поиск тренировочных матчей:",
+  practice_matches_desc: "Автоматизированная система для поиска тренировочных игр против соперников равного уровня",
+  payment_system: "Система оплаты в валюте и криптовалюте:", 
+  payment_system_desc: "Внедрение сервисов для платежей по всему миру",
+  integrated_streams: "Интегрированные трансляции:",
+  integrated_streams_desc: "Транслирование матчей игроков напрямую на платформы AWL с оверлеями"
+  }
   },
 
   en: {
@@ -179,6 +272,8 @@ export const translations = {
     password_recovery_placeholder: "Enter your email",
     recovery_send_button: "Send Link",
     recovery_loading: 'Sending...',
+    email_already_exists: 'User with this email already exists',
+    email_rate_limit: "Email rate limit exceeded. Please try again later.",
 
     // Модалка поиска EN
     search_placeholder: "Search the site...",
@@ -283,6 +378,7 @@ export const translations = {
       'auth/user-disabled': 'Account is disabled',
       'auth/user-not-found': 'User not found'
     },
+
     // Notifications
     notifications: {
       auth_already: 'You are already logged in as',
@@ -296,6 +392,95 @@ export const translations = {
       feedback_error: 'Sending error',
       logout_success: "You have successfully logged out",
       logout_error: "Logout error"
+    },
+
+    // PROFILE PAGE
+    stats: {
+      notAvailable: "N/a",
+  kdRatio: "K/D Ratio",
+  winRate: "Win Rate", 
+  playTime: "Play Time",
+  favoriteWeapon: "Favorite Weapon",
+  wins: "Wins",
+  losses: "Loses",
+  inDevelopment: "In Development"
+    },
+
+    // TRANSFERS PAGE
+    freeAgents: 'Free Agents',
+    freeAgentsDescription: 'Find players without a team who are looking for partners to participate in tournaments. Our platform helps build a strong team and start the path to victory in tournaments.',
+    freeAgentsCount: 'free agents',
+    searchPartners: 'search partners',
+    formedTeams: 'formed teams',
+    allPlayers: 'All Players',
+    data: 'Data',
+    class: 'Class',
+    nickname: 'Nickname',
+    kd: 'K/D',
+    playTime: 'Play Time',
+    details: 'Details',
+    loading: 'Loading players...',
+    playerInfo: 'Player information',
+  
+  // TEAMS PAGE
+    teams: {
+      free_slot: "Free slot", 
+      division_1_rank: "Division I rank",
+      division_2_rank: "Division II rank", 
+      division_3_rank: "Division III rank", 
+      division_system_title: "AWL SERIES S1 DIVISION SYSTEM",
+      division_system_description: "Showcase your skills in the best competitive experience from popular Battlefield modes. Rise through the ranks, earn prestigious rewards and build your legacy in the international competitive system of Arena Warborn League.",
+      rating_structure_title: "RATING STRUCTURE AND REWARDS", 
+      rating_structure_description: "Our competitive system is designed to recognize and reward mastery, dedication and strategic excellence. Earn TMMR (Team Match Making Rating) points through competitive matches, tournament series and open cups. Rise through divisions and unlock exclusive AWL combat achievements. Each season brings new challenges and prestigious rewards for the best teams and MVPs.",
+      
+      // TEAMS PAGE Rewards
+      sponsor_contracts: "SPONSOR CONTRACTS", 
+      contracts_with_organizations: "Contracts with gaming organizations",
+      equipment_sponsorship: "Equipment and gear sponsorship",
+      media_contracts: "Media contracts and streaming deals",
+      exclusive_partnerships: "Exclusive partnerships with the league",
+      
+      combat_rewards: "COMBAT REWARDS", 
+      prize_funds: "Prize pools up to $1,000 per season at league start",
+      unique_medals: "Unique medals for season victories",
+      seasonal_tokens: "Seasonal tokens for each participation",
+      profile_badges: "Distinction badges for player profile",
+      invite_bonuses: "Bonuses for inviting teammates",
+      guaranteed_prizes: "Guaranteed prizes for team and solo leadership",
+      
+      privileged_quotas: "PRIVILEGED QUOTAS",
+      automatic_qualification: "Automatic qualification to Majors",
+      priority_slots: "Priority slots in major tournaments",
+      exclusive_access: "Exclusive access to closed events",
+      championship_quotas: "Quotas for league championship series",
+      
+      career_growth: "CAREER GROWTH",
+      scout_programs: "Participation in scout programs",
+      training_sessions: "Access to training sessions",
+      professional_mentorship: "Mentorship from professional players",
+      streaming_opportunities: "Opportunities for streaming career",
+      
+      // TEAMS PAGE Statistics
+      tmmr: "TMMR", 
+      teams: "Teams", 
+      new_teams: "New teams (30d)", 
+      expand: "Expand",
+      view_team: "View team",
+      
+      // TEAMS PAGE Future opportunities
+      future_opportunities_title: "FUTURE COMPETITIVE OPPORTUNITIES",
+      future_features_icon: "Future features icon", 
+      seasonal_tournaments: "Seasonal major tournaments:", 
+      seasonal_tournaments_desc: "Quarterly championship events with increased prize pools and special rewards",
+      global_leaderboards: "Global leaderboards:",
+      global_leaderboards_desc: "Real-time rankings with regional and world positions",
+      captain_announcements: "Captain announcement system",
+      captain_announcements_desc: "Searching for teammates for new teams within the league will be significantly simplified",
+      practice_matches: "Practice match search:",
+      practice_matches_desc: "Automated system for finding practice games against opponents of equal level",
+      payment_system: "Currency and cryptocurrency payment system:", 
+      payment_system_desc: "Implementation of payment services worldwide",
+      integrated_streams: "Integrated streams:",
+      integrated_streams_desc: "Broadcasting player matches directly to AWL platforms with overlays"
     }
-  }
-};
+}};

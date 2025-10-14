@@ -2,17 +2,15 @@ import React, { lazy, Suspense } from 'react';
 import { useState, useEffect } from 'react';
 import { showSingleNotification } from '/utils/notifications';
 import CountryPicker from '../../components/CountryPicker';
+import { supabase } from '../../supabase';
+import { useLanguage } from '/utils/language-context.jsx';
 import '/src/styles.css';
+import './ProfileInfo.css';
 
 // Ленивая загрузка react-world-flags
 const Flag = lazy(() => import('react-world-flags').then(module => {
   return { default: module.default };
 }));
-
-// Правильные пути импорта для структуры проекта
-import { auth, db } from '../../firebase';
-import { onAuthStateChanged } from 'firebase/auth';
-import { doc, getDoc, updateDoc, serverTimestamp, Timestamp, collection, query, where, getDocs } from 'firebase/firestore';
 
 const Profile = () => {
   const [userData, setUserData] = useState(null);
@@ -25,95 +23,154 @@ const Profile = () => {
   const [isCountryPickerOpen, setIsCountryPickerOpen] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState('EMPTY');
   const [hasCountryBeenSet, setHasCountryBeenSet] = useState(false);
+  const [selectedClass, setSelectedClass] = useState('');
+  const [showClassSelector, setShowClassSelector] = useState(false);
+  const { t } = useLanguage();
 
-   // useEffect для загрузки данных при монтировании
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user && user.emailVerified) {
-        loadUserData(user);
-      } else {
-        setLoading(false);
-        setUserData(null);
-      }
-    });
+  // ------------------------------------------------------------------------ Загрузка данных при монтировании
 
-    return () => unsubscribe();
-  }, []);
+useEffect(() => {
+  let mounted = true;
 
-  // Загрузка данных пользователя
-  const loadUserData = async (user) => {
+  const loadInitialData = async () => {
     try {
       setLoading(true);
+      const { data: { session } } = await supabase.auth.getSession();
       
-      if (user && user.emailVerified) {
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
-        if (userDoc.exists()) {
-          const data = userDoc.data();
-          setUserData({
-          ...data,
-          battlefieldNickname: data.battlefieldNickname || '',
-            country: data.country || 'EMPTY',
-            countryName: data.countryName || 'Не выбрана'
-          });
-          setEditedNickname(data.battlefieldNickname || '');
-          setSelectedCountry(data.country || 'EMPTY');
-          setHasAgeBeenSet(!!data.birthDate);
-          setHasCountryBeenSet(!!data.country && data.country !== 'EMPTY');
-          checkNicknameCooldown(data);
-          
-          // Проверяем кулдаун на смену никнейма
-          checkNicknameCooldown(data);
-        } else {
-          showSingleNotification('✗ Профиль не найден', true);
-        }
-      } else {
-        showSingleNotification('✗ Подтвердите email для доступа к профилю', true);
+      if (mounted && session?.user) {
+        await loadUserData(session.user, mounted);
       }
     } catch (error) {
       console.error('Ошибка загрузки данных:', error);
-      showSingleNotification('✗ Ошибка загрузки профиля', true);
+      if (mounted) {
+        showSingleNotification('✗ Ошибка загрузки профиля', true);
+      }
     } finally {
+      if (mounted) {
+        setLoading(false);
+      }
+    }
+  };
+
+  // Слушаем ТОЛЬКО для выхода из системы
+  const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+    if (!mounted) return;
+
+    // Реагируем ТОЛЬКО на выход
+    if (event === 'SIGNED_OUT') {
+      setUserData(null);
       setLoading(false);
     }
+    // Игнорируем ВСЕ остальные события включая SIGNED_IN и TOKEN_REFRESHED
+  });
+
+  loadInitialData();
+
+  return () => {
+    mounted = false;
+    subscription.unsubscribe();
   };
+}, []);
 
-  const handleCountrySelect = (country) => {
-    // Проверяем, была ли страна уже установлена
-    if (hasCountryBeenSet) {
-      showSingleNotification('✗ Страну можно установить только один раз', true);
-      setIsCountryPickerOpen(false);
-      return;
-    }
+  // ------------------------------------------------------------------------- Загрузка данных пользователя
 
-    setSelectedCountry(country.code);
-    setUserData(prev => ({
-      ...prev,
-      country: country.code,
-      countryName: country.name
-    }));
-    setIsCountryPickerOpen(false);
+const loadUserData = async (user, mounted) => {
+  try {
+    setLoading(true);
     
-     // Сохраняем выбор страны в базу данных
-    const user = auth.currentUser;
     if (user) {
-      updateDoc(doc(db, 'users', user.uid), {
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+
+      if (error) {
+        throw error;
+      }
+
+      // ⚠️ Проверяем, что компонент еще mounted
+      if (!mounted) return;
+
+      if (data) {
+        const userStats = data.stats || null;
+
+        setUserData({
+          ...data,
+          stats: userStats,
+          battlefield_nickname: data.battlefield_nickname || '',
+          country: data.country || 'EMPTY',
+          countryName: data.countryName || 'Не выбрана'
+        });
+        setEditedNickname(data.battlefield_nickname|| '');
+        setSelectedCountry(data.country || 'EMPTY');
+        setHasAgeBeenSet(!!data.birthDate);
+        setHasCountryBeenSet(!!data.country && data.country !== 'EMPTY');
+        checkNicknameCooldown(data);
+      } else {
+        if (mounted) { // ← ДОБАВЬТЕ проверку
+          showSingleNotification('✗ Профиль не найден', true);
+        }
+      }
+    } else {
+      if (mounted) { // ← ДОБАВЬТЕ проверку
+        showSingleNotification('✗ Пользователь не авторизован', true);
+      }
+    }
+  } catch (error) {
+    if (mounted) {
+      console.error('Ошибка загрузки данных:', error);
+      showSingleNotification('✗ Ошибка загрузки профиля', true);
+    }
+  } finally {
+    if (mounted) {
+      setLoading(false);
+    }
+  }
+};
+
+  const handleCountrySelect = async (country) => {
+  // Проверяем, была ли страна уже установлена
+  if (hasCountryBeenSet) {
+    showSingleNotification('✗ Страну можно установить только один раз', true);
+    setIsCountryPickerOpen(false);
+    return;
+  }
+
+  setSelectedCountry(country.code);
+  setUserData(prev => ({
+    ...prev,
+    country: country.code,
+    countryName: country.name
+  }));
+  setIsCountryPickerOpen(false);
+  
+  // Сохраняем выбор страны в базу данных
+  const { data: { user } } = await supabase.auth.getUser();
+  if (user) {
+    const { error } = await supabase
+      .from('users')
+      .update({
         country: country.code,
         countryName: country.name,
-        lastUpdate: serverTimestamp()
-      }).then(() => {
-        setHasCountryBeenSet(true); // Устанавливаем флаг, что страна была установлена
-        showSingleNotification('✓ Страна успешно установлена');
-      }).catch(error => {
-        console.error('Ошибка сохранения страны:', error);
-        showSingleNotification('✗ Ошибка сохранения страны', true);
-      });
+        lastUpdate: new Date().toISOString()
+      })
+      .eq('id', user.id);
+
+    if (error) {
+      console.error('Ошибка сохранения страны:', error);
+      showSingleNotification('✗ Ошибка сохранения страны', true);
+    } else {
+      setHasCountryBeenSet(true);
+      showSingleNotification('✓ Страна успешно установлена');
     }
-  };
+  }
+};
 
   // Проверка кулдауна на смену никнейма
   const checkNicknameCooldown = (userData) => {
     if (userData.lastNicknameChange) {
-      const lastChange = userData.lastNicknameChange.toDate();
+      const lastChange = new Date(userData.lastNicknameChange);
       const now = new Date();
       const monthInMs = 30 * 24 * 60 * 60 * 1000; // 30 дней в миллисекундах
       const timeSinceLastChange = now - lastChange;
@@ -131,24 +188,69 @@ const Profile = () => {
     }
   };
 
-  // Проверка существования никнейма
+  // -------------------------------------------------------------------------- Функция для обработки выбора класса
+
+const handleClassSelect = async (playerClass) => {
+  // Если выбран тот же класс, ничего не делаем
+  if (userData?.player_class === playerClass) {
+    setShowClassSelector(false);
+    return;
+  }
+
+  setShowClassSelector(false);
+  
+  // Сохраняем выбор класса в базу данных
+  const { data: { user } } = await supabase.auth.getUser();
+  if (user) {
+    const { error } = await supabase
+      .from('users')
+      .update({
+        player_class: playerClass,
+        lastUpdate: new Date().toISOString()
+      })
+      .eq('id', user.id);
+
+    if (error) {
+      console.error('Ошибка сохранения класса:', error);
+      showSingleNotification('✗ Ошибка сохранения класса', true);
+      // Возвращаем предыдущее значение при ошибке
+      setSelectedClass(userData?.player_class || '');
+    } else {
+      setUserData(prev => ({ ...prev, player_class: playerClass }));
+      showSingleNotification(`✓ Класс изменен на ${getClassName(playerClass)}`);
+    }
+  }
+};
+
+// Вспомогательная функция для получения названия класса
+const getClassName = (classKey) => {
+  const classNames = {
+    assault: 'Штурмовик',
+    medic: 'Медик',
+    support: 'Поддержка',
+    recon: 'Разведчик',
+    engineer: 'Инженер'
+  };
+  return classNames[classKey] || classKey;
+};
+
+  // ------------------------------------------------------------------------ Проверка существования никнейма
+
 const checkNicknameExists = async (nickname) => {
   try {
-    // Нормализуем входную строку - убираем лишние пробелы
     const cleanNickname = nickname.trim();
     
-    // Проверка на пустую строку
+    // Базовые проверки
     if (!cleanNickname) {
-      return false;
+      showSingleNotification('✗ Введите никнейм', true);
+      return true;
     }
-
-    // Проверка на наличие пробелов
+    
     if (/\s/.test(cleanNickname)) {
       showSingleNotification('✗ Никнейм не должен содержать пробелы', true);
       return true;
     }
-
-    // Проверка на минимальную длину
+    
     if (cleanNickname.length < 2) {
       showSingleNotification('✗ Никнейм должен содержать минимум 2 символа', true);
       return true;
@@ -159,29 +261,34 @@ const checkNicknameExists = async (nickname) => {
       return true;
     }
 
-    const usersRef = collection(db, 'users');
-    const q = query(usersRef);
+    const { data: { user } } = await supabase.auth.getUser();
     
-    const querySnapshot = await getDocs(q);
-    
-    // Фильтруем результаты с учетом регистра (игнорируем регистр)
-    const currentUser = auth.currentUser;
-    let caseInsensitiveMatch = false;
+    // Получаем ВСЕ никнеймы для нормализованной проверки
+    const { data, error } = await supabase
+      .from('users')
+      .select('battlefield_nickname, id')
+      .neq('id', user?.id);
 
-    querySnapshot.forEach((doc) => {
-      // Пропускаем текущего пользователя
-      if (currentUser && doc.id === currentUser.uid) {
-        return;
-      }
+    if (error) throw error;
 
-      const existingNickname = doc.data().battlefieldNickname;
-      // Сравниваем без учета регистра
-      if (existingNickname && existingNickname.toLowerCase() === cleanNickname.toLowerCase()) {
-        caseInsensitiveMatch = true;
-      }
+    // Нормализуем новый никнейм (убираем дефисы, нижний регистр)
+    const normalizeForComparison = (nick) => {
+      return nick
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, ''); // убираем ВСЕ не-буквы и не-цифры
+    };
+
+    const normalizedNewNick = normalizeForComparison(cleanNickname);
+
+    // Проверяем на нормализованные совпадения
+    const nicknameExists = data.some(userData => {
+      if (!userData.battlefield_nickname) return false;
+      
+      const normalizedExistingNick = normalizeForComparison(userData.battlefield_nickname);
+      return normalizedExistingNick === normalizedNewNick;
     });
 
-    if (caseInsensitiveMatch) {
+    if (nicknameExists) {
       showSingleNotification('✗ Никнейм уже занят', true);
       return true;
     }
@@ -194,7 +301,8 @@ const checkNicknameExists = async (nickname) => {
   }
 };
 
-// Обновленная функция сохранения никнейма
+// ------------------------------------------------------------------------------- Сохранение никнейма
+
 const saveNickname = async () => {
   if (!editedNickname.trim()) {
     showSingleNotification('✗ Введите никнейм', true);
@@ -210,7 +318,7 @@ const saveNickname = async () => {
   }
 
   // Проверяем, не совпадает ли новый никнейм со старым (учитывая регистр)
-  if (cleanNickname === (userData.battlefieldNickname || '')) {
+  if (cleanNickname === (userData.battlefield_nickname || '')) {
     showSingleNotification('✗ Это ваш текущий никнейм', true);
     return;
   }
@@ -222,23 +330,31 @@ const saveNickname = async () => {
   }
 
   try {
-    const user = auth.currentUser;
-    if (!user) {
-      showSingleNotification('✗ Пользователь не авторизован', true);
-      return;
-    }
+    const { data: { user } } = await supabase.auth.getUser();
+if (!user) {
+  showSingleNotification('✗ Пользователь не авторизован', true);
+  return;
+}
 
-    await updateDoc(doc(db, 'users', user.uid), {
-      battlefieldNickname: cleanNickname,
-      lastNicknameChange: serverTimestamp(),
-      lastUpdate: serverTimestamp()
-    });
+const { error } = await supabase
+  .from('users')
+  .update({
+    battlefield_nickname: cleanNickname,
+    lastNicknameChange: new Date().toISOString(),
+    lastUpdate: new Date().toISOString()
+  })
+  .eq('id', user.id);
 
-    setUserData(prev => ({ 
-      ...prev, 
-      battlefieldNickname: cleanNickname,
-      lastNicknameChange: Timestamp.now()
-    }));
+if (error) {
+  throw error;
+}
+
+setUserData(prev => ({ 
+  ...prev, 
+  battlefield_nickname: cleanNickname,
+  lastNicknameChange: new Date().toISOString()
+}));
+
     setIsEditingNickname(false);
     setCanEditNickname(false);
     setNicknameCooldown(30);
@@ -249,7 +365,8 @@ const saveNickname = async () => {
   }
 };
 
-  // Функция изменения возраста (можно установить только один раз)
+  // ----------------------------------------------------------- Функция изменения возраста (можно установить только один раз)
+  
   const editAge = async () => {
     // Проверяем, был ли возраст уже установлен
     if (hasAgeBeenSet) {
@@ -257,9 +374,11 @@ const saveNickname = async () => {
       return;
     }
 
-    const currentAge = userData?.birthDate ? calculateAge(userData.birthDate) : null;
+    const currentAge = userData?.birthDate ? calculateAge(new Date(userData.birthDate)) : null;
     
-    // Создаем модальное окно для выбора даты
+
+    // ------------------------------------------------ Модальное окно для выбора даты
+
     const modal = document.createElement('div');
     modal.className = 'date-picker-modal';
     modal.innerHTML = `
@@ -326,7 +445,7 @@ const saveNickname = async () => {
       
       if (day && month && year) {
         const birthDate = new Date(year, month - 1, day);
-        const age = calculateAge(Timestamp.fromDate(birthDate));
+        const age = calculateAge(birthDate);
         
         if (age < 16) {
           modal.querySelector('.age-preview').textContent = 'Меньше 16 лет';
@@ -349,37 +468,43 @@ const saveNickname = async () => {
     });
 
     modal.querySelector('.save-btn').addEventListener('click', async () => {
-      const day = modal.querySelector('.day-select').value;
-      const month = modal.querySelector('.month-select').value;
-      const year = modal.querySelector('.year-select').value;
-      
-      if (day && month && year) {
-        const birthDate = new Date(year, month - 1, day);
-        const birthTimestamp = Timestamp.fromDate(birthDate);
-        const age = calculateAge(birthTimestamp);
-        
-        if (age < 16) {
-          showSingleNotification('✗ Минимальный возраст - 16 лет', true);
-          return;
-        }
-        
-        try {
-          const user = auth.currentUser;
-          await updateDoc(doc(db, 'users', user.uid), {
-            birthDate: birthTimestamp,
-            lastUpdate: serverTimestamp()
-          });
-          
-          setUserData(prev => ({ ...prev, birthDate: birthTimestamp }));
-          setHasAgeBeenSet(true); // Устанавливаем флаг, что возраст был установлен
-          showSingleNotification('✓ Возраст установлен');
-          document.body.removeChild(modal);
-        } catch (error) {
-          console.error('Ошибка сохранения возраста:', error);
-          showSingleNotification('✗ Ошибка сохранения возраста', true);
-        }
+  const day = modal.querySelector('.day-select').value;
+  const month = modal.querySelector('.month-select').value;
+  const year = modal.querySelector('.year-select').value;
+  
+  if (day && month && year) {
+    const birthDate = new Date(year, month - 1, day);
+    const age = calculateAge(birthDate);
+    
+    if (age < 16) {
+      showSingleNotification('✗ Минимальный возраст - 16 лет', true);
+      return;
+    }
+    
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      const { error } = await supabase
+        .from('users')
+        .update({
+          birthDate: birthDate.toISOString(),
+          lastUpdate: new Date().toISOString()
+        })
+        .eq('id', user.id);
+
+      if (error) {
+        throw error;
       }
-    });
+      
+      setUserData(prev => ({ ...prev, birthDate: birthDate.toISOString() }));
+      setHasAgeBeenSet(true);
+      showSingleNotification('✓ Возраст установлен');
+      document.body.removeChild(modal);
+    } catch (error) {
+      console.error('Ошибка сохранения возраста:', error);
+      showSingleNotification('✗ Ошибка сохранения возраста', true);
+    }
+  }
+});
 
     modal.addEventListener('click', (e) => {
       if (e.target === modal) {
@@ -388,18 +513,19 @@ const saveNickname = async () => {
     });
   };
 
-  // Вспомогательные функции
+  // ----------------------------------------------------------------------------- Вспомогательные функции
+
   const calculateAge = (birthDate) => {
-    if (!birthDate) return null;
-    const birth = birthDate.toDate();
-    const today = new Date();
-    let age = today.getFullYear() - birth.getFullYear();
-    const monthDiff = today.getMonth() - birth.getMonth();
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-      age--;
-    }
-    return age;
-  };
+  if (!birthDate) return null;
+  const birth = new Date(birthDate);
+  const today = new Date();
+  let age = today.getFullYear() - birth.getFullYear();
+  const monthDiff = today.getMonth() - birth.getMonth();
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+    age--;
+  }
+  return age;
+};
 
   const displayAge = (age) => {
     if (!age) return 'Не указан';
@@ -425,7 +551,14 @@ const saveNickname = async () => {
   };
 
   if (loading) {
-  return <div className="loading-profile">Загрузка профиля...</div>;
+  return <div className="loading-profile">
+    <div className="loading-container">
+      <div className="spinner">
+        <div className="spinner-circle"></div>
+      </div>
+      <p>Загрузка...</p>
+    </div>
+    </div>;
 }
 
 if (!userData) {
@@ -434,6 +567,8 @@ if (!userData) {
 
   const age = userData.birthDate ? calculateAge(userData.birthDate) : null;
   const playerStatus = getPlayerStatus();
+
+   // -------------------------------------------------------------------------------------------------------- HTML ---------------------------------------------
 
   return (
     <div className="content-index">
@@ -445,8 +580,9 @@ if (!userData) {
 
       <div className="player-information">
         <div className="info-section">
-          <h3 className="section-title">Игрок</h3>
-          <div className="info-block">
+          <h3 className="section-title-profile">Игрок</h3>
+          <div className="info-block first-block">
+            <div className="nickname-and-class-container">
             {/* Ник игрока - с возможностью редактирования */}
             <div className="nickname-container">
               {isEditingNickname ? (
@@ -470,7 +606,7 @@ if (!userData) {
                       className="nickname-cancel-btn"
                       onClick={() => {
                         setIsEditingNickname(false);
-                        setEditedNickname(userData.battlefieldNickname || '');
+                        setEditedNickname(userData.battlefield_nickname || '');
                       }}
                     >
                       <img className="icons-redactor" src="/images/icons/icon-redactor2.png" alt="back"/>
@@ -480,7 +616,7 @@ if (!userData) {
               ) : (
                 <div className="nickname-display-container">
                   <span className="name-player-style">
-                    {userData.battlefieldNickname || 'Ник не указан'}
+                    {userData.battlefield_nickname || 'Ник не указан'}
                   </span>
                   {canEditNickname && (
                     <button 
@@ -499,6 +635,41 @@ if (!userData) {
                 </div>
               )}
             </div>
+             {/* Контейнер для выбора класса игрока */}
+<div className="class-selector-container">
+  <div className="class-selector">
+    <div 
+      className="current-class"
+      onClick={() => setShowClassSelector(!showClassSelector)}
+      style={{ cursor: 'pointer' }}
+    >
+      <img 
+        src={`/images/icons/icon-class-${userData?.player_class || 'assault'}.png`} 
+        alt={userData?.player_class || 'assault'}
+        className="class-icon-profile"
+      />
+    </div>
+    
+    {showClassSelector && (
+      <div className="class-options-row">
+        {['assault', 'medic', 'sniper', 'engineer'].map((playerClass) => (
+          <div
+            key={playerClass}
+            className={`class-option ${userData?.player_class === playerClass ? 'selected' : ''}`}
+            onClick={() => handleClassSelect(playerClass)}
+          >
+            <img 
+              src={`/images/icons/icon-class-${playerClass}.png`} 
+              alt={playerClass}
+              className="class-icon-profile"
+            />
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+</div>
+</div>
             
             <div className="horizontal-row-1">
         <div className="info-player-style">
@@ -610,8 +781,8 @@ if (!userData) {
 
         {/* Остальные блоки остаются без изменений */}
         <div className="info-section">
-          <h3 className="section-title">Награды MVP</h3>
-          <div className="info-block">
+          <h3 className="section-title-profile">Награды MVP</h3>
+          <div className="info-block second-block">
             <div className="mvp-rewards-grid">
               <div className="mvp-reward-item">
                 <img src="/images/medals/icon-medal1.png" className="reward-icon" alt="Награда"/>
@@ -635,14 +806,14 @@ if (!userData) {
 
         <div className="info-sections-container">
           <div className="info-section">
-            <h3 className="section-title">MMR</h3>
+            <h3 className="section-title-profile">MMR</h3>
             <div className="info-block mmr-value">
             {userData.mmr !== undefined && userData.mmr !== null ? userData.mmr : 0}
             </div>
           </div>
           
           <div className="info-section">
-            <h3 className="section-title">Дивизион</h3>
+            <h3 className="section-title-profile">Дивизион</h3>
             <div className="svg-division-container">
               <svg className="svg-division-block" viewBox="0 0 302 92" preserveAspectRatio="none">
                 <path 
@@ -662,44 +833,45 @@ if (!userData) {
 
         <div className="stats-actions-container">
           <div className="info-section">
-            <h3 className="section-title">Статистика</h3>
+            <h3 className="section-title-profile">Статистика
+            </h3>
             <div className="info-block">
               <div className="stats-container">
                 <div className="stats-column">
                   <div className="stat-item">
-                    <span className="stat-label">У/С</span>
-                    <span className="stat-value">{userData.stats?.kdRatio || 0}</span>
+                    <span className="stat-label">{t('stats.kdRatio')}</span>
+                    <span className="stat-value">{userData.stats?.kdRatio ?? t('stats.notAvailable')}</span>
                   </div>
                   <div className="stat-item">
-                    <span className="stat-label">% Побед</span>
-                    <span className="stat-value">{userData.stats?.winRate || '0%'}</span>
+                    <span className="stat-label">{t('stats.winRate')}</span>
+                    <span className="stat-value">{userData.stats?.winRate ? `${userData.stats.winRate}%` : t('stats.notAvailable')}</span>
                   </div>
                   <div className="stat-item">
-                    <span className="stat-label">Время в игре</span>
-                    <span className="stat-value">{userData.stats?.playTime || '0 часов'}</span>
+                    <span className="stat-label">{t('stats.playTime')}</span>
+                    <span className="stat-value">{userData.stats?.playTime ?? t('stats.notAvailable')}</span>
                   </div>
                   <div className="stat-item">
-                    <span className="stat-label">Любимое оружие</span>
-                    <span className="stat-value">{userData.stats?.favoriteWeapon || 'Не указано'}</span>
+                    <span className="stat-label">{t('stats.favoriteWeapon')}</span>
+                    <span className="stat-value">{userData.stats?.favoriteWeapon ?? t('stats.notAvailable')}</span>
                   </div>
                 </div>
                 
                 <div className="stats-column">
                   <div className="stat-item">
-                    <span className="stat-label">В разработке</span>
-                    <span className="stat-value">n/a</span>
+                    <span className="stat-label">{t('stats.wins')}</span>
+                    <span className="stat-value">{userData.stats?.wins ?? t('stats.notAvailable')}</span>
+                  </div>
+                  <div className="stat-item">
+                    <span className="stat-label">{t('stats.losses')}</span>
+                    <span className="stat-value">{userData.stats?.losses ?? t('stats.notAvailable')}</span>
                   </div>
                   <div className="stat-item">
                     <span className="stat-label">В разработке</span>
-                    <span className="stat-value">n/a</span>
+                    <span className="stat-value">{t('stats.notAvailable')}</span>
                   </div>
                   <div className="stat-item">
                     <span className="stat-label">В разработке</span>
-                    <span className="stat-value">n/a</span>
-                  </div>
-                  <div className="stat-item">
-                    <span className="stat-label">В разработке</span>
-                    <span className="stat-value">n/a</span>
+                    <span className="stat-value">{t('stats.notAvailable')}</span>
                   </div>
                 </div>
               </div>
@@ -721,7 +893,7 @@ if (!userData) {
         </div>
 
         <div className="info-section">
-          <h3 className="section-title">Достижения</h3>
+          <h3 className="section-title-profile">Достижения</h3>
           <div className="info-block achievements-block">
             <div className="achievements-row">
               <div className="achievement-item">

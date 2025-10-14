@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useLanguage } from '/utils/language-context.jsx';
 
 const Teams = () => {
   const [expandedDivision, setExpandedDivision] = useState(null);
+  const { t } = useLanguage();
 
   const toggleDivision = (divisionId) => {
     setExpandedDivision(expandedDivision === divisionId ? null : divisionId);
@@ -17,7 +19,7 @@ const Teams = () => {
         row.push({ 
           id: `empty-${rows.length}-${row.length}`, 
           logo: '../public/images/icons/icon-empty-slot-team.png', 
-          name: 'Свободный слот', 
+          name: t('teams.free_slot'), 
           isEmpty: true 
         });
       }
@@ -30,59 +32,59 @@ const Teams = () => {
     {
       id: 'division1',
       name: 'STAR LADDER L3',
-      subtitle: 'Дивизион I ранга',
+      subtitle:  t('teams.division_1_rank'),
       tmrr: '3500+',
       teams: '0',
       newTeams: '-',
       type: 'assault',
       icon: '../public/images/icons/icon-division-starladder.png',
       teamsData: createTeamRows([
-        { id: 1, logo: '../public/images/icons/icon-empty-slot-team.png', name: 'Свободный слот', isEmpty: true },
-        { id: 2, logo: '../public/images/icons/icon-empty-slot-team.png', name: 'Свободный слот', isEmpty: true },
-        { id: 3, logo: '../public/images/icons/icon-empty-slot-team.png', name: 'Свободный слот', isEmpty: true },
-        { id: 4, logo: '../public/images/icons/icon-empty-slot-team.png', name: 'Свободный слот', isEmpty: true },
-        { id: 5, logo: '../public/images/icons/icon-empty-slot-team.png', name: 'Свободный слот', isEmpty: true },
-        { id: 6, logo: '../public/images/icons/icon-empty-slot-team.png', name: 'Свободный слот', isEmpty: true },
-        { id: 7, logo: '../public/images/icons/icon-empty-slot-team.png', name: 'Свободный слот', isEmpty: true },
-        { id: 8, logo: '../public/images/icons/icon-empty-slot-team.png', name: 'Свободный слот', isEmpty: true },
-        { id: 9, logo: '../public/images/icons/icon-empty-slot-team.png', name: 'Свободный слот', isEmpty: true },
-        { id: 10, logo: '../public/images/icons/icon-empty-slot-team.png', name: 'Свободный слот', isEmpty: true }
+        { id: 1, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 2, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 3, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 4, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 5, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 6, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 7, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 8, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 9, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 10, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true }
       ])
     },
     {
       id: 'division2',
       name: 'SLAYGER L1',
-      subtitle: 'Дивизион II ранга',
+      subtitle:  t('teams.division_2_rank'),
       tmrr: '2000+',
       teams: '0',
       newTeams: '-',
       type: 'special',
       icon: '../public/images/icons/icon-division-slayger.png',
       teamsData: createTeamRows([
-        { id: 1, logo: '../public/images/icons/icon-empty-slot-team.png', name: 'Свободный слот', isEmpty: true },
-        { id: 2, logo: '../public/images/icons/icon-empty-slot-team.png', name: 'Свободный слот', isEmpty: true },
-        { id: 3, logo: '../public/images/icons/icon-empty-slot-team.png', name: 'Свободный слот', isEmpty: true },
-        { id: 4, logo: '../public/images/icons/icon-empty-slot-team.png', name: 'Свободный слот', isEmpty: true },
-        { id: 5, logo: '../public/images/icons/icon-empty-slot-team.png', name: 'Свободный слот', isEmpty: true },
-        { id: 5, logo: '../public/images/icons/icon-empty-slot-team.png', name: 'Свободный слот', isEmpty: true }
+        { id: 1, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 2, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 3, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 4, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 5, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 5, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true }
       ])
     },
     {
       id: 'division3',
       name: 'VANGUARD L1',
-      subtitle: 'Дивизион III ранга',
+      subtitle: t('teams.division_3_rank'),
       tmrr: '500+',
       teams: '0',
       newTeams: '-',
       type: 'vanguard',
       icon: '../public/images/icons/icon-division-vanguard.png',
       teamsData: createTeamRows([
-        { id: 1, logo: '../public/images/icons/icon-empty-slot-team.png', name: 'Свободный слот', isEmpty: true },
-        { id: 2, logo: '../public/images/icons/icon-empty-slot-team.png', name: 'Свободный слот', isEmpty: true },
-        { id: 3, logo: '../public/images/icons/icon-empty-slot-team.png', name: 'Свободный слот', isEmpty: true },
-        { id: 4, logo: '../public/images/icons/icon-empty-slot-team.png', name: 'Свободный слот', isEmpty: true },
-        { id: 5, logo: '../public/images/icons/icon-empty-slot-team.png', name: 'Свободный слот', isEmpty: true },
-        { id: 5, logo: '../public/images/icons/icon-empty-slot-team.png', name: 'Свободный слот', isEmpty: true }
+        { id: 1, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 2, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 3, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 4, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 5, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 5, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true }
         // Меньше команд для демонстрации
       ])
     }
@@ -91,44 +93,44 @@ const Teams = () => {
   const rewards = [
     {
       icon: '../public/images/icons/icon-contract.png',
-      title: 'СПОНСОРСКИЕ КОНТРАКТЫ',
+      title: t('teams.sponsor_contracts'),
       items: [
-        'Контракты с игровыми организациями',
-        'Спонсорство оборудования и экипировки',
-        'Медийные контракты и стриминговые сделки',
-        'Эксклюзивные партнерства с лигой'
+        t('teams.contracts_with_organizations'),
+        t('teams.equipment_sponsorship'),
+        t('teams.media_contracts'),
+        t('teams.exclusive_partnerships')
       ]
     },
     {
       icon: '../public/images/icons/icon-awards.png',
-      title: 'БОЕВЫЕ НАГРАДЫ',
+      title:  t('teams.combat_rewards'),
       items: [
-        'Призовые фонды до $1,000 за сезон на старте лиги',
-        'Уникальные медали за победы в сезонах',
-        'Сезонные жетоны за каждое участие',
-        'Знаки отличия для профиля игрока',
-        'Бонусы за приглашение напарников',
-        'Гарантированные призы за первенство в команде и соло'
+        t('teams.prize_funds'),
+        t('teams.unique_medals'),
+        t('teams.seasonal_tokens'),
+        t('teams.profile_badges'),
+        t('teams.invite_bonuses'),
+        t('teams.guaranteed_prizes')
       ]
     },
     {
       icon: '../public/images/icons/icon-quotes.png',
-      title: 'ПРИВИЛЕГИРОВАННЫЕ КВОТЫ',
+      title: t('teams.privileged_quotas'),
       items: [
-        'Автоматическая квалификация в Majors',
-        'Приоритетные слоты в больших турнирах',
-        'Эксклюзивный доступ к закрытым событиям',
-        'Квоты на серию чемпионатов лиги'
+         t('teams.automatic_qualification'),
+        t('teams.priority_slots'),
+        t('teams.exclusive_access'),
+        t('teams.championship_quotas')
       ]
     },
     {
       icon: '../public/images/icons/icon-up-career.png',
-      title: 'КАРЬЕРНЫЙ РОСТ',
+      title: t('teams.career_growth'),
       items: [
-        'Участие в скаутских программах',
-        'Доступ к тренировочным сессиям',
-        'Менторство от профессиональных игроков',
-        'Возможности для стриминговой карьеры'
+        t('teams.scout_programs'),
+        t('teams.training_sessions'),
+        t('teams.professional_mentorship'),
+        t('teams.streaming_opportunities')
       ]
     }
   ];
@@ -136,58 +138,55 @@ const Teams = () => {
   const futureFeatures = [
     {
       icon: '../public/images/icons/icon-shesterenka.png',
-      title: 'Сезонные крупные турниры:',
-      description: 'Ежеквартальные чемпионские события с увеличенными призовыми фондами и специальными наградами'
+      title: t('teams.seasonal_tournaments'),
+      description: t('teams.seasonal_tournaments_desc')
     },
     {
       icon: '../public/images/icons/icon-shesterenka.png',
-      title: 'Глобальные таблицы лидеров:',
-      description: 'Рейтинги в реальном времени с региональными и мировыми позициями'
+      title: t('teams.global_leaderboards'),
+      description: t('teams.global_leaderboards_desc')
     },
     {
       icon: '../public/images/icons/icon-shesterenka.png',
-      title: 'Система объявлений от капитанов',
-      description: 'Поиски тиммейтов в новым команды внутри лиги качественно упростится'
+      title: t('teams.captain_announcements'),
+      description: t('teams.captain_announcements_desc')
     },
     {
       icon: '../public/images/icons/icon-shesterenka.png',
-      title: 'Поиск тренировочных матчей:',
-      description: 'Автоматизированная система для поиска тренировочных игр против соперников равного уровня'
+      title: t('teams.practice_matches'),
+      description: t('teams.practice_matches_desc')
     },
     {
       icon: '../public/images/icons/icon-shesterenka.png',
-      title: 'Система оплаты в валюте и криптовалюте:',
-      description: 'Внедрение сервисов для платежей по всему миру'
+      title: t('teams.payment_system'),
+      description: t('teams.payment_system_desc')
     },
     {
       icon: '../public/images/icons/icon-shesterenka.png',
-      title: 'Интегрированные трансляции:',
-      description: 'Транслирование матчей игроков напрямую на платформы AWL с оверлеями'
+      title: t('teams.integrated_streams'),
+      description: t('teams.integrated_streams_desc')
     }
   ];
+
+  {/* ---------------------------------------------------------------------------------------------- HTML ------------------------------ */}
 
   return (
     <div>
       {/* Герой-секция с описанием */}
 
       <section className="divisions-hero">
-        <h1 className="divisions-title">СИСТЕМА ДИВИЗИОНОВ AWL SERIES S1</h1>
+        <h1 className="divisions-title">{t('teams.division_system_title')}</h1>
         <p className="divisions-subtitle">
-          Продемонстрируйте свои навыки в лучшем соревновательном опыте из популярных режимов Battlefield. 
-          Поднимайтесь по рангам, получайте престижные награды и создайте свое наследие 
-          в интернациональной соревновательной системе Arena Warborn League.
+          {t('teams.division_system_description')}
         </p>
       </section>
 
       {/* Система рейтинга */}
 
       <section className="rating-system">
-        <h2 className="section-title">СТРУКТУРА РЕЙТИНГА И НАГРАД</h2>
+        <h2 className="section-title">{t('teams.rating_structure_title')}</h2>
         <p className="system-description">
-          Наша соревновательная система создана для признания и вознаграждения мастерства, 
-          преданности и стратегического превосходства. Зарабатывайте очки TMMR (Team Match Making Rating) 
-          через соревновательные матчи, серии турниров и открытых кубков. Поднимайтесь по дивизионам и открывайте эксклюзивные 
-          боевые достижения AWL. Каждый сезон приносит новые вызовы и престижные награды для лучших команд и MVP.
+          {t('teams.rating_structure_description')}
         </p>
         
         <div className="rewards-section">
@@ -209,51 +208,51 @@ const Teams = () => {
 
       {/* Контейнер дивизионов */}
 
-<div className="divisions-container">
-  {divisions.map((division) => (
-    <div key={division.id} className="division-with-icon">
-      {/* Используйте division.icon вместо шаблонной строки */}
-      <img 
-        src={division.icon} 
-        alt={`${division.name} icon`}
-        className="division-external-icon"
-      />
-      
-      {/* Существующий division-wrapper */}
+      <div className="divisions-container">
+        {divisions.map((division) => (
+          <div key={division.id} className="division-with-icon">
+            {/* Используйте division.icon вместо шаблонной строки */}
+            <img 
+              src={division.icon} 
+              alt={`${division.name} icon`}
+              className="division-external-icon"
+            />
+            
+            {/* Существующий division-wrapper */}
 
-      <div className={`division-wrapper division-${division.type}`}>
-        <div 
-          className={`division-header ${expandedDivision === division.id ? '' : 'collapsed'}`}
-          onClick={() => toggleDivision(division.id)}
-        >
-          <div className="division-info">
-            <div className="division-title">
-              <h2 className="division-name">{division.name}</h2>
-              <span className="division-subtitle">{division.subtitle}</span>
-            </div>
-          </div>
-          <div className="division-stats">
-            <div className="division-stat">
-              <span className="stat-label">TMMR:</span>
-              <span className="stat-value">{division.tmrr}</span>
-            </div>
-            <div className="division-stat">
-              <span className="stat-label">Команды:</span>
-              <span className="stat-value">{division.teams}</span>
-            </div>
-            <div className="division-stat">
-              <span className="stat-label">Новые составы (30д):</span>
-              <span className="stat-value">{division.newTeams}</span>
-            </div>
-          </div>
-          <img 
-            src="/public/images/icons/icon-updown.png" 
-            alt="Развернуть" 
-            className={`division-toggle ${expandedDivision === division.id ? '' : 'collapsed'}`}
-          />
-        </div>
+            <div className={`division-wrapper division-${division.type}`}>
+              <div 
+                className={`division-header ${expandedDivision === division.id ? '' : 'collapsed'}`}
+                onClick={() => toggleDivision(division.id)}
+              >
+                <div className="division-info">
+                  <div className="division-title">
+                    <h2 className="division-name">{division.name}</h2>
+                    <span className="division-subtitle">{division.subtitle}</span>
+                  </div>
+                </div>
+                <div className="division-stats">
+                  <div className="division-stat">
+                    <span className="stat-label">{t('teams.tmmr')}:</span>
+                    <span className="stat-value">{division.tmrr}</span>
+                  </div>
+                  <div className="division-stat">
+                    <span className="stat-label">{t('teams.teams')}:</span>
+                    <span className="stat-value">{division.teams}</span>
+                  </div>
+                  <div className="division-stat">
+                    <span className="stat-label">{t('teams.new_teams')}:</span>
+                    <span className="stat-value">{division.newTeams}</span>
+                  </div>
+                </div>
+                <img 
+                  src="/public/images/icons/icon-updown.png" 
+                  alt={t('teams.expand')} 
+                  className={`division-toggle ${expandedDivision === division.id ? '' : 'collapsed'}`}
+                />
+              </div>
 
-         {/* ОБНОВЛЕННЫЙ КОНТЕНТ С ГРИДОМ КОМАНД */}
+              {/* ОБНОВЛЕННЫЙ КОНТЕНТ С ГРИДОМ КОМАНД */}
               <div 
                 className={`division-content ${expandedDivision === division.id ? '' : 'collapsed'}`} 
                 id={division.id}
@@ -274,12 +273,12 @@ const Teams = () => {
                             />
                             <div className="team-info">
                               {team.isEmpty ? (
-                                'Свободный слот'
+                                t('teams.free_slot')
                               ) : (
                                 <button className="team-view-btn">
                                   <img 
                                     src="/images/icons/icon-eye.png" 
-                                    alt="Просмотр команды" 
+                                    alt={t('teams.view_team')} 
                                     className="team-view-icon"
                                   />
                                 </button>
@@ -300,11 +299,11 @@ const Teams = () => {
       {/* Будущие возможности */}
 
       <section className="future-features">
-        <h2 className="section-title">БУДУЩИЕ СОРЕВНОВАТЕЛЬНЫЕ ВОЗМОЖНОСТИ</h2>
+        <h2 className="section-title">{t('teams.future_opportunities_title')}</h2>
         <div className="features-grid">
           {futureFeatures.map((feature, index) => (
             <div key={index} className="feature-item">
-              <img src={feature.icon} alt="icon-divisions-futures" className="feature-icon" />
+              <img src={feature.icon} alt={t('teams.future_features_icon')} className="feature-icon" />
               <p className="feature-text">
                 <span className="feature-text-span">{feature.title}</span> {feature.description}
               </p>

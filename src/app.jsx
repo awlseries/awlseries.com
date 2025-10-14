@@ -4,7 +4,7 @@ import { useEffect, Suspense, lazy } from 'react';
 import MainLayout from './components/Layout/MainLayout';
 import Home from './pages/Home/Home';
 import { LanguageProvider } from '/utils/language-context.jsx';
-import './firebase';
+import './supabase';
 import '/src/styles.css';
 
 // Ленивая загрузка только тяжелых компонентов
@@ -15,6 +15,7 @@ const Profile = lazy(() => import('./pages/Profile/Profile'));
 const Transfers = lazy(() => import('./pages/Transfers/Transfers.jsx'));
 const Rules = lazy(() => import('./pages/Rules/Rules'));
 const Registration = lazy(() => import('./pages/Registration/Registration.jsx'));
+const VerificationSuccess = lazy(() => import('./components/VerificationSuccess/VerificationSuccess.jsx'));
 
 // Простой inline компонент для загрузки
 function LoadingFallback() {
@@ -27,6 +28,7 @@ function LoadingFallback() {
     </div>
   );
 }
+
 
 // Создаем отдельный компонент для контента с роутингом
 function AppContent() {
@@ -45,6 +47,22 @@ function AppContent() {
             </Suspense>
           } 
         />
+        <Route 
+          path="/verification-success" 
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <VerificationSuccess />
+            </Suspense>
+          } 
+        />
+        <Route 
+            path="/rules" 
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <Rules />
+              </Suspense>
+            } 
+          />
         
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
@@ -85,14 +103,6 @@ function AppContent() {
             element={
               <Suspense fallback={<LoadingFallback />}>
                 <Transfers />
-              </Suspense>
-            } 
-          />
-          <Route 
-            path="rules" 
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <Rules />
               </Suspense>
             } 
           />

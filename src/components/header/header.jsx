@@ -2,8 +2,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import SearchModal from '../SearchModal/SearchModal.jsx';
 import SearchResults from '../SearchResults/SearchResults.jsx';
-import { sendEmailVerification } from 'firebase/auth';
-import { auth } from '../../firebase';
+import { supabase } from '../../supabase.js';
 import Ticker from '../Ticker/Ticker.jsx';
 import { showSingleNotification } from '/utils/notifications';
 import { useLanguage } from '/utils/language-context.jsx';
@@ -24,25 +23,44 @@ const Header = () => {
   const [searchKey, setSearchKey] = useState(0);
   const { currentLanguage, changeLanguage, t } = useLanguage();
 
-  // Единственный useEffect для проверки аутентификации
+   // ----------------------------------------------------- Проверка аутентификации через Supabase
+
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
+    // Получаем текущую сессию при загрузке
+    const getInitialSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
         setIsAuthenticated(true);
-        setUserEmail(user.email);
-        setIsEmailVerified(user.emailVerified);
-      } else {
-        setIsAuthenticated(false);
-        setUserEmail(t('not_authenticated_text'));
-        setIsEmailVerified(false);
+        setUserEmail(session.user.email);
+        setIsEmailVerified(session.user.email_confirmed_at !== null);
       }
       setIsAuthChecked(true);
-    });
+    };
 
-    return () => unsubscribe();
-}, [t]);
+    getInitialSession();
 
-  // Функция для обработки смены языка
+  // -------------------------------------------------------- Слушаем изменения аутентификации
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (session?.user) {
+          setIsAuthenticated(true);
+          setUserEmail(session.user.email);
+          setIsEmailVerified(session.user.email_confirmed_at !== null);
+        } else {
+          setIsAuthenticated(false);
+          setUserEmail(t('not_authenticated_text'));
+          setIsEmailVerified(false);
+        }
+        setIsAuthChecked(true);
+      }
+    );
+
+    return () => subscription.unsubscribe();
+  }, [t]);
+
+  // ------------------------------------------------------------ Функция для обработки смены языка
+
   const handleLanguageChange = (lang) => {
     changeLanguage(lang);
     // Принудительно обновляем ключ, чтобы пересоздать SearchModal
@@ -54,55 +72,63 @@ const Header = () => {
     setCurrentPath(location.pathname);
   }, [location.pathname]);
 
-  // Функция для проверки активного пункта меню
+  // ---------------------------------------------------------- Функция для проверки активного пункта меню
+  
   const isActiveLink = (path) => {
     return currentPath === path;
   };
 
-  // Функция для отправки верификации email
-const handleSendVerification = async () => {
-  if (!auth.currentUser) return;
+  // ---------------------------------------------------------- Функция для отправки верификации email
   
-  setIsSendingVerification(true);
-  try {
-    await sendEmailVerification(auth.currentUser);
-    showSingleNotification(t('notifications.verification_sent'), false);
-    console.log('Письмо отправлено успешно');
-  } catch (error) {
-    console.error('Ошибка отправки верификации:', error);
-    showSingleNotification(t('notifications.resend_error'), 'error');
-    console.error('Ошибка отправки верификации:', error);
-    console.error('Код ошибки:', error.code);
-    console.error('Сообщение ошибки:', error.message);
-  } finally {
-    setIsSendingVerification(false);
-  }
-};
+  const handleSendVerification = async () => {
+    setIsSendingVerification(true);
+    try {
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email: userEmail,
+      });
 
-// Функция для выхода из аккаунта
-const handleLogout = async () => {
-  try {
-    await auth.signOut();
-    
-    // ОЧИСТКА ЛОКАЛЬНОГО ХРАНИЛИЩА
-    const storageKeys = [
-      'email_verification_pending',
-      'temp_email_for_verification', 
-      'temp_password_for_verification'
-    ];
-    
-    storageKeys.forEach(key => {
-      localStorage.removeItem(key);
-    });
-    
-    showSingleNotification(t('notifications.logout_success'), false);
-    navigate('/');
-    
-  } catch (error) {
-    console.error('Ошибка выхода:', error);
-    showSingleNotification(t('notifications.logout_error'), true);
-  }
-};
+      if (error) throw error;
+
+      showSingleNotification(t('notifications.verification_sent'), false);
+      console.log('Письмо отправлено успешно');
+    } catch (error) {
+      console.error('Ошибка отправки верификации:', error);
+      showSingleNotification(t('notifications.resend_error'), 'error');
+    } finally {
+      setIsSendingVerification(false);
+    }
+  };
+
+// -------------------------------------------------------------------- Функция для выхода из аккаунта
+
+  const handleLogout = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+
+      // Очистка локального хранилища
+      const storageKeys = [
+        'email_verification_pending',
+        'temp_email_for_verification', 
+        'temp_password_for_verification'
+      ];
+      
+      storageKeys.forEach(key => {
+        localStorage.removeItem(key);
+      });
+
+      // Supabase также хранит токены - очищаем их
+      localStorage.removeItem('supabase.auth.token');
+      
+      showSingleNotification(t('notifications.logout_success'), false);
+      navigate('/');
+      
+    } catch (error) {
+      console.error('Ошибка выхода:', error);
+      showSingleNotification(t('notifications.logout_error'), true);
+    }
+  };
 
   // Функция для определения класса статуса email
   const getEmailStatusClass = () => {

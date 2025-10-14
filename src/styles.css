@@ -660,8 +660,6 @@ input:-webkit-autofill { animation-name: onAutoFillStart }
   cursor: pointer;
   text-align: center;
   text-decoration: none;
-  /* Анимация .complete-to-main-page-btn */
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 /* Анимация при наведении .complete-to-main-page-btn */
 .complete-to-main-page-btn:hover {
@@ -1783,13 +1781,15 @@ backdrop-filter: blur(5px); /* Размытие фона кнопки */
 }
 
 .info-section {
+    position: relative;
     flex: 1;
     min-width: 250px;
     text-align: left;
     width: 50%;
+    overflow: visible;
 }
 
-.section-title {
+.section-title-profile {
     margin-bottom: 5px;
     font-size: 18px;
     font-weight: 500;
@@ -1939,54 +1939,15 @@ border-bottom: 2px solid #ff6600;
     align-items: flex-start;
     flex-direction: column; /* горизонтальное расположение элементов */
     justify-content: left;
-    /* Пентагон с правым средним углом */
-    clip-path: polygon(
-        0% 0%, 
-        95% 0%, 
-        100% 50%, 
-        95% 100%, 
-        0% 100%
-    );
 }
+.info-block.first-block,
+.info-block.second-block {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: 6px;
+    border: 1px solid #444;
 
-/* Задний фон блоков профиля */
-.info-block::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 35%;
-    right: 0;
-    bottom: 0;
-    background-color: #ff6600;
-    border-radius: 8px;
-    clip-path: polygon(
-        0% 0%, 
-        95% 0%, 
-        100% 50%, 
-        95% 100%, 
-        0% 100%
-    );
-    z-index: -2;
-}
-
-/* Передний фон блоков профиля */
-.info-block::after {
-    content: '';
-    position: absolute;
-    top: 2px;
-    left: 0;
-    right: 2px;
-    bottom: 0;
-    background-color: #5b605f;
-    border-radius: 8px;
-    clip-path: polygon(
-        0% 0%, 
-        95% 0%, 
-        100% 50%, 
-        95% 100%, 
-        0% 100%
-    );
-    z-index: -1; /* Позади всего контента */
 }
 
 .name-player-style {
@@ -2592,6 +2553,7 @@ border-bottom: 2px solid #ff6600;
 
 .nickname-container {
   position: relative;
+    flex: 1;
 }
 
 .nickname-display-container {
@@ -4561,7 +4523,7 @@ border-radius: 12px;
     text-align: left;
 }
 
-.player-nickname {
+.player-nickname-team {
     color: #f6efd9;
     font-size: 14px;
     margin-bottom: 5px;
