@@ -134,7 +134,8 @@ export const translations = {
       'auth/invalid-login-credentials': 'Неверный email или пароль',
       'auth/too-many-requests': 'Слишком много попыток. Попробуйте позже',
       'auth/user-disabled': 'Аккаунт заблокирован',
-      'auth/user-not-found': 'Пользователь не найден'
+      'auth/user-not-found': 'Пользователь не найден',
+      'auth/wrong-password': 'Некорректный email/пароль'
     },
 
     // Уведомления
@@ -376,7 +377,8 @@ export const translations = {
       'auth/invalid-login-credentials': 'Invalid email or password',
       'auth/too-many-requests': 'Too many attempts. Try again later',
       'auth/user-disabled': 'Account is disabled',
-      'auth/user-not-found': 'User not found'
+      'auth/user-not-found': 'User not found',
+      'auth/wrong-password': 'Invalid email/password'
     },
 
     // Notifications

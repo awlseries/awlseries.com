@@ -8,11 +8,11 @@ import './supabase';
 import '/src/styles.css';
 
 // Ленивая загрузка только тяжелых компонентов
-const Tournaments = lazy(() => import('./pages/Tournaments/Tournaments.jsx'));
-const Teams = lazy(() => import('./pages/Teams/Teams'));
-const Rating = lazy(() => import('./pages/Rating/Rating'));
-const Profile = lazy(() => import('./pages/Profile/Profile'));
-const Transfers = lazy(() => import('./pages/Transfers/Transfers.jsx'));
+const Tournaments = lazy(() => import('./pages/tournaments/tournaments.jsx'));
+const Teams = lazy(() => import('./pages/teams/teams'));
+const Rating = lazy(() => import('./pages/rating/rating'));
+const Profile = lazy(() => import('./pages/profile/profile'));
+const Transfers = lazy(() => import('./pages/transfers/transfers.jsx'));
 const Rules = lazy(() => import('./pages/Rules/Rules'));
 const Registration = lazy(() => import('./pages/Registration/Registration.jsx'));
 const VerificationSuccess = lazy(() => import('./components/VerificationSuccess/VerificationSuccess.jsx'));

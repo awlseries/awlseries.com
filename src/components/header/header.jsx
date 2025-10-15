@@ -1,6 +1,6 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import SearchModal from '../SearchModal/SearchModal.jsx';
+import SearchModal from '../searchmodal/searchmodal.jsx';
 import SearchResults from '../SearchResults/SearchResults.jsx';
 import { supabase } from '../../supabase.js';
 import Ticker from '../Ticker/Ticker.jsx';
