@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { supabase } from '../../supabase';
-import Footer from '../../components/Footer/Footer';
-import FeedbackModal from '../../components/FeedbackModal/FeedbackModal.jsx';
+import Footer from '../../components/footer/footer';
+import FeedbackModal from '../../components/feedbackmodal/feedbackmodal.jsx';
 import { showSingleNotification } from '/utils/notifications';
 import LottieAnimation from '../../components/LottieAnimation/LottieAnimation';
 import { useLanguage } from '/utils/language-context.jsx';
