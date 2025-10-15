@@ -5,7 +5,7 @@ const Home = () => {
       {/* Баннер */}
       <section className="hero-banner">
         <div className="maintenance-container">
-          <img src="/images/icons/icon-processing-works.png" alt="technical-works" className="maintenance-icon" />
+          <img src="/images/icons/icon-processing-works.png" alt="technical-works" className="maintenance-icon" loading="eager" />
           <div className="maintenance-text">Ведутся технические работы</div>
         </div>
       </section>

@@ -18,7 +18,7 @@ const Teams = () => {
       while (row.length < rowSize) {
         row.push({ 
           id: `empty-${rows.length}-${row.length}`, 
-          logo: '../public/images/icons/icon-empty-slot-team.png', 
+          logo: '/images/icons/icon-empty-slot-team.png', 
           name: t('teams.free_slot'), 
           isEmpty: true 
         });
@@ -37,18 +37,18 @@ const Teams = () => {
       teams: '0',
       newTeams: '-',
       type: 'assault',
-      icon: '../public/images/icons/icon-division-starladder.png',
+      icon: '/images/icons/icon-division-starladder.png',
       teamsData: createTeamRows([
-        { id: 1, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
-        { id: 2, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
-        { id: 3, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
-        { id: 4, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
-        { id: 5, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
-        { id: 6, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
-        { id: 7, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
-        { id: 8, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
-        { id: 9, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
-        { id: 10, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true }
+        { id: 1, logo: '/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 2, logo: '/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 3, logo: '/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 4, logo: '/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 5, logo: '/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 6, logo: '/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 7, logo: '/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 8, logo: '/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 9, logo: '/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 10, logo: '/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true }
       ])
     },
     {
@@ -59,14 +59,14 @@ const Teams = () => {
       teams: '0',
       newTeams: '-',
       type: 'special',
-      icon: '../public/images/icons/icon-division-slayger.png',
+      icon: '/images/icons/icon-division-slayger.png',
       teamsData: createTeamRows([
-        { id: 1, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
-        { id: 2, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
-        { id: 3, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
-        { id: 4, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
-        { id: 5, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
-        { id: 5, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true }
+        { id: 1, logo: '/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 2, logo: '/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 3, logo: '/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 4, logo: '/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 5, logo: '/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 5, logo: '/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true }
       ])
     },
     {
@@ -77,14 +77,14 @@ const Teams = () => {
       teams: '0',
       newTeams: '-',
       type: 'vanguard',
-      icon: '../public/images/icons/icon-division-vanguard.png',
+      icon: '/images/icons/icon-division-vanguard.png',
       teamsData: createTeamRows([
-        { id: 1, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
-        { id: 2, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
-        { id: 3, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
-        { id: 4, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
-        { id: 5, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
-        { id: 5, logo: '../public/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true }
+        { id: 1, logo: '/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 2, logo: '/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 3, logo: '/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 4, logo: '/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 5, logo: '/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true },
+        { id: 5, logo: '/images/icons/icon-empty-slot-team.png', name: t('teams.free_slot'), isEmpty: true }
         // Меньше команд для демонстрации
       ])
     }
@@ -92,7 +92,7 @@ const Teams = () => {
 
   const rewards = [
     {
-      icon: '../public/images/icons/icon-contract.png',
+      icon: '/images/icons/icon-contract.png',
       title: t('teams.sponsor_contracts'),
       items: [
         t('teams.contracts_with_organizations'),
@@ -102,7 +102,7 @@ const Teams = () => {
       ]
     },
     {
-      icon: '../public/images/icons/icon-awards.png',
+      icon: '/images/icons/icon-awards.png',
       title:  t('teams.combat_rewards'),
       items: [
         t('teams.prize_funds'),
@@ -114,7 +114,7 @@ const Teams = () => {
       ]
     },
     {
-      icon: '../public/images/icons/icon-quotes.png',
+      icon: '/images/icons/icon-quotes.png',
       title: t('teams.privileged_quotas'),
       items: [
          t('teams.automatic_qualification'),
@@ -124,7 +124,7 @@ const Teams = () => {
       ]
     },
     {
-      icon: '../public/images/icons/icon-up-career.png',
+      icon: '/images/icons/icon-up-career.png',
       title: t('teams.career_growth'),
       items: [
         t('teams.scout_programs'),
@@ -137,32 +137,32 @@ const Teams = () => {
 
   const futureFeatures = [
     {
-      icon: '../public/images/icons/icon-shesterenka.png',
+      icon: '/images/icons/icon-shesterenka.png',
       title: t('teams.seasonal_tournaments'),
       description: t('teams.seasonal_tournaments_desc')
     },
     {
-      icon: '../public/images/icons/icon-shesterenka.png',
+      icon: '/images/icons/icon-shesterenka.png',
       title: t('teams.global_leaderboards'),
       description: t('teams.global_leaderboards_desc')
     },
     {
-      icon: '../public/images/icons/icon-shesterenka.png',
+      icon: '/images/icons/icon-shesterenka.png',
       title: t('teams.captain_announcements'),
       description: t('teams.captain_announcements_desc')
     },
     {
-      icon: '../public/images/icons/icon-shesterenka.png',
+      icon: '/images/icons/icon-shesterenka.png',
       title: t('teams.practice_matches'),
       description: t('teams.practice_matches_desc')
     },
     {
-      icon: '../public/images/icons/icon-shesterenka.png',
+      icon: '/images/icons/icon-shesterenka.png',
       title: t('teams.payment_system'),
       description: t('teams.payment_system_desc')
     },
     {
-      icon: '../public/images/icons/icon-shesterenka.png',
+      icon: '/images/icons/icon-shesterenka.png',
       title: t('teams.integrated_streams'),
       description: t('teams.integrated_streams_desc')
     }
