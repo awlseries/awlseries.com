@@ -1,9 +1,9 @@
 // src/components/Layout/MainLayout.jsx
 import { Outlet } from 'react-router-dom';
 import { useState } from 'react';
-import Header from '../Header/Header';
-import Footer from '../Footer/Footer';
-import FeedbackModal from '../FeedbackModal/Feedbackmodal.jsx';
+import Header from '../header/header';
+import Footer from '../footer/footer';
+import FeedbackModal from '../feedbackmodal/feedbackmodal.jsx';
 import { useLanguage } from '/utils/language-context.jsx';
 
 function MainLayout() {
