@@ -17,6 +17,7 @@ const Transfers = lazy(() => import('./pages/transfers/transfers.jsx'));
 const Rules = lazy(() => import('./pages/Rules/Rules'));
 const Registration = lazy(() => import('./pages/Registration/Registration.jsx'));
 const VerificationSuccess = lazy(() => import('./components/VerificationSuccess/VerificationSuccess.jsx'));
+const ResetPassword = lazy(() => import('/utils/ResetPassword'));
 
 // Простой inline компонент для загрузки
 function LoadingFallback() {
@@ -64,6 +65,14 @@ function AppContent() {
               </Suspense>
             } 
           />
+          <Route 
+  path="/reset-password" 
+  element={
+    <Suspense fallback={<LoadingFallback />}>
+      <ResetPassword />
+    </Suspense>
+  } 
+/>
         
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />

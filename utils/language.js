@@ -8,6 +8,16 @@ export const translations = {
     mobile_block_description: "Мобильная версия сайта в разработке. Для полного доступа к функциям Arena Warborn League используйте ноутбук или компьютер.",
     mobile_block_footer: "Arena Warborn League 2025. Все права защищены.",
 
+    // СТРАНИЦА RESET PASSWORD
+  reset_password_title: "Сброс пароля",
+  new_password_label: "Новый пароль",
+  new_password_placeholder: "Введите новый пароль",
+  confirm_new_password_label: "Подтвердите пароль",
+  confirm_new_password_placeholder: "Повторите новый пароль",
+  remember_password: "Вспомнили пароль?",
+  login_link: "Войти",
+  password_updated: "Пароль успешно обновлен!",
+
     registration_title: "Регистрация",
     fullname_label: "Имя*",
     fullname_placeholder: "Имя и фамилия через пробел",

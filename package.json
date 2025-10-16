@@ -13,6 +13,7 @@
     "@vercel/speed-insights": "^1.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-helmet-async": "^2.0.5",
     "react-lottie": "^1.2.10",
     "react-router-dom": "^7.9.4",
     "react-world-flags": "^1.6.0"

@@ -544,33 +544,54 @@ const handlePasswordRecoverySubmit = async (e) => {
   setError('');
   
   const form = e.target;
-  const email = form.email.value;
+  const email = form.email.value.trim();
 
-  if (!email.trim() || !/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(email)) {
+  if (!email) {
+    setError(t('errors.email_required'));
+    setRecoveryLoading(false);
+    return;
+  }
+
+  if (!/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(email)) {
     setError(t('errors.email_invalid'));
     setRecoveryLoading(false);
     return;
   }
 
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/update-password`,
-      });
+  try {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `https://awlseries.com/reset-password`,
+    });
 
-      if (error) throw error;
-
-      showSingleNotification(`✓ ${t('notifications.recovery_instructions')}`);
-      setPasswordRecoveryOpen(false);
-      setError('');
-    } catch (error) {
-      console.error('Ошибка восстановления пароля:', error);
-      const errorMessage = getRecoveryErrorMessage(error);
-      setError(errorMessage);
-      showSingleNotification(errorMessage, true);
-    } finally {
-      setRecoveryLoading(false);
+    if (error) {
+      console.error('Supabase error:', error);
+      throw error;
     }
-  };
+
+    showSingleNotification(`✓ ${t('notifications.recovery_instructions')}`);
+    setPasswordRecoveryOpen(false);
+    setError('');
+    
+  } catch (error) {
+    console.error('Ошибка восстановления пароля:', error);
+    
+    // Более детальная обработка ошибок
+    let errorMessage = t('errors.recovery_failed');
+    
+    if (error.message?.includes('rate limit')) {
+      errorMessage = t('errors.rate_limit');
+    } else if (error.message?.includes('not found') || error.message?.includes('does not exist')) {
+      errorMessage = t('errors.email_not_found');
+    } else {
+      errorMessage = error.message || t('errors.recovery_failed');
+    }
+    
+    setError(errorMessage);
+    showSingleNotification(errorMessage, true);
+  } finally {
+    setRecoveryLoading(false);
+  }
+};
 
   // -------------------------------------------------------------- Переключение на форму входа
 
