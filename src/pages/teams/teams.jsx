@@ -173,8 +173,13 @@ const Teams = () => {
   return (
     <div>
       {/* Герой-секция с описанием */}
-
       <section className="divisions-hero">
+        {/* Фоновое изображение */}
+  <img className='divisions-hero-banner' src="/images/banners/banner-divisions-bg.webp" alt="divisions-banner" loading="eager"
+  />
+  {/* Градиентный оверлей */}
+  <div className='divisions-hero-overlay'/>
+  
         <h1 className="divisions-title">{t('teams.division_system_title')}</h1>
         <p className="divisions-subtitle">
           {t('teams.division_system_description')}

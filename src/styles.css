@@ -6,7 +6,7 @@
     font-display: swap; /* чтобы текст не был невидимым во время загрузки */
 }
 
-/* ------------------------------------------------------------------- src/components/UI/LoadingSpinner.css ------------------------------------ */
+/* ---------------------------------------------------------------------------------- ЗАГРУЗКА СПИННЕРА ------------------------------------ */
 
 .spinner {
   display: flex;
@@ -4880,13 +4880,28 @@ border-radius: 12px;
 /* ------------------------------------------- Стили для основного контента */
 
 .divisions-hero {
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)), 
-                url('/images/banners/banner-divisions-bg.webp');
-    background-size: cover;
-    background-position: center;
+    position: relative;
     padding: 80px 20px;
     text-align: center;
     border-bottom: 1px solid #444;
+}
+.divisions-hero-banner {
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    z-index: -1;
+}
+.divisions-hero-overlay {
+    position: absolute;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100% ;
+     background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8));
+     z-index: -1;
 }
 
 .divisions-title {

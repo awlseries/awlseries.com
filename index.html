@@ -14,22 +14,77 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" href="/images/banners/slider-processing-works.webp" as="image" type="image/webp">
   <link rel="preload" href="/images/other/registration-bg88tr.webp" as="image" type="image/webp">
-  
   <!-- Предзагрузка критичных шрифтов -->
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  
   <!-- Основные шрифты -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-  
   <!-- Fallback для старых браузеров -->
   <noscript>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   </noscript>
   <title>Arena Warborn League</title>
+  <style>
+  .initial-loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #2c2c2c;
+    display: flex;
+    justify-content: center;
+  }
+  
+  /* Скрываем когда React загрузился */
+  .react-loaded .initial-loading {
+    display: none;
+  }
+  .spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+.spinner-circle {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #ff6600;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+}
+.loading-container p {
+  margin-top: 10px;
+  color: #666;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+}
+</style>
   </head>
 
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Спиннер пока грузится React -->
+    <div class="initial-loading">
+      <div class="loading-container">
+        <div class="spinner">
+          <div class="spinner-circle"></div>
+        </div>
+        <p>Loading...</p>
+      </div>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
