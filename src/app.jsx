@@ -125,6 +125,23 @@ function AppContent() {
 }
 
 function App() {
+  // Редирект при первом посещении
+  useEffect(() => {
+    const isFirstVisit = !localStorage.getItem('hasVisited');
+    
+    if (isFirstVisit && window.location.pathname === '/') {
+      localStorage.setItem('hasVisited', 'true');
+      window.location.href = '/registration';
+      return;
+    }
+  }, []);
+
+  // Если редирект сработал, не рендерим контент
+  const shouldRedirect = !localStorage.getItem('hasVisited') && window.location.pathname === '/';
+  if (shouldRedirect) {
+    return null;
+  }
+  
   return (
     <LanguageProvider>
       <AppContent />
