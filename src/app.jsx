@@ -1,9 +1,10 @@
 // src/App.jsx
 import { createBrowserRouter, RouterProvider, createRoutesFromElements, Route } from 'react-router-dom';
-import { useEffect, Suspense, lazy } from 'react';
+import { useEffect, Suspense, lazy, useState } from 'react';
 import MainLayout from './components/Layout/MainLayout';
 import Home from './pages/Home/Home';
 import { LanguageProvider } from '/utils/language-context.jsx';
+import MobileBlockMessage from './components/MobileBlockMessage/MobileBlockMessage';
 import './supabase';
 import '/src/styles.css';
 
@@ -125,26 +126,43 @@ function AppContent() {
 }
 
 function App() {
-  // Редирект при первом посещении
+  const [isMobile, setIsMobile] = useState(false);
+  const [shouldRedirect, setShouldRedirect] = useState(false);
+
+  // Проверка мобильного устройства и редирект
   useEffect(() => {
+    // Проверка на мобильное устройство
+    const checkMobile = () => {
+      const mobile = window.innerWidth <= 1024;
+      setIsMobile(mobile);
+    };
+
+    // Проверка редиректа при первом посещении
     const isFirstVisit = !localStorage.getItem('hasVisited');
+    const shouldRedirectToRegistration = isFirstVisit && window.location.pathname === '/';
     
-    if (isFirstVisit && window.location.pathname === '/') {
+    if (shouldRedirectToRegistration) {
       localStorage.setItem('hasVisited', 'true');
       window.location.href = '/registration';
+      setShouldRedirect(true);
       return;
     }
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   // Если редирект сработал, не рендерим контент
-  const shouldRedirect = !localStorage.getItem('hasVisited') && window.location.pathname === '/';
   if (shouldRedirect) {
     return null;
   }
-  
+
+  // Показываем мобильное сообщение вместо контента
   return (
     <LanguageProvider>
-      <AppContent />
+      {isMobile ? <MobileBlockMessage /> : <AppContent />}
     </LanguageProvider>
   );
 }

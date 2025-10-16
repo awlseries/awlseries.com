@@ -2,6 +2,12 @@
 // Перевод страницы регистрации
 export const translations = {
   ru: {
+
+    // СТРАНИЦА MBM
+    mobile_block_title: "Доступно только на компьютерах",
+    mobile_block_description: "Мобильная версия сайта в разработке. Для полного доступа к функциям Arena Warborn League используйте ноутбук или компьютер.",
+    mobile_block_footer: "Arena Warborn League 2025. Все права защищены.",
+
     registration_title: "Регистрация",
     fullname_label: "Имя*",
     fullname_placeholder: "Имя и фамилия через пробел",
@@ -67,7 +73,7 @@ export const translations = {
       go_to_section: "Перейти в раздел"
     },
 
-    // HEADER RU
+    // ШАПКА RU
     join_us_text: "Присоединяйтесь к нам:",
     home_link: "Главная",
     tournaments_link: "Турниры", 
@@ -81,7 +87,7 @@ export const translations = {
     not_authenticated_text: "Не авторизован",
     sending_button: "Отправка...",
 
-    // Footer translations
+    // КОМПОНЕНТ Footer
     footer_description: " — это новая профессиональная киберспортивная лига, учрежденная с целью развития и структурирования соревновательной экосистемы в современных дисциплинах киберспорта",
     rights_reserved: "Все права защищены.",
     tournament_rules: "Правила турниров",
@@ -93,7 +99,7 @@ export const translations = {
     feedback_text3: "Обработка запроса в течение",
     feedback_text3_part2: "24 часов.",
 
-    // FeedbackModal translations
+    // КОМПОНЕНТ FeedbackModal
     feedback_modal_title: "Обратная связь",
     feedback_email_label: "Ваш Email*",
     feedback_email_placeholder: "Почта, на которую вам придет ответ",
@@ -245,6 +251,12 @@ export const translations = {
   },
 
   en: {
+
+    // PAGE MBM
+    mobile_block_title: "Available only on computers",
+    mobile_block_description: "Mobile version is under development. For full access to Arena Warborn League features, please use a laptop or computer.",
+    mobile_block_footer: "Arena Warborn League 2025. All rights reserved.",
+
     registration_title: "Registration",
     fullname_label: "Full Name*",
     fullname_placeholder: "First and last name with space",
