@@ -5,6 +5,7 @@ import CountryPicker from '../../components/CountryPicker';
 import { supabase } from '../../supabase';
 import { useLanguage } from '/utils/language-context.jsx';
 import '/src/styles.css';
+import { useNavigate } from 'react-router-dom';
 import './ProfileInfo.css';
 import SEO from '../../components/Seo/Seo';
 
@@ -26,52 +27,66 @@ const Profile = () => {
   const [hasCountryBeenSet, setHasCountryBeenSet] = useState(false);
   const [selectedClass, setSelectedClass] = useState('');
   const [showClassSelector, setShowClassSelector] = useState(false);
+  const navigate = useNavigate();
   const { t } = useLanguage();
 
   // ------------------------------------------------------------------------ Загрузка данных при монтировании
 
 useEffect(() => {
-  let mounted = true;
+    let mounted = true;
 
-  const loadInitialData = async () => {
-    try {
-      setLoading(true);
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (mounted && session?.user) {
-        await loadUserData(session.user, mounted);
+    const loadInitialData = async () => {
+      try {
+        setLoading(true);
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (mounted && session?.user) {
+          await loadUserData(session.user, mounted);
+        } else if (mounted) {
+          // 🔐 РЕДИРЕКТ ЕСЛИ НЕТ СЕССИИ
+          showSingleNotification('✗ Требуется авторизация', true);
+          setTimeout(() => navigate('/'), 1000);
+          return;
+        }
+      } catch (error) {
+        console.error('Ошибка загрузки данных:', error);
+        if (mounted) {
+          showSingleNotification('✗ Ошибка загрузки профиля', true);
+        }
+      } finally {
+        if (mounted) {
+          setLoading(false);
+        }
       }
-    } catch (error) {
-      console.error('Ошибка загрузки данных:', error);
-      if (mounted) {
-        showSingleNotification('✗ Ошибка загрузки профиля', true);
-      }
-    } finally {
-      if (mounted) {
+    };
+
+    // Слушаем ТОЛЬКО для выхода из системы
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (!mounted) return;
+
+      // Реагируем ТОЛЬКО на выход
+      if (event === 'SIGNED_OUT') {
+        setUserData(null);
         setLoading(false);
+        showSingleNotification('✗ Вы вышли из системы', true);
+        navigate('/');
       }
-    }
-  };
+      // 🔐 ДОБАВЛЯЕМ ПРОВЕРКУ ПОДТВЕРЖДЕНИЯ ПОЧТЫ ПРИ ВХОДЕ
+      else if (event === 'SIGNED_IN' && session?.user) {
+        if (!session.user.email_confirmed_at && !session.user.confirmed_at) {
+          showSingleNotification('✗ Подтвердите email для доступа к профилю', true);
+          navigate('/');
+        }
+      }
+    });
 
-  // Слушаем ТОЛЬКО для выхода из системы
-  const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-    if (!mounted) return;
+    loadInitialData();
 
-    // Реагируем ТОЛЬКО на выход
-    if (event === 'SIGNED_OUT') {
-      setUserData(null);
-      setLoading(false);
-    }
-    // Игнорируем ВСЕ остальные события включая SIGNED_IN и TOKEN_REFRESHED
-  });
-
-  loadInitialData();
-
-  return () => {
-    mounted = false;
-    subscription.unsubscribe();
-  };
-}, []);
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
+  }, [navigate]);
 
   // ------------------------------------------------------------------------- Загрузка данных пользователя
 

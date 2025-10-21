@@ -1742,10 +1742,10 @@ backdrop-filter: blur(5px); /* Размытие фона кнопки */
 /* ----------------------------- Блок с фотографией игрока */
 .fade-block {
     position: absolute;
-    width: 509px;
-    height: 508px;
+    width: 400px;
+    height: 400px;
     top: 200px;
-    right: 22%;
+    right: 27%;
     overflow: hidden;
     /* Маска для прозрачности снизу вверх */
     -webkit-mask-image: linear-gradient(to top, 
