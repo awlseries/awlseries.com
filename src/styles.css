@@ -390,29 +390,29 @@ input:-webkit-autofill { animation-name: onAutoFillStart }
 }
 
 /* Состояния валидации для всех полей КРОМЕ подтверждения пароля */
-.form-group input:not(:placeholder-shown):not(:focus):invalid:not(#confirm-password) {
-    border-bottom-color: #ce2727;
+.invalid-input {
+    border-bottom: 2px solid #e74c3c !important;
 }
 /* Стиль для активного состояния */
 .form-group input:focus {
     border-bottom-color: #d0cbba; /* Цветная линия при фокусе */
 }
-.form-group input:not(:placeholder-shown):not(:focus):valid:not(#confirm-password) {
-    border-bottom-color: #22b327;
+.valid-input {
+    border-bottom: 2px solid #9acd32 !important;
 }
 /* Красный только при несовпадении паролей */
 #confirm-password.invalid-password {
-    border-bottom-color: #ce2727;
+    border-bottom-color: #e74c3c;
 }
 /* Зеленый только при совпадении паролей */
 #confirm-password.valid-password {
-    border-bottom-color: #22b327;
+    border-bottom-color: #9acd32;
 }
 
 
 /* Сообщения об ошибках */
 .error-message {
-  color: #ff4444;
+  color: #e74c3c;
   font-size: 12px;
   margin-top: 5px;
   display: block;

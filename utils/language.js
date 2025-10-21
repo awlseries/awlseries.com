@@ -10,13 +10,13 @@ export const translations = {
 
     // СТРАНИЦА RESET PASSWORD
   reset_password_title: "Сброс пароля",
-  new_password_label: "Новый пароль",
+  new_password_label: "Новый пароль* ",
   new_password_placeholder: "Введите новый пароль",
-  confirm_new_password_label: "Подтвердите пароль",
+  confirm_new_password_label: "Подтвердите пароль*",
   confirm_new_password_placeholder: "Повторите новый пароль",
-  remember_password: "Вспомнили пароль?",
-  login_link: "Войти",
   password_updated: "Пароль успешно обновлен!",
+  use_reset_link: '✗ Доступ запрещен, используйте ссылку из письма для сброса пароля',
+  session_expired: '✗ Сессия истекла или недействительна',
 
     registration_title: "Регистрация",
     fullname_label: "Имя*",
@@ -262,10 +262,20 @@ export const translations = {
 
   en: {
 
-    // PAGE MBM
+    // PAGE MOBILE BLOCK
     mobile_block_title: "Available only on computers",
     mobile_block_description: "Mobile version is under development. For full access to Arena Warborn League features, please use a laptop or computer.",
     mobile_block_footer: "Arena Warborn League 2025. All rights reserved.",
+
+    // PAGE RESET PASSWORD
+  reset_password_title: "Reset Password",
+  new_password_label: "New Password* ", 
+  new_password_placeholder: "Enter new password",
+  confirm_new_password_label: "Confirm Password*",
+  confirm_new_password_placeholder: "Repeat new password",
+  password_updated: "Password successfully updated!",
+  use_reset_link: 'Access Denied, use the link from the email to reset your password',
+  session_expired: '✗ The session has expired or is invalid',
 
     registration_title: "Registration",
     fullname_label: "Full Name*",

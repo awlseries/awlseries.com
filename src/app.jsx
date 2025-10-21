@@ -66,13 +66,13 @@ function AppContent() {
             } 
           />
           <Route 
-  path="/reset-password" 
-  element={
-    <Suspense fallback={<LoadingFallback />}>
-      <ResetPassword />
-    </Suspense>
-  } 
-/>
+          path="/reset-password" 
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <ResetPassword />
+            </Suspense>
+          } 
+        />
         
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />

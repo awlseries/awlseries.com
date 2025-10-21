@@ -13,9 +13,111 @@ const ResetPassword = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [isFeedbackOpen, setFeedbackOpen] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isValidAccess, setIsValidAccess] = useState(false);
+  const [isCheckingAccess, setIsCheckingAccess] = useState(true);
 
   const handleLanguageChange = (lang) => {
     changeLanguage(lang);
+  };
+
+  // Проверяем, что пользователь пришел по правильной ссылке сброса пароля
+  useEffect(() => {
+    const checkAccess = async () => {
+      try {
+        // Получаем hash из URL (Supabase передает токен в hash)
+        const hash = window.location.hash;
+        
+        if (!hash || !hash.includes('type=recovery')) {
+          // Если нет правильного hash, перенаправляем на главную
+          showSingleNotification(t('use_reset_link'), true);
+          setTimeout(() => {
+            window.location.href = '/';
+          }, 3000);
+          return;
+        }
+
+        // Пытаемся получить сессию из hash
+        const { data, error } = await supabase.auth.getSession();
+        
+        if (error || !data.session) {
+          showSingleNotification(t('session_expired'), true);
+          setTimeout(() => {
+            window.location.href = '/';
+          }, 3000);
+          return;
+        }
+
+        // Если все ок, разрешаем доступ
+        setIsValidAccess(true);
+        
+      } catch (error) {
+        console.error('Ошибка проверки доступа:', error);
+        showSingleNotification('✗ Ошибка доступа к странице', true);
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 3000);
+      } finally {
+        setIsCheckingAccess(false);
+      }
+    };
+
+    checkAccess();
+  }, []);
+
+  // Функции валидации (возвращают boolean)
+  const validatePasswordRealTime = (value) => {
+    if (!value) return true; // Пустое поле - нейтральный статус
+    return value.length >= 8 && 
+           /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(value);
+  };
+
+  const validatePasswordMatch = (password, confirmPassword) => {
+    if (!confirmPassword) return true; // Пустое поле - нейтральный статус
+    return password === confirmPassword;
+  };
+
+  // Функция проверки совпадения паролей с визуальной индикацией
+  const checkPasswordMatch = () => {
+    const passwordInput = document.getElementById('new-password');
+    const confirmInput = document.getElementById('confirm-new-password');
+    
+    if (!passwordInput || !confirmInput) return;
+    
+    // Валидация основного пароля
+    const isPasswordValid = validatePasswordRealTime(password);
+    passwordInput.classList.remove('valid-input', 'invalid-input');
+    if (password) {
+      if (!isPasswordValid) {
+        passwordInput.classList.add('invalid-input');
+      } else {
+        passwordInput.classList.add('valid-input');
+      }
+    }
+    
+    // Валидация подтверждения пароля
+    const isMatchValid = validatePasswordMatch(password, confirmPassword);
+    confirmInput.classList.remove('valid-input', 'invalid-input');
+    if (confirmPassword) {
+      if (!isMatchValid) {
+        confirmInput.classList.add('invalid-input');
+      } else {
+        confirmInput.classList.add('valid-input');
+      }
+    }
+  };
+
+  // Обработчик изменения основного пароля
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    setError('');
+  };
+
+  // Обработчик изменения подтверждения пароля
+  const handleConfirmPasswordChange = (e) => {
+    setConfirmPassword(e.target.value);
+    setError('');
   };
 
   const handleResetPassword = async (e) => {
@@ -23,14 +125,23 @@ const ResetPassword = () => {
     setLoading(true);
     setError('');
 
+    // Проверка совпадения паролей
     if (password !== confirmPassword) {
       setError(t('errors.passwords_mismatch'));
       setLoading(false);
       return;
     }
 
+    // Проверка длины пароля
     if (password.length < 8) {
       setError(t('errors.password_length'));
+      setLoading(false);
+      return;
+    }
+
+    // Проверка сложности пароля
+    if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
+      setError(t('errors.password_complexity'));
       setLoading(false);
       return;
     }
@@ -54,9 +165,60 @@ const ResetPassword = () => {
     }
   };
 
+  // Вызываем проверку при изменении паролей
+  useEffect(() => {
+    checkPasswordMatch();
+  }, [password, confirmPassword]);
+
+  // Показываем loader пока проверяем доступ
+  if (isCheckingAccess) {
+    return (
+      <div className="loading-container">
+      <div className="spinner">
+        <div className="spinner-circle"></div>
+      </div>
+      <p>Проверка доступа..</p>
+    </div>
+    );
+  }
+  
+  // Если доступ не валиден, не показываем форму
+  if (!isValidAccess) {
+    return (
+      <div className="registration-page-reset-password">
+        <div className="language-switcher">
+          <img 
+            src="/images/icons/icon-rus.png" 
+            alt="Russian" 
+            className={`language-flag ${currentLanguage === 'ru' ? 'active' : ''}`} 
+            data-lang="ru" 
+            onClick={() => handleLanguageChange('ru')}
+          />
+          <img 
+            src="/images/icons/icon-usa.png" 
+            alt="English" 
+            className={`language-flag ${currentLanguage === 'en' ? 'active' : ''}`} 
+            data-lang="en" 
+            onClick={() => handleLanguageChange('en')}
+          />
+        </div>
+        
+        <div className="main-content-registration-reset-password">
+        </div>
+
+        <Footer 
+          onFeedbackClick={() => setFeedbackOpen(true)} 
+        />
+        <FeedbackModal 
+          isOpen={isFeedbackOpen}
+          onClose={() => setFeedbackOpen(false)}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="registration-page-reset-password">
-      {/* Переключатель языка как в Registration */}
       <div className="language-switcher">
         <img 
           src="/images/icons/icon-rus.png" 
@@ -76,30 +238,41 @@ const ResetPassword = () => {
       
       <div className="main-content-registration-reset-password">
         <div className="registration-container-reset-password">
-          <form onSubmit={handleResetPassword}>
+          <form onSubmit={handleResetPassword} className='form-reset-password'>
             <h1>{t('reset_password_title')}</h1>
             
             {error && <div className="error-message global-error">{error}</div>}
             
             <div className="form-group">
-              <label htmlFor="new-password">{t('new_password_label')}</label>
+              <label htmlFor="new-password">
+                {t('new_password_label')}
+                <button 
+                  type="button" 
+                  className="toggle-password"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? '👁️' : '👁️‍🗨️'}
+                </button>
+              </label>
               <input 
-                type="password" 
+                type={showPassword ? 'text' : 'password'} 
                 id="new-password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={handlePasswordChange}
                 placeholder={t('new_password_placeholder')}
                 required
               />
             </div>
             
             <div className="form-group">
-              <label htmlFor="confirm-new-password">{t('confirm_new_password_label')}</label>
+              <label htmlFor="confirm-new-password">
+                {t('confirm_new_password_label')}
+              </label>
               <input 
-                type="password" 
+                type={showConfirmPassword ? 'text' : 'password'} 
                 id="confirm-new-password"
                 value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                onChange={handleConfirmPasswordChange}
                 placeholder={t('confirm_new_password_placeholder')}
                 required
               />
@@ -110,17 +283,10 @@ const ResetPassword = () => {
                 <img src="/images/icons/icon-strelka.png" alt="Иконка стрелки" className="button-icon-strelka" />
               )}
             </button>
-
-            {/* Ссылка на страницу входа */}
-            <div className="login-link">
-              <span>{t('remember_password')}</span>
-              <a href="/registration"> {t('login_link')}</a>
-            </div>
           </form>
         </div>
       </div>
 
-      {/* Футер и модальное окно как в Registration */}
       <Footer 
         onFeedbackClick={() => setFeedbackOpen(true)} 
       />

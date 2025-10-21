@@ -279,6 +279,26 @@ const validateRegistrationForm = (formData) => {
   return errors;
 };
 
+// ------------------------------------------------------------ Валидация полей формы в реальном времени
+
+const validateFullnameRealTime = (value) => {
+  if (!value.trim()) return true; // Пустое поле - нейтральный статус
+  return /^[А-ЯЁA-Z][а-яёa-z]+\s[А-ЯЁA-Z][а-яёa-z]+$/.test(value) && 
+         value.length >= 5 && 
+         value.length <= 30;
+};
+
+const validateEmailRealTime = (value) => {
+  if (!value.trim()) return true; // Пустое поле - нейтральный статус
+  return /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(value);
+};
+
+const validatePasswordRealTime = (value) => {
+  if (!value) return true; // Пустое поле - нейтральный статус
+  return value.length >= 8 && 
+         /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(value);
+};
+
   // -------------------------------------------------------------- Валидация формы входа
 
 const validateLoginForm = (formData) => {
@@ -744,26 +764,53 @@ const handlePasswordChange = (e) => {
     <div className="form-group">
       <label htmlFor="fullname">{t('fullname_label')}</label>
       <input 
-        type="text" 
-        id="fullname" 
-        name="fullname"
-        placeholder={t('fullname_placeholder')}
-        onFocus={() => handleFieldFocus('fullname')}
-        onChange={() => setError('')}
-      />
+  type="text" 
+  id="fullname" 
+  name="fullname"
+  placeholder={t('fullname_placeholder')}
+  onFocus={() => handleFieldFocus('fullname')}
+  onChange={(e) => {
+    setError('');
+    const isValid = validateFullnameRealTime(e.target.value);
+    
+    // Визуальная индикация границы
+    const input = e.target;
+    input.classList.remove('valid-input', 'invalid-input');
+    if (e.target.value) {
+      if (!isValid) {
+        input.classList.add('invalid-input');
+      } else {
+        input.classList.add('valid-input');
+      }
+    }
+  }}
+/>
       {fieldErrors.fullname && <span className="error-message">{fieldErrors.fullname}</span>}
     </div>
     
     <div className="form-group">
       <label htmlFor="email">{t('email_label')}</label>
       <input 
-        type="email" 
-        id="email" 
-        name="email" 
-        placeholder={t('email_placeholder')}
-        onFocus={() => handleFieldFocus('email')}
-        onChange={() => setError('')}
-      />
+  type="email" 
+  id="email" 
+  name="email" 
+  placeholder={t('email_placeholder')}
+  onFocus={() => handleFieldFocus('email')}
+  onChange={(e) => {
+    setError('');
+    const isValid = validateEmailRealTime(e.target.value);
+    
+    const input = e.target;
+    input.classList.remove('valid-input', 'invalid-input');
+    if (e.target.value) {
+      if (!isValid) {
+        input.classList.add('invalid-input');
+      } else {
+        input.classList.add('valid-input');
+      }
+    }
+  }}
+/>
       {fieldErrors.email && <span className="error-message">{fieldErrors.email}</span>}
     </div>
     
@@ -780,16 +827,27 @@ const handlePasswordChange = (e) => {
         </button>
       </label>
       <input 
-        type={showPassword ? 'text' : 'password'} 
-        id="password" 
-        name="password"
-        placeholder={t('password_placeholder')}
-        onFocus={() => handleFieldFocus('password')}
-        onChange={(e) => {
-          handlePasswordChange(e);
-          setError('');
-        }}
-      />
+  type={showPassword ? 'text' : 'password'} 
+  id="password" 
+  name="password"
+  placeholder={t('password_placeholder')}
+  onFocus={() => handleFieldFocus('password')}
+  onChange={(e) => {
+    handlePasswordChange(e);
+    setError('');
+    const isValid = validatePasswordRealTime(e.target.value);
+    
+    const input = e.target;
+    input.classList.remove('valid-input', 'invalid-input');
+    if (e.target.value) {
+      if (!isValid) {
+        input.classList.add('invalid-input');
+      } else {
+        input.classList.add('valid-input');
+      }
+    }
+  }}
+/>
       {fieldErrors.password && <span className="error-message">{fieldErrors.password}</span>}
     </div>
 
