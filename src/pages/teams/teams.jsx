@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useLanguage } from '/utils/language-context.jsx';
+import SEO from '../../components/Seo/Seo';
 
 const Teams = () => {
   const [expandedDivision, setExpandedDivision] = useState(null);
@@ -171,6 +172,13 @@ const Teams = () => {
   {/* ---------------------------------------------------------------------------------------------- HTML ------------------------------ */}
 
   return (
+    <>
+      <SEO 
+        title="AWL Battlefield 6 Divisions - Professional Esports Squads in S1 System Rating"
+        description="Explore amateur and professional Battlefield 6 teams. Check team rankings, player rosters, stats, and join existing squads or create your own."
+        keywords="battlefield 6 teams, bf6 squads, esports teams, gaming clans, team rankings"
+        canonicalUrl="/teams"
+      />
     <div>
       {/* Герой-секция с описанием */}
       <section className="divisions-hero">
@@ -317,6 +325,7 @@ const Teams = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 

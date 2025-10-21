@@ -1,0 +1,30 @@
+# public/robots.txt
+User-agent: *
+Allow: /
+
+# Basic directories
+Disallow: /admin/
+Disallow: /api/
+Disallow: /private/
+
+# Dynamic parameters
+Clean-param: ref /teams/
+Clean-param: sort /rating/
+Clean-param: filter /tournaments/
+
+# Crawling delay
+Crawl-delay: 1
+
+# Sitemaps
+Sitemap: https://awlseries.com/sitemap.xml
+Sitemap: https://awlseries.com/sitemap-static.xml
+
+# Bots for esports sites
+User-agent: AhrefsBot
+Crawl-delay: 2
+
+User-agent: SemrushBot
+Crawl-delay: 2
+
+User-agent: MJ12bot
+Crawl-delay: 3

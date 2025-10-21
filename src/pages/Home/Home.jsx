@@ -1,6 +1,15 @@
 // src/pages/index/index.jsx
+import SEO from '../../components/Seo/Seo';
+
 const Home = () => {
   return (
+    <>
+      <SEO 
+        title="Battlefield 6 Esports Tournaments - Arena Warborn League"
+        description="Join official Battlefield 6 competitive tournaments. Team rankings, player stats, and BF6 esports community. Register now for season matches!"
+        keywords="battlefield 6 tournaments, bf6 competitive, esports bf6, battlefield 6 league, gaming tournaments"
+        canonicalUrl="/"
+      />
     <div>
       {/* Баннер */}
       <section className="hero-banner">
@@ -194,6 +203,7 @@ const Home = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 

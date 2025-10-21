@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../../supabase';
 import { useLanguage } from '/utils/language-context.jsx';
+import SEO from '../../components/Seo/Seo';
 
 const Transfers = () => {
   const [players, setPlayers] = useState([]);
@@ -152,6 +153,13 @@ const Transfers = () => {
   };
 
   return (
+    <>
+      <SEO 
+        title="AWL Battlefield 6 Player Transfers - Team Recruitment"
+        description="Browse Battlefield 6 player transfers and team recruitment. Find new teammates or join professional BF6 esports organizations."
+        keywords="bf6 transfers, player recruitment, team tryouts, esports transfers awl"
+        canonicalUrl="/transfers"
+      />
     <div className="content-index-transfers">
       <div className="centered-container">
         
@@ -273,6 +281,7 @@ const Transfers = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

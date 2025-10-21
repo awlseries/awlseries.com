@@ -5,6 +5,7 @@ import FeedbackModal from '../../components/feedbackmodal/feedbackmodal.jsx';
 import { showSingleNotification } from '/utils/notifications';
 import LottieAnimation from '../../components/LottieAnimation/LottieAnimation';
 import { useLanguage } from '/utils/language-context.jsx';
+import SEO from '../../components/Seo/Seo';
 import '/src/styles.css';
 
 const Registration = () => {
@@ -731,6 +732,13 @@ const handlePasswordChange = (e) => {
   // ------------------------------------------------------------------------------------------ HTML
 
   return (
+    <>
+      <SEO 
+        title="Register for Battlefield 6 Tournaments on AWL - Arena Warborn League"
+        description="Register for Battlefield 6 esports tournaments. Create your account, join teams, and start your competitive gaming journey in Arena Warborn League."
+        keywords="bf6 registration, sign up, tournament registration, esports account"
+        canonicalUrl="/registration"
+      />
     <div className="registration-page">
       {!isCheckingAuth && ( 
         <>
@@ -1061,6 +1069,7 @@ const handlePasswordChange = (e) => {
         </>
 )}
     </div>
+    </>
   );
 };
 

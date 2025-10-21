@@ -42,7 +42,7 @@
       "name": "Home",
       "short_name": "Home",
       "description": "View main page",
-      "url": "/tournaments"
+      "url": "/home"
     },
     {
       "name": "Tournaments",

@@ -6,6 +6,7 @@ import { supabase } from '../../supabase';
 import { useLanguage } from '/utils/language-context.jsx';
 import '/src/styles.css';
 import './ProfileInfo.css';
+import SEO from '../../components/Seo/Seo';
 
 // Ленивая загрузка react-world-flags
 const Flag = lazy(() => import('react-world-flags').then(module => {
@@ -571,6 +572,13 @@ if (!userData) {
    // -------------------------------------------------------------------------------------------------------- HTML ---------------------------------------------
 
   return (
+     <>
+      <SEO 
+        title="Player Profile - AWL Battlefield 6 Your Cyberpsort Profile"
+        description="View your Battlefield 6 player profile, statistics, achievements, and tournament history. Manage your esports career in Arena Warborn League."
+        keywords="bf6 profile, player statistics, gaming achievements, esports career bf6"
+        canonicalUrl="/profile"
+      />
     <div className="content-index">
       <img className="profile-awl-background" src="/images/other/profile-background-awl.webp" alt="awl-logo-profile"/>
 
@@ -927,6 +935,7 @@ if (!userData) {
         disabled={hasCountryBeenSet} // Передаем пропс о блокировке
       />
     </div>
+    </>
   );
 };
 

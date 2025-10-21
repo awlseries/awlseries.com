@@ -1,0 +1,850 @@
+
+/* ------------------------------------------------------------ ТУРНИРНЫЕ СТИЛИ --------------------------------------- */
+
+.tournament-container {
+    max-width: 1300px;
+    margin: 100px auto;
+    width: 100%;
+    border: 1px solid #464646;
+    border-radius: 12px;
+}
+
+.tournament-header-block {
+    width: 100%;
+    background: rgba(44, 44, 44, 0.8);
+    padding: 40px 40px 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end; /* Выравнивание по верху */
+    border-radius: 12px;
+    
+}
+
+.tournament-title-section {
+    display: flex;
+    flex-direction: column;
+    min-width: 0; /* Для корректной работы text-overflow */
+}
+
+.tournament-page-status {
+    font-size: 12px;
+    width: auto;
+    color: #a1a194;
+    margin-bottom: 8px;
+    background-color: #3c3c3c;
+    align-items: center;
+    border-radius: 10px;
+    padding: 5px 10px;
+    font-weight: 500;
+    font-family: 'Montserrat', sans-serif;
+    width: fit-content; /* Ширина по содержимому */
+}
+
+.tournament-page-name {
+    font-family: 'BlackOpsOne', 'BlackOpsOneType', sans-serif;
+    font-size: 28px;
+    color: #f6efd9;
+    margin: 0;
+    font-weight: 400;
+    white-space: nowrap; /* Запрет переноса текста */
+}
+
+.join-tournament-btn {
+    background: rgba(255, 102, 0, 0.3);
+    border: 1px solid rgba(255, 102, 0, 0.5);
+    color: #f6efd9;
+    padding: 8px 24px;
+    border-radius: 6px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+    flex-shrink: 0; /* Запрет сжатия кнопки */
+}
+.icons-tournaments {
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.join-tournament-btn:hover {
+    background: rgba(255, 102, 0, 0.5);
+    border-color: rgba(255, 102, 0, 0.7);
+    transform: translateY(-1px);
+}
+
+/* --------------------------------------- Стили для второго горизонатльного блока */
+
+.tournament-middle-block {
+    background-color: #5b605fa5;
+    padding: 20px 40px;
+    margin-bottom: 20px;
+    min-height: 90px;
+    display: flex;
+    justify-content: space-between;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+/* Контейнер для мини-блоков слева (в ряд) */
+.tournament-mini-blocks {
+    display: flex;
+    gap: 30px;
+}
+
+/* Отдельный мини-блок */
+.mini-block {
+    background-color: #464646;
+    border-radius: 28px;
+    border: 1px solid rgba(39, 39, 39, 0.5);
+    overflow: hidden;
+    min-height: 60px;
+    min-width: 190px; /* Фиксированная ширина */
+    display: flex;
+    flex-direction: row;
+}
+.mini-block:nth-child(3) {
+    min-width: 210px;
+}
+
+/* Левая часть мини-блока */
+.mini-block-top {
+    width: 33%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Правая часть мини-блока */
+.mini-block-bottom {
+    width: 67%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+}
+
+.mini-text-line-top {
+    font-size: 13px;
+    color: #f6efd9;
+    line-height: 1.2;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    margin-bottom: 2px;
+    padding-bottom: 2px;
+    white-space: nowrap;
+}
+
+.mini-text-line-bottom {
+    font-size: 11px;
+    color: #a1a194;
+    line-height: 1.2;
+    font-family: 'Open Sans', sans-serif;
+}
+
+/* Правый блок */
+.tournament-right-block {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    width: auto
+}
+
+/* Левая часть правого блока */
+.right-block-top {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: right;
+}
+.right-block-line-top {
+    line-height: 1.2;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    color: #f6efd9;
+    padding-bottom: 5px;
+}
+.right-block-line-bottom {
+    font-family: 'BlackOpsOne', 'BlackOpsOneType', sans-serif;
+    font-size: 16px;
+    color: #a1a194;
+}
+
+/* Правая часть правого блока */
+.right-block-bottom {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-left: 8px;
+    position: relative;
+}
+
+/* Контейнер для кругов с иконками */
+.team-icons-container {
+    display: flex;
+    position: relative;
+}
+
+/* Отдельный круг с иконкой команды */
+.team-icon-circle {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-left: -12px; /* Наложение кругов */
+    border: 4px solid #5b605fa5;
+    overflow: hidden;
+}
+
+.team-icon-circle:first-child {
+    margin-left: 0; /* Первый круг без отступа */
+}
+.team-icon-circle:last-child {
+    margin-right: 8px; /* Первый круг без отступа */
+    border: none;
+    background-color: #464646;
+}
+
+.team-icon-circle img {
+    width: 60px;
+    height: 60px;
+    background: transparent;
+    object-fit: cover;
+}
+.right-block-line-bottom-last {
+    font-family: 'BlackOpsOne', 'BlackOpsOneType', sans-serif;
+    font-size: 16px;
+    color: #ff6600;
+}
+
+/* ---------------------------- ТРЕТИЙ ГОРИЗОНТАЛЬНЫЙ БЛОК */
+
+.tournament-bottom-block {
+    background: rgba(44, 44, 44, 0.8);
+    padding: 20px 0 20px 40px;
+    display: flex;
+    border-radius: 12px;
+}
+
+/* ------- Левый мини-блок в 3 СЕКЦИИ */
+.tournament-info-section {
+    flex: 0 0 34%;
+    display: flex;
+    flex-direction: column;
+    padding-right: 60px;
+}
+
+.info-block-tournament {
+    margin-bottom: 20px;
+}
+
+.info-title-tournament {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    color: #f6efd9;
+    margin-bottom: 8px;
+}
+
+.info-description-tournament {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12px;
+    color: #a1a194;
+    line-height: 1.5;
+}
+
+.game-details {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(70, 70, 70, 0.3);
+}
+
+.detail-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    color: #a1a194;
+    font-weight: 500;
+}
+
+.detail-value {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    color: #ff6600;
+    font-weight: 600;
+    padding-left: 15px;
+}
+
+.partners-block {
+    margin-top: 30px;
+}
+
+.partners-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    color: #5b605f;
+    margin-bottom: 20px;
+}
+
+.partners-icons {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.partner-icon {
+    width: 80px;
+    height: 80px;
+    background: transparent;
+    object-fit: contain;
+    opacity: 0.3;
+}
+
+.partner-icon:hover {
+opacity: 1;
+}
+
+/* ------- Правый мини-блок в 3 СЕКЦИИ */
+
+.tournament-details-section {
+    flex: 0 0 66%;
+    background: rgba(34, 34, 34, 0.6);
+    border-radius: 8px 0 0 8px;
+    border: 3px solid #404040;
+    border-right: none;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    position: relative; /* Для абсолютного позиционирования скроллбара */
+    max-height: 700px;
+    scroll-behavior: smooth; /* Плавная прокрутка */
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.details-navigation {
+    width: 80%;
+    margin: 0 auto;
+    padding-top: 15px;
+    display: flex;
+    border-bottom: 2px solid #464646;
+    margin-bottom: 20px;
+    justify-content: center;
+}
+
+.nav-item {
+    padding: 12px 24px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #a1a194;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+}
+
+.nav-item:hover {
+    color: #f6efd9;
+}
+
+.nav-item.active {
+    color: #ff6600;
+    border-bottom-color: #ff6600;
+}
+
+/* ------- ДИНАМИЧЕСКИЙ КОНТЕНТ 3 СЕКЦИИ */
+
+.details-content {
+    width: 100%;
+    min-height: 300px;
+}
+
+.content-tab {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.content-tab.active {
+    display: block;
+}
+
+.bracket-placeholder,
+.schedule-placeholder,
+.participants-placeholder,
+.rules-placeholder {
+    text-align: center;
+    color: #a1a194;
+    font-style: italic;
+    padding: 40px 20px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Таблица лидеров */
+.leaderboard-table {
+    margin-bottom: 0;
+    overflow: hidden;
+}
+
+.table-header-wsow {
+    display: grid;
+    grid-template-columns: 20px 110px 2fr 1fr 1fr 1.5fr;
+    padding: 20px 10px;
+    border-top: 1px solid #ff6600;
+    border-bottom: 1px solid #ff6600;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    color: #a1a194;
+    font-weight: 600;
+}
+
+.table-row-wsow {
+    display: grid;
+    grid-template-columns: 20px 110px 2fr 1fr 1fr 1.5fr;
+    padding: 25px 5px;
+    border-bottom: 1px solid rgba(70, 70, 70, 0.3);
+    font-family: 'Open Sans', sans-serif;
+    font-size: 13px;
+    color: #f6efd9;
+    transition: background-color 0.3s ease;
+}
+
+.table-row-wsow.champion {
+    background: linear-gradient(to bottom, 
+        rgba(255, 102, 0, 0.1) 0%, 
+        rgba(255, 102, 0, 0.02) 50%, 
+        rgba(255, 102, 0, 0.015) 100%);
+}
+
+.table-row-wsow:last-child {
+    border-bottom: none;
+}
+
+.col-rank {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    color: #a1a194;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.rank-arrow {
+    max-width: none;
+    width: 60px;
+    background: transparent;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: -21px;
+}
+
+/* ---------------- Стили для колонки с лого */
+
+.col-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.team-logo {
+    width: 75px;
+    height: 70px;
+    background: transparent;
+    filter: brightness(1) invert(1); 
+}
+
+.team-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.col-team {
+    display: flex;
+    align-items: center;
+}
+
+.team-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.team-name-tournament {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    color: #f6efd9;
+    margin-bottom: 2px;
+    font-size: 20px;
+}
+.team-name-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.team-flag {
+    width: 21px;
+    height: 16px;
+    border-radius: 2px;
+    object-fit: cover;
+    background: transparent;
+}
+
+.team-players {
+    font-size: 11px;
+    color: #a1a194;
+    padding-right: 25px;
+}
+
+.col-total {
+    display: flex;
+    align-items: center;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+}
+
+.total-points {
+    color: #f6efd9;
+    font-size: 16px;
+}
+
+.col-kills {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.kills-count {
+    color: #c0392b;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+}
+.kills-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.col-stats {
+    display: flex;
+    align-items: center;
+}
+
+.match-performance {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.match-result {
+    padding: 4px 8px;
+    background: rgba(70, 70, 70, 0.5);
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.match-result.win {
+    color: #9acd32;
+}
+
+.match-result.top3 {
+    color: #9acd32;
+}
+
+/* ------------------------------------ Стили для РАСПИСАНИЯ МАТЧЕЙ */
+
+.tournament-schedule {
+    padding: 20px;
+}
+
+.schedule-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    color: #ff6600;
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+.schedule-week {
+    margin-bottom: 30px;
+    background: rgba(34, 34, 34, 0.6);
+    border-radius: 8px;
+    border: 1px solid rgba(70, 70, 70, 0.5);
+    overflow: hidden;
+}
+
+.week-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 20px;
+    background: rgba(44, 44, 44, 0.8);
+    border-bottom: 1px solid rgba(70, 70, 70, 0.3);
+}
+
+.week-title-section {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    align-items: center;
+}
+
+.week-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    color: #a1a194;
+    font-weight: 500;
+}
+
+.week-dates {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    color: #f6efd9;
+}
+
+.week-status {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 12px;
+    background: rgba(255, 102, 0, 0.2);
+    color: #ff6600;
+    border: 1px solid rgba(255, 102, 0, 0.4);
+}
+
+.week-status.completed {
+    background: rgba(76, 175, 80, 0.2);
+    color: #4CAF50;
+    border: 1px solid rgba(76, 175, 80, 0.4);
+}
+
+.week-status.live {
+    background: rgba(244, 67, 54, 0.2);
+    color: #f44336;
+    border: 1px solid rgba(244, 67, 54, 0.4);
+    animation: pulse 2s infinite;
+}
+
+.week-status.upcoming {
+    background: rgba(255, 102, 0, 0.2);
+    color: #ff6600;
+    border: 1px solid rgba(255, 102, 0, 0.4);
+}
+
+.matches-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: rgba(70, 70, 70, 0.3);
+}
+
+.match-card {
+    display: grid;
+    grid-template-columns: 80px 1fr 100px;
+    gap: 15px;
+    padding: 16px 20px;
+    background: rgba(44, 44, 44, 0.8);
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.match-time {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #ff6600;
+    font-weight: 600;
+}
+
+.match-info {
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+    align-items: center;
+}
+
+.match-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    color: #f6efd9;
+    font-weight: 500;
+}
+.match-recording {
+    width: 27px;
+    height: 18px;
+    background: transparent;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    filter: grayscale(0.6);
+    position: relative;
+}
+
+.match-recording:hover {
+    filter: grayscale(0.3)
+}
+.match-recording.no-recording {
+    filter: grayscale(0.8) opacity(0.3);
+    cursor: not-allowed;
+}
+
+.day-result {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    color: #a1a194;
+    font-weight: 500;
+    text-align: right;
+}
+
+.match-card.upcoming .match-result {
+    color: #a1a194;
+}
+
+/* ------------------------------------ Стили для РЕГЛАМЕНТА --------- */
+
+.tournament-rules {
+    padding: 0;
+}
+
+.rules-section {
+    margin-bottom: 25px;
+    background: rgba(34, 34, 34, 0.6);
+    border-radius: 8px;
+    border: 1px solid rgba(70, 70, 70, 0.5);
+    overflow: hidden;
+}
+
+.section-header-rules {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    background: rgba(44, 44, 44, 0.8);
+    border-bottom: 1px solid rgba(70, 70, 70, 0.3);
+}
+
+.section-number {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 24px;
+    color: #ff6600;
+    font-weight: 700;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 102, 0, 0.1);
+    border-radius: 6px;
+}
+
+.section-title-rules {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    color: #f6efd9;
+    margin: 0;
+    font-weight: 600;
+}
+
+.rules-content {
+    padding: 20px;
+}
+
+.rule-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(70, 70, 70, 0.3);
+    gap: 15px;
+}
+
+.rule-item:last-child {
+    border-bottom: none;
+}
+
+.rule-item.prohibited {
+    border-left: 3px solid #f44336;
+    padding-left: 10px;
+    background: rgba(244, 67, 54, 0.05);
+}
+
+.rule-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    color: #f6efd9;
+    font-weight: 500;
+}
+
+.rule-value {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 13px;
+    color: #a1a194;
+    text-align: right;
+}
+
+.rule-item.prohibited .rule-value {
+    color: #f44336;
+}
+
+/* Система очков */
+.scoring-system {
+    padding: 20px;
+}
+
+.scoring-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+}
+
+.scoring-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    background: rgba(44, 44, 44, 0.8);
+    border-radius: 4px;
+    border-left: 3px solid #ff6600;
+}
+
+.scoring-item.kills {
+    border-left-color: #a1a194;
+}
+
+.placement {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    color: #f6efd9;
+    flex: 1;
+}
+
+.points {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    color: #4CAF50;
+    font-weight: 600;
+}
+
+.scoring-item.kills .points {
+    color: #4CAF50;
+}

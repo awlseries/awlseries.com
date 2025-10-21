@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <!-- Статические ресурсы для индексации -->
+  <url>
+    <loc>https://awlseries.com/images/other/og-bf6-tournaments.jpg</loc>
+    <lastmod>2025-10-19</lastmod>
+  </url>
+
+  <url>
+    <loc>https://awlseries.com/images/other/registration-bg88tr.webp</loc>
+    <lastmod>2025-10-19</lastmod>
+  </url>
+
+  <!-- Логотипы и брендинг -->
+  <url>
+    <loc>https://awlseries.com/images/icons/main-logo4.png</loc>
+    <lastmod>2025-10-19</lastmod>
+  </url>
+
+</urlset>
