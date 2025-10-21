@@ -170,21 +170,49 @@ const Registration = () => {
 useEffect(() => {
   const checkAuthState = async () => {
     try {
+      // Проверяем сохраненный экран верификации
       const savedScreen = localStorage.getItem(STORAGE_KEYS.CURRENT_SCREEN);
-      const savedData = localStorage.getItem(STORAGE_KEYS.VERIFICATION);
-      
-      if (savedScreen === 'verification' && savedData) {
-        const { email, userId, timestamp } = JSON.parse(savedData);
+      if (savedScreen === 'verification') {
+        // Если был сохранен экран верификации, проверяем сессию
+        const { data: { session }, error } = await supabase.auth.getSession();
         
-        // Просто проверяем что данные не устарели
-        if (!timestamp || Date.now() - new Date(timestamp).getTime() <= 24 * 60 * 60 * 1000) {
-          setUser({ id: userId, email });
-          setUserEmail(email);
+        if (session?.user && !session.user.email_confirmed_at) {
+          // Пользователь все еще не подтвердил email, показываем экран верификации
+          setUser(session.user);
+          setUserEmail(session.user.email);
           setCurrentScreen('verification');
-          startVerificationCheck({ id: userId, email });
+          startVerificationCheck(session.user);
           return;
         } else {
+          // Если email подтвержден или сессии нет, очищаем
+          localStorage.removeItem(STORAGE_KEYS.CURRENT_SCREEN);
+        }
+      }
+
+      const savedData = localStorage.getItem(STORAGE_KEYS.VERIFICATION);
+      
+      if (savedData) {
+        const { email, userId, timestamp } = JSON.parse(savedData);
+        
+        // Проверяем актуальность данных (не старше 24 часов)
+        if (timestamp && Date.now() - new Date(timestamp).getTime() > 24 * 60 * 60 * 1000) {
           clearAuthData();
+          return;
+        }
+        
+        // Проверяем текущую сессию
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (session?.user) {
+          if (session.user.email_confirmed_at) {
+            setCurrentScreen('complete');
+            clearAuthData();
+          } else {
+            setUser(session.user);
+            setUserEmail(session.user.email || email);
+            setCurrentScreen('verification');
+            startVerificationCheck(session.user);
+          }
         }
       }
     } catch (error) {
