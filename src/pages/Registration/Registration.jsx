@@ -173,19 +173,20 @@ useEffect(() => {
       // Проверяем сохраненный экран верификации
       const savedScreen = localStorage.getItem(STORAGE_KEYS.CURRENT_SCREEN);
       if (savedScreen === 'verification') {
-        // Если был сохранен экран верификации, проверяем сессию
-        const { data: { session }, error } = await supabase.auth.getSession();
-        
-        if (session?.user && !session.user.email_confirmed_at) {
-          // Пользователь все еще не подтвердил email, показываем экран верификации
-          setUser(session.user);
-          setUserEmail(session.user.email);
+        // Восстанавливаем экран верификации
+        const tempEmail = localStorage.getItem(STORAGE_KEYS.TEMP_EMAIL);
+        if (tempEmail) {
+          setUserEmail(tempEmail);
           setCurrentScreen('verification');
-          startVerificationCheck(session.user);
+          // Запускаем проверку подтверждения email в БД
+          const savedData = localStorage.getItem(STORAGE_KEYS.VERIFICATION);
+          if (savedData) {
+            const { userId } = JSON.parse(savedData);
+            // Создаем минимальный user объект для проверки
+            const user = { id: userId };
+            startVerificationCheck(user);
+          }
           return;
-        } else {
-          // Если email подтвержден или сессии нет, очищаем
-          localStorage.removeItem(STORAGE_KEYS.CURRENT_SCREEN);
         }
       }
 
@@ -200,19 +201,24 @@ useEffect(() => {
           return;
         }
         
-        // Проверяем текущую сессию
-        const { data: { session }, error } = await supabase.auth.getSession();
-        
-        if (session?.user) {
-          if (session.user.email_confirmed_at) {
-            setCurrentScreen('complete');
-            clearAuthData();
-          } else {
-            setUser(session.user);
-            setUserEmail(session.user.email || email);
-            setCurrentScreen('verification');
-            startVerificationCheck(session.user);
-          }
+        // Проверяем подтверждение email в таблице users
+        const { data: userData, error: userError } = await supabase
+          .from('users')
+          .select('email_confirmed_at')
+          .eq('id', userId)
+          .single();
+
+        if (userError) throw userError;
+
+        if (userData?.email_confirmed_at) {
+          setCurrentScreen('complete');
+          clearAuthData();
+        } else {
+          setUserEmail(email);
+          setCurrentScreen('verification');
+          // Создаем минимальный user объект для проверки
+          const user = { id: userId };
+          startVerificationCheck(user);
         }
       }
     } catch (error) {
@@ -338,41 +344,23 @@ const validateLoginForm = (formData) => {
   const startVerificationCheck = (user) => {
   const checkInterval = setInterval(async () => {
     try {
-      // Получаем актуальную сессию
-      const { data: { session }, error } = await supabase.auth.getSession();
-      
-      if (error) throw error;
+      // Проверяем подтверждение в таблице users
+      const { data: userData, error: userError } = await supabase
+        .from('users')
+        .select('email_confirmed_at')
+        .eq('id', user.id)
+        .single();
 
-      // Проверяем подтверждение в auth
-      if (session?.user) {
-        // Получаем свежие данные пользователя из auth
-        const { data: { user: currentUser }, error: userError } = await supabase.auth.getUser();
+      if (userError) throw userError;
+
+      // Проверяем поле email_confirmed_at в таблице users
+      if (userData?.email_confirmed_at) {
+        clearInterval(checkInterval);
         
-        if (userError) throw userError;
-
-        // Проверяем различные возможные поля подтверждения
-        const isEmailConfirmed = 
-          currentUser?.email_confirmed_at || 
-          currentUser?.confirmed_at ||
-          currentUser?.email_verified;
-        
-        if (isEmailConfirmed) {
-          clearInterval(checkInterval);
-          
-          // ОБНОВЛЯЕМ запись в таблице users
-          await supabase
-            .from('users')
-            .update({ 
-              email_confirmed_at: new Date().toISOString(),
-              last_login: new Date().toISOString()
-            })
-            .eq('id', currentUser.id);
-
-          setCurrentScreen('complete');
-          localStorage.removeItem(STORAGE_KEYS.CURRENT_SCREEN);
-          clearAuthData();
-          showSingleNotification(`✓ ${t('notifications.email_verified')}`);
-        }
+        setCurrentScreen('complete');
+        localStorage.removeItem(STORAGE_KEYS.CURRENT_SCREEN);
+        clearAuthData();
+        showSingleNotification(`✓ ${t('notifications.email_verified')}`);
       }
     } catch (error) {
       console.error('Ошибка проверки верификации:', error);
@@ -409,10 +397,9 @@ const validateLoginForm = (formData) => {
   // ------------------------------------------------------- Очистка данных аутентификации
 
   const clearAuthData = () => {
-    Object.values(STORAGE_KEYS).forEach(key => {
-      localStorage.removeItem(key);
-    });
-  };
+  // Удаляем только те ключи, которые нужны для верификации
+  localStorage.removeItem(STORAGE_KEYS.VERIFICATION);
+};
 
   // ------------------------------------------------------------- Обработчик отправки формы регистрации
 
@@ -448,7 +435,8 @@ const validateLoginForm = (formData) => {
         options: {
           data: {
             full_name: formData.fullname
-          }
+          },
+          emailRedirectTo: `https://awlseries.com/verification-success`
         }
       });
 
@@ -459,6 +447,7 @@ const validateLoginForm = (formData) => {
       }
       throw error;
     }
+    localStorage.setItem(STORAGE_KEYS.TEMP_PASSWORD, formData.password);
       
       // Сохраняем данные в localStorage
       localStorage.setItem(STORAGE_KEYS.VERIFICATION, JSON.stringify({
@@ -466,6 +455,13 @@ const validateLoginForm = (formData) => {
         userId: data.user.id
       }));
       localStorage.setItem(STORAGE_KEYS.TEMP_EMAIL, formData.email);
+      console.log('DEBUG: Saving credentials to localStorage');
+localStorage.setItem(STORAGE_KEYS.TEMP_EMAIL, formData.email);
+localStorage.setItem(STORAGE_KEYS.TEMP_PASSWORD, formData.password);
+
+// Проверим что сохранилось
+console.log('DEBUG: Saved email:', localStorage.getItem(STORAGE_KEYS.TEMP_EMAIL));
+console.log('DEBUG: Saved password:', localStorage.getItem(STORAGE_KEYS.TEMP_PASSWORD) ? '***exists***' : 'null');
       
       // Создаем запись в таблице users supabase
       const { error: dbError } = await supabase
@@ -727,6 +723,42 @@ const handleConfirmPasswordChange = (e) => {
 const handlePasswordChange = (e) => {
   checkPasswordMatch();
   setError('');
+};
+
+// --------------------------------------------------------------------------- Вход в профиль по кнопке Главная на экране завершения регистрации
+
+const handleCompleteRegistration = async () => {
+  try {
+    const tempEmail = localStorage.getItem(STORAGE_KEYS.TEMP_EMAIL);
+    const tempPassword = localStorage.getItem(STORAGE_KEYS.TEMP_PASSWORD);
+    
+    if (tempEmail && tempPassword) {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: tempEmail,
+        password: tempPassword
+      });
+
+      if (error) throw error;
+
+      await supabase
+        .from('users')
+        .update({ last_login: new Date().toISOString() })
+        .eq('id', data.user.id);
+
+      // Очищаем временные credentials после успешного входа
+      clearTempCredentials();
+      
+      showSingleNotification(`✓ ${t('notifications.login_success')}`);
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 1000);
+    } else {
+      window.location.href = '/';
+    }
+  } catch (error) {
+    console.error('Auto-login error:', error);
+    window.location.href = '/';
+  }
 };
 
   // ------------------------------------------------------------------------------------------ HTML
@@ -1021,7 +1053,12 @@ const handlePasswordChange = (e) => {
       </a> 
       <span> {t('wish_text')}</span>
     </p>
-    <a href="/" className="complete-to-main-page-btn">{t('main_page_link')}</a>
+    <button 
+      onClick={handleCompleteRegistration} 
+      className="complete-to-main-page-btn"
+    >
+      {t('main_page_link')}
+    </button>
   </div>
 )}
         </div>

@@ -34,7 +34,7 @@
             rgba(0, 0, 0, 0.4) 40%,
             rgba(0, 0, 0, 0.2) 60%,
             transparent 100%),
-        url('../images/banners/rating-bg.jpg');
+        url('../images/banners/rating-bg1.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -178,7 +178,7 @@
 
 .rating-table-header {
     display: grid;
-    grid-template-columns: 80px 2fr 1.5fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 60px 2fr 1.5fr 1fr 1fr 1fr 1fr;
     padding: 20px;
     background: rgba(44, 44, 44, 0.9);
     border-bottom: 2px solid #ff6600;
@@ -196,7 +196,7 @@
 
 .rating-player-row {
     display: grid;
-    grid-template-columns: 80px 2fr 1.5fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 60px 2fr 1.5fr 1fr 1fr 1fr 1fr;
     padding: 18px 20px;
     border-bottom: 1px solid rgba(70, 70, 70, 0.3);
     align-items: center;
@@ -205,19 +205,17 @@
     color: #f6efd9;
 }
 
-.rating-player-row:hover {
-    background: rgba(255, 102, 0, 0.1);
-}
-
 .rating-player-row.top-3 {
-    background: linear-gradient(90deg, rgba(255, 102, 0, 0.1), transparent);
+    background: linear-gradient(90deg, rgba(255, 102, 0, 0.07), transparent);
 }
 
 .rating-col-rank {
     font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
+    font-weight: 600;
     font-size: 16px;
-    text-align: center;
+    text-align: left;
+    color: #a1a194;
+    padding-left: 12px;
 }
 
 .rating-col-player {
@@ -227,17 +225,17 @@
 }
 
 .rating-player-avatar {
-    width: 45px;
+    width: 40px;
     height: 45px;
     border-radius: 50%;
     overflow: hidden;
-    border: 2px solid #ff6600;
 }
 
 .rating-player-avatar img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    background: transparent;
 }
 
 .rating-player-info {
@@ -250,11 +248,11 @@
     font-weight: 600;
     font-size: 16px;
     color: #f6efd9;
-    margin-bottom: 2px;
+    margin-bottom: -3px;
 }
 
 .rating-player-realname {
-    font-size: 12px;
+    font-size: 11px;
     color: #a1a194;
 }
 
@@ -264,23 +262,10 @@
     gap: 10px;
 }
 
-.rating-team-logo-small {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    overflow: hidden;
-}
-
-.rating-team-logo-small img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
 .rating-team-name {
     font-family: 'Montserrat', sans-serif;
     font-weight: 500;
-    font-size: 14px;
+    font-size: 12px;
     color: #f6efd9;
 }
 
@@ -360,6 +345,52 @@
 .rating-page-number:hover:not(.active) {
     background: rgba(255, 102, 0, 0.1);
     color: #f6efd9;
+}
+
+.rating-page-ellipsis {
+    padding: 8px 6px;
+    color: #a1a194;
+    font-family: 'Montserrat', sans-serif;
+}
+.no-players-message {
+    text-align: center;
+    color: #a1a194;
+    font-style: italic;
+    padding: 40px 20px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+/* Кастомный скроллбар ТОЛЬКО для таблицы игроков */
+
+.rating-table-body {
+    max-height: 600px; /* или нужная тебе высота */
+    overflow-y: auto;
+}
+
+/* Стили скроллбара для таблицы */
+.rating-table-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.rating-table-body::-webkit-scrollbar-track {
+    background: #2a2a2a;
+    border-radius: 4px;
+    margin: 5px 0;
+}
+
+.rating-table-body::-webkit-scrollbar-thumb {
+    background: #ff6600;
+    border-radius: 4px;
+}
+
+.rating-table-body::-webkit-scrollbar-thumb:hover {
+    background: #e55c00;
+}
+
+/* Для Firefox */
+.rating-table-body {
+    scrollbar-width: thin;
+    scrollbar-color: #ff6600 #2a2a2a;
 }
 
 /* Адаптивность для рейтинга */

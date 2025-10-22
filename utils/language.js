@@ -18,6 +18,16 @@ export const translations = {
   use_reset_link: '✗ Доступ запрещен, используйте ссылку из письма для сброса пароля',
   session_expired: '✗ Сессия истекла или недействительна',
 
+  // СТРАНИЦА ПОДТВЕРЖДЕНИЯ EMAIL
+  verification_success: {
+    title: "Почта подтверждена!",
+    welcome_text: "Возвращайся на страницу регистрации",
+    close_window: "Закрыть",
+    invalid_access: "Доступ закрыт",
+    invalid_access_message: "Эта страница доступна только через ссылки подтверждения email.",
+    invalid_verification_link: '✗ Неверная ссылка подтверждения'
+  },
+
     registration_title: "Регистрация",
     fullname_label: "Имя*",
     fullname_placeholder: "Имя и фамилия через пробел",
@@ -262,12 +272,12 @@ export const translations = {
 
   en: {
 
-    // PAGE MOBILE BLOCK
+    // PAGE - MOBILE BLOCK
     mobile_block_title: "Available only on computers",
     mobile_block_description: "Mobile version is under development. For full access to Arena Warborn League features, please use a laptop or computer.",
     mobile_block_footer: "Arena Warborn League 2025. All rights reserved.",
 
-    // PAGE RESET PASSWORD
+    // PAGE - RESET PASSWORD
   reset_password_title: "Reset Password",
   new_password_label: "New Password* ", 
   new_password_placeholder: "Enter new password",
@@ -276,6 +286,16 @@ export const translations = {
   password_updated: "Password successfully updated!",
   use_reset_link: 'Access Denied, use the link from the email to reset your password',
   session_expired: '✗ The session has expired or is invalid',
+
+  // PAGE - VERIFICATION EMAIL
+verification_success: {
+  title: "Email Confirmed!",
+  welcome_text: "Return to the registration page", 
+  close_window: "Close",
+  invalid_access: "Access Denied",
+  invalid_access_message: "This page is only accessible through email verification links.",
+  invalid_verification_link: '✗ Invalid verification link'
+},
 
     registration_title: "Registration",
     fullname_label: "Full Name*",

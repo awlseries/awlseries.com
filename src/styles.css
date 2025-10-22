@@ -82,6 +82,26 @@ body {
     color: white;
     margin: 0;
 }
+/* Скрыть скроллбар у всего сайта */
+html, body {
+    overflow: -moz-scrollbars-none; /* Firefox */
+    -ms-overflow-style: none; /* IE и Edge */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+/* Альтернативный вариант */
+body {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE и Edge */
+}
+
+body::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
 /* Для заголовков */
 h1, h2, h3, h4, h5, h6 {
 font-family: 'Montserrat', sans-serif;
@@ -725,7 +745,7 @@ backdrop-filter: blur(5px); /* Размытие фона кнопки */
   animation: fadeIn 0.3s ease-out;
 }
 .custom-alert.error {
-  background-color: #f44336;
+  background-color: #e74c3c;
 }
 @keyframes fadeIn {
   from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
@@ -1541,16 +1561,16 @@ backdrop-filter: blur(5px); /* Размытие фона кнопки */
 
 /* Зеленый для верифицированных (существующий стиль) */
 .email-text.authenticated {
-  color: #22b327;
+  color: #9acd32;
 }
 
 .user-icon.authenticated {
-  filter: brightness(0) saturate(100%) invert(48%) sepia(79%) saturate(2476%) hue-rotate(90deg) brightness(118%) contrast(119%) !important;
+    filter: brightness(0) saturate(100%) invert(76%) sepia(56%) saturate(415%) hue-rotate(35deg) brightness(93%) contrast(87%) !important;
 }
 
 /* Красный для неавторизованных (существующий стиль) */
 .email-text.not-authenticated {
-  color: #f44336;
+  color: #e74c3c;
 }
 
 .user-icon.not-authenticated {
@@ -1596,13 +1616,13 @@ backdrop-filter: blur(5px); /* Размытие фона кнопки */
 }
 
 .logout-btn:hover {
-  border: 1px solid #f44336;
-  color: #f44336;
+  border: 1px solid #e74c3c;
+  color: #e74c3c;
 }
 
 /* Фокус-стили для доступности */
 .logout-btn:focus-visible {
-  outline: 2px solid #f44336;
+  outline: 2px solid #e74c3c;
   outline-offset: 1px;
 }
 
@@ -3849,7 +3869,6 @@ search-mark {
     border-radius: 12px;
     overflow: hidden;
     background: #2c2c2c;
-    transition: all 0.3s ease;
     border: 1px solid #464646;
 }
 
@@ -4366,7 +4385,7 @@ border-radius: 12px;
 }
 
 .match-score.lose {
-    color: #f44336;
+    color: #e74c3c;
 }
 
 .vs-separator {
