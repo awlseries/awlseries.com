@@ -13,27 +13,16 @@ const VerificationSuccess = () => {
     changeLanguage(lang);
   };
 
-  useEffect(() => {
+ useEffect(() => {
   console.log('🔵 VerificationSuccess mounted');
   console.log('🔵 Current URL:', window.location.href);
   
   const checkConfirmation = async () => {
     try {
-      // Сначала проверяем параметры в URL (момент до редиректа)
-      const urlParams = new URLSearchParams(window.location.search);
-      const token = urlParams.get('token');
-      const type = urlParams.get('type');
+      // Даем время Supabase обработать сессию
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
-      console.log('🔵 URL params - token:', token, 'type:', type);
-      
-      if (token && type === 'signup') {
-        console.log('🔵 Token found in URL - waiting for Supabase processing');
-        // Supabase автоматически обработает токен и создаст сессию
-        // Ждем обработки
-        await new Promise(resolve => setTimeout(resolve, 2000));
-      }
-      
-      // Проверяем сессию после обработки токена
+      // Проверяем сессию
       const { data: { session }, error } = await supabase.auth.getSession();
       
       if (error) {
