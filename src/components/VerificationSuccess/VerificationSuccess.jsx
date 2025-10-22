@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLanguage } from '/utils/language-context.jsx';
 import { showSingleNotification } from '/utils/notifications';
-import { supabase } from '/supabase';
+import { supabase } from '../../supabase';
 import './VerificationSuccess.css';
 
 const VerificationSuccess = () => {
