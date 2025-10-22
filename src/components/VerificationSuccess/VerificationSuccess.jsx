@@ -16,57 +16,75 @@ const VerificationSuccess = () => {
   console.log('🔵 VerificationSuccess mounted');
   console.log('🔵 Current URL:', window.location.href);
   
-  const checkEmailConfirmation = async () => {
+  const checkConfirmation = async () => {
     try {
-      // Получаем текущую сессию
+      // Сначала проверяем параметры в URL (момент до редиректа)
+      const urlParams = new URLSearchParams(window.location.search);
+      const token = urlParams.get('token');
+      const type = urlParams.get('type');
+      
+      console.log('🔵 URL params - token:', token, 'type:', type);
+      
+      if (token && type === 'signup') {
+        console.log('🔵 Token found in URL - waiting for Supabase processing');
+        // Supabase автоматически обработает токен и создаст сессию
+        // Ждем обработки
+        await new Promise(resolve => setTimeout(resolve, 2000));
+      }
+      
+      // Проверяем сессию после обработки токена
       const { data: { session }, error } = await supabase.auth.getSession();
       
       if (error) {
         console.error('🔵 Session error:', error);
-        setHasValidToken(false);
-        showSingleNotification(t('verification_success.invalid_verification_link'), true);
-        return;
+        throw error;
       }
       
       if (session?.user) {
-        console.log('🔵 User found:', session.user.email);
+        console.log('🔵 User session found:', session.user.email);
         
-        // Проверяем, подтвержден ли email
-        const isEmailConfirmed = session.user.email_confirmed_at || 
-                                session.user.confirmed_at;
-        
-        console.log('🔵 Email confirmed:', isEmailConfirmed);
-        
-        if (isEmailConfirmed) {
-          setHasValidToken(true);
-          showSingleNotification(`✓ ${t('notifications.email_verified')}`);
+        // Проверяем подтверждение email в БД
+        const { data: userData, error: userError } = await supabase
+          .from('users')
+          .select('email_confirmed_at')
+          .eq('id', session.user.id)
+          .single();
           
-          // Обновляем запись в таблице users
-          await supabase
-            .from('users')
-            .update({ email_confirmed_at: new Date().toISOString() })
-            .eq('id', session.user.id);
-            
+        if (userError) throw userError;
+        
+        console.log('🔵 Email confirmed in DB:', userData?.email_confirmed_at);
+        
+        if (userData?.email_confirmed_at) {
+          setHasValidToken(true);
+          if (!hasCheckedToken) {
+            showSingleNotification(`✓ ${t('notifications.email_verified')}`);
+          }
         } else {
           setHasValidToken(false);
-          showSingleNotification(t('verification_success.invalid_verification_link'), true);
+          if (!hasCheckedToken) {
+            showSingleNotification(t('verification_success.invalid_verification_link'), true);
+          }
         }
       } else {
         console.log('🔵 No user session found');
         setHasValidToken(false);
-        showSingleNotification(t('verification_success.invalid_verification_link'), true);
+        if (!hasCheckedToken) {
+          showSingleNotification(t('verification_success.invalid_verification_link'), true);
+        }
       }
     } catch (error) {
-      console.error('🔵 Check confirmation error:', error);
+      console.error('🔵 Error:', error);
       setHasValidToken(false);
-      showSingleNotification(t('verification_success.invalid_verification_link'), true);
+      if (!hasCheckedToken) {
+        showSingleNotification(t('verification_success.invalid_verification_link'), true);
+      }
     } finally {
       setHasCheckedToken(true);
     }
   };
 
-  checkEmailConfirmation();
-}, [t]);
+  checkConfirmation();
+}, [t, hasCheckedToken]);
 
   console.log('🟢 VerificationSuccess rendering');
 
