@@ -16,37 +16,41 @@ const VerificationSuccess = () => {
   console.log('🔵 VerificationSuccess mounted');
   console.log('🔵 Current URL:', window.location.href);
   
-  // Проверяем ВСЕ параметры URL
-  const urlParams = new URLSearchParams(window.location.search);
-  console.log('🔵 All URL parameters:');
-  for (let [key, value] of urlParams) {
-    console.log(`🔵 ${key}: ${value}`);
+  // Проверяем HASH fragment (после #)
+  const hash = window.location.hash;
+  console.log('🔵 Hash fragment:', hash);
+  
+  if (hash) {
+    // Убираем # и парсим параметры из hash
+    const hashParams = new URLSearchParams(hash.substring(1));
+    console.log('🔵 All HASH parameters:');
+    for (let [key, value] of hashParams) {
+      console.log(`🔵 ${key}: ${value}`);
+    }
+    
+    const token = hashParams.get('access_token');
+    const token_hash = hashParams.get('token_hash');
+    const type = hashParams.get('type');
+    
+    console.log('🔵 Access token:', token);
+    console.log('🔵 Token hash:', token_hash);
+    console.log('🔵 Type:', type);
+    
+    // Проверяем параметры из hash
+    if ((token || token_hash) && type === 'signup') {
+      console.log('🔵 Valid confirmation found in hash');
+      setHasValidToken(true);
+      if (!hasCheckedToken) {
+        showSingleNotification(`✓ ${t('notifications.email_verified')}`);
+      }
+      return;
+    }
   }
   
-  // Supabase может использовать другие параметры
-  const token = urlParams.get('token');
-  const type = urlParams.get('type');
-  const token_hash = urlParams.get('token_hash'); // Supabase часто использует это
-  const refresh_token = urlParams.get('refresh_token');
-  
-  console.log('🔵 Token:', token);
-  console.log('🔵 Type:', type);
-  console.log('🔵 Token hash:', token_hash);
-  console.log('🔵 Refresh token:', refresh_token);
-  
-  // Проверяем разные комбинации параметров Supabase
-  if ((token && type === 'signup') || token_hash) {
-    console.log('🔵 Valid confirmation found');
-    setHasValidToken(true);
-    if (!hasCheckedToken) {
-      showSingleNotification(`✓ ${t('notifications.email_verified')}`);
-    }
-  } else {
-    console.log('🔵 No valid token found');
-    setHasValidToken(false);
-    if (!hasCheckedToken) {
-      showSingleNotification(t('verification_success.invalid_verification_link'), true);
-    }
+  console.log('🔵 No valid token found');
+  setHasValidToken(false);
+  if (!hasCheckedToken) {
+    showSingleNotification(t('verification_success.invalid_verification_link'), true);
   }
   
   setHasCheckedToken(true);
