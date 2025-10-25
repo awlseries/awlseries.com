@@ -594,16 +594,18 @@ if (!userData) {
         keywords="bf6 profile, player statistics, gaming achievements, esports career bf6"
         canonicalUrl="/profile"
       />
+      {/* Основной контент страницы */}
     <div className="content-index">
-      <img className="profile-awl-background" src="/images/other/profile-background-awl.webp" alt="awl-logo-profile"/>
 
-      <div className="fade-block">
-        <img src="/images/other/profile-player-example.png" alt="awl-player-photo" className="masked-image"/>
-      </div>
-
+       {/* Блок информации об игроке */}
       <div className="player-information">
+        <img class="profile-awl-background" src="/images/other/profile-background-awl.webp" alt="awl-logo-profile"/>
+        {/*  Основной контейнер для первых четырех блоков */}
+        <div class="main-info-container">
+        <div class="info-content-wrapper">
+          {/*  Первый блок - Игрок */}
         <div className="info-section">
-          <h3 className="section-title-profile">Игрок</h3>
+          <h3 className="section-title">Игрок</h3>
           <div className="info-block first-block">
             <div className="nickname-and-class-container">
             {/* Ник игрока - с возможностью редактирования */}
@@ -658,8 +660,10 @@ if (!userData) {
                 </div>
               )}
             </div>
+
              {/* Контейнер для выбора класса игрока */}
 <div className="class-selector-container">
+  <span className="class-label">Класс:</span>
   <div className="class-selector">
     <div 
       className="current-class"
@@ -802,9 +806,10 @@ if (!userData) {
           </div>
         </div>
 
-        {/* Остальные блоки остаются без изменений */}
+        {/* ------------------------------------------------------------- 2 блок - Награды MVP */}
+
         <div className="info-section">
-          <h3 className="section-title-profile">Награды MVP</h3>
+          <h3 className="section-title">Награды MVP</h3>
           <div className="info-block second-block">
             <div className="mvp-rewards-grid">
               <div className="mvp-reward-item">
@@ -826,17 +831,19 @@ if (!userData) {
             </div>
           </div>
         </div>
+        
+        {/* ------------------------------------------------------------- 3 и 4 блоки - MMR и Дивизион */}
 
         <div className="info-sections-container">
           <div className="info-section">
-            <h3 className="section-title-profile">MMR</h3>
+            <h3 className="section-title">MMR</h3>
             <div className="info-block mmr-value">
             {userData.mmr !== undefined && userData.mmr !== null ? userData.mmr : 0}
             </div>
           </div>
           
           <div className="info-section">
-            <h3 className="section-title-profile">Дивизион</h3>
+            <h3 className="section-title">Дивизион</h3>
             <div className="svg-division-container">
               <svg className="svg-division-block" viewBox="0 0 302 92" preserveAspectRatio="none">
                 <path 
@@ -853,11 +860,39 @@ if (!userData) {
             </div>
           </div>
         </div>
+        </div>
+
+         {/* -------------------------------------------------------------------- Блок для фото и контактов */}
+
+    <div class="fade-block-container">
+                <h3 class="section-title">Контакты</h3>
+        <div class="contacts-profile-block">
+        <div class="contacts-container">
+            <div class="contact-block">
+                <span class="contact-name">Steam</span>
+                <img src="/images/icons/icon-profile-steam.png" alt="Steam" class="contact-icon"/>
+            </div>
+            <div class="contact-block middle">
+                <span class="contact-name">Telegram</span>
+                <img src="/images/icons/icon-profile-telegram.png" alt="Telegram" class="contact-icon"/>
+            </div>
+            <div class="contact-block">
+                <span class="contact-name">WhatsApp</span>
+                <img src="/images/icons/icon-profile-whatsup.png" alt="WhatsApp" class="contact-icon"/>
+            </div>
+        </div>
+    </div>
+        <div class="fade-block">
+            <img src="/images/other/team-player-empty.png" alt="awl-player-photo" class="masked-image"/>
+        </div>
+    </div>
+</div>
+
+        {/* -------------------------------------------------------------------- Блок статистики */}
 
         <div className="stats-actions-container">
           <div className="info-section">
-            <h3 className="section-title-profile">Статистика
-            </h3>
+            <h3 className="section-title">Статистика</h3>
             <div className="info-block">
               <div className="stats-container">
                 <div className="stats-column">
@@ -901,22 +936,35 @@ if (!userData) {
             </div>
           </div>
 
-          <div className="info-section">
-            <div className="info-block">
-              <div className="action-buttons-container">
-                <button className="action-btn">
-                  <span className="btn-text">Контакты</span>
-                </button>
-                <button className="action-btn">
-                  <span className="btn-text">Пригласить в команду</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+          {/* -------------------------------------------------------------------- Блок меню кнопок */}
 
-        <div className="info-section">
-          <h3 className="section-title-profile">Достижения</h3>
+    <div className="info-section">
+        <div className="info-block">
+            <div className="action-buttons-container">
+                <button className="action-btn">
+                    <span className="btn-text">Контакты</span>
+                </button>
+                <button className="action-btn">
+                    <span className="btn-text">Команда</span>
+                </button>
+                <button className="action-btn">
+                    <span className="btn-text">Турниры</span>
+                </button>
+                <button className="action-btn">
+                    <span className="btn-text">Приватность</span>
+                </button>
+                <button className="action-btn">
+                    <span className="btn-text">Удалить аккаунт</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+        {/* -------------------------------------------------------------------- Блок достижений */}
+
+        <div className="info-section achievements-section">
+          <h3 className="section-title">Достижения</h3>
           <div className="info-block achievements-block">
             <div className="achievements-row">
               <div className="achievement-item">
@@ -941,6 +989,7 @@ if (!userData) {
           </div>
         </div>
       </div>
+
        {/* Компонент выбора страны */}
       <CountryPicker
         isOpen={isCountryPickerOpen}

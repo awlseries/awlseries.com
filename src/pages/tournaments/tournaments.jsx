@@ -185,7 +185,7 @@ const Tournaments = () => {
                         <img src="../images/icons/icon-tournament-arrow.png" alt="" className="rank-arrow" />
                       </div>
                       <div className="col-logo">
-                        <img src="../images/icons/logo-opponent.png" alt="first-team-on-tournament" className="team-logo" />
+                        <img src="../images/icons/logo-opponent.png" alt="first-team-on-tournament" className="team-logo-tournaments" />
                       </div>
                       <div className="col-team">
                         <div className="team-info">
@@ -219,7 +219,7 @@ const Tournaments = () => {
                         <img src="../images/icons/icon-tournament-arrow.png" alt="" className="rank-arrow" />
                       </div>
                       <div className="col-logo">
-                        <img src="../images/icons/logo-opponent.png" alt="second-team-on-tournament" className="team-logo" />
+                        <img src="../images/icons/logo-opponent.png" alt="second-team-on-tournament" className="team-logo-tournaments" />
                       </div>
                       <div className="col-team">
                         <div className="team-info">
@@ -253,12 +253,12 @@ const Tournaments = () => {
                         <img src="../images/icons/icon-tournament-arrow.png" alt="" className="rank-arrow" />
                       </div>
                       <div className="col-logo">
-                        <img src="../images/icons/logo-opponent.png" alt="thirth-team-on-tournament" className="team-logo" />
+                        <img src="../images/icons/logo-opponent.png" alt="thirth-team-on-tournament" className="team-logo-tournaments" />
                       </div>
                       <div className="col-team">
                         <div className="team-info">
                           <div className="team-name-wrapper">
-                            <img src="../images/icons/icon-europe.png" alt="country-team-tournament-awl" className="team-flag" />
+                            <img src="../images/icons/icon-europe.png" alt="country-team-tournament-awl" className="team-flag"/>
                             <span className="team-name-tournament">Delta</span>
                           </div>
                           <span className="team-players">Player1 | Player2 | Player3 | Player4</span>
@@ -287,7 +287,7 @@ const Tournaments = () => {
                         <img src="../images/icons/icon-tournament-arrow.png" alt="" className="rank-arrow" />
                       </div>
                       <div className="col-logo">
-                        <img src="../images/icons/logo-opponent.png" alt="third-team-on-tournament" className="team-logo" />
+                        <img src="../images/icons/logo-opponent.png" alt="third-team-on-tournament" className="team-logo-tournaments"/>
                       </div>
                       <div className="col-team">
                         <div className="team-info">
@@ -321,7 +321,7 @@ const Tournaments = () => {
                         <img src="../images/icons/icon-tournament-arrow.png" alt="" className="rank-arrow" />
                       </div>
                       <div className="col-logo">
-                        <img src="../images/icons/logo-opponent.png" alt="fifth-team-on-tournament" className="team-logo" />
+                        <img src="../images/icons/logo-opponent.png" alt="fifth-team-on-tournament" className="team-logo-tournaments" />
                       </div>
                       <div className="col-team">
                         <div className="team-info">
