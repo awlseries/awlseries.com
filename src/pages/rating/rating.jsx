@@ -357,7 +357,7 @@ const Rating = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
               <button className="rating-search-btn">
-                <img src="../public/images/icons/icon-searching.png" alt="search-player-on-awl" />
+                <img src="/images/icons/icon-searching.png" alt="search-player-on-awl" />
               </button>
             </div>
             <div className="rating-filter-controls">

@@ -1,15 +1,243 @@
-/* -------------------------------------------------------- Стили для выбора класса игрока ------------------------------------------------------------------ */
+/* --------------------------------------------------------------- Стили для контента PROFILE ------------------------------- */
 
-/* Существующий стиль - убедитесь что он есть */
+.content-index {
+  position: relative;
+  background-image: url('/images/other/profile-structure.webp');
+  background-size: cover; /* или contain в зависимости от needs */
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.profile-awl-background {
+            position: absolute;
+            background: transparent;
+            right: -80px;
+            top: -95px;
+            width: 1012px;
+            height: 578px;
+            opacity: 0.5;
+}
+
+/* ------------------------------------------------------ Стили для блока контактов */
+/* --------------------------------------------------------------------------------- */
+
+.contacts-profile-block {
+    height: 70px;
+    position: relative;
+    background: rgba(34, 34, 34, 0.6);
+    border-radius: 8px;
+    border: 1px solid #a1a194;
+    margin-bottom: 30px;
+    display: flex;
+}
+
+/* Блок контакта */
+.contact-block {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+    gap: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 10px 5px;
+    position: relative;
+}
+/* Контейнер для иконок контактов */
+.contacts-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+}
+
+/* Центральный блок с боковыми границами */
+.contact-block.middle {
+    border-left: 1px solid #464646;
+    border-right: 1px solid #464646;
+}
+
+/* Иконка контакта */
+.contact-icon {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+    transition: all 0.3s ease;
+    filter: grayscale(0.8);
+}
+
+/* Название соцсети */
+.contact-name {
+    font-size: 10px;
+    color: #b2ad9c;
+    font-weight: 500;
+    text-transform: uppercase;
+    opacity: 0;
+    transform: translateY(-5px);
+    transition: all 0.3s ease;
+    position: absolute;
+    top: 0;
+}
+
+/* Ховер эффекты */
+.contact-block:hover {
+    background: rgba(255, 102, 0, 0.1);
+}
+
+.contact-block:hover .contact-icon {
+    filter: grayscale(0);
+    transform: scale(1.1);
+}
+
+.contact-block:hover .contact-name {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* --------------------------------------------- Блок с фотографией игрока */
+/* ----------------------------------------------------------------------- */
+
+.fade-block-container {
+    flex: 2; /* 2 части из 5 */
+    display: flex;
+    flex-direction: column;
+}
+
+.fade-block {
+    position: relative;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+
+.masked-image {
+    object-fit: cover; /* или contain, в зависимости от needs */
+    display: block;
+    height: 335px;
+    background-color: transparent !important;
+       /* Маска для прозрачности снизу вверх */
+    -webkit-mask-image: linear-gradient(to top, 
+                    transparent 0%, 
+                    transparent 3%,
+                    rgba(0,0,0,0.3) 10%,
+                    rgba(0,0,0,0.7) 25%,
+                    black 50%,
+                    black 100%);
+    mask-image: linear-gradient(to top, 
+                    transparent 0%, 
+                    transparent 3%,
+                    rgba(0,0,0,0.3) 10%,
+                    rgba(0,0,0,0.7) 25%,
+                    black 50%,
+                    black 100%);
+}
+
+.player-information {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    border-radius: 14px;
+    padding: 30px;
+    border: 1px solid #464646;
+    max-width: 1050px;
+    margin: 0 auto;
+    background-color: rgba(46, 46, 46, 0.8);
+}
+
+/* Основной контейнер для первых четырех блоков */
+.main-info-container {
+    position: relative;
+    display: flex;
+    width: 100%;
+    gap: 30px;
+}
+
+/* Обертка для информационных блоков (левая часть) */
+.info-content-wrapper {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.info-block {
+    position: relative;
+    min-height: 80px;
+    border: 1px solid #a1a194;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column; /* горизонтальное расположение элементов */
+}
+
+.section-title {
+    margin-bottom: 5px;
+    font-size: 18px;
+    font-weight: 500;
+    color: #ff6600;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* -------------------------------------------------------- 1 блок профиля */
+/* ----------------------------------------------------------------------- */
+
+.info-section {
+    width: 100%;
+}
+
+.first-block-profile {
+    flex: 1;
+    display: flex;
+    height: 140px;
+}
+
 .nickname-and-class-container {
-  display: flex;
-  align-items: center;
+    padding: 15px 20px 15px 20px;
+    background: rgba(34, 34, 34, 0.6);
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* --------------------- Стили для выбора класса игрока */
+
+/* Стили для надписи "Класс:" перед выбором класса */
+.class-label {
+    font-size: 11px;
+    color: #b2ad9c;
+    position: relative;
+    padding-left: 20px;
+    margin-right: 5px;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+}
+
+.class-label::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 3px;
+    background-color: #ff6600;
+    border-radius: 1px;
 }
 
 /* Контейнер выбора класса */
 .class-selector-container {
   flex-shrink: 0;
-  margin-left: 15px; /* или нужное вам расстояние */
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
 }
 
 .class-selector {
@@ -74,6 +302,525 @@
   width: 32px;
   height: 32px;
   object-fit: contain;
+}
+
+/* --------------------------------------- Стили для редактирования никнейма */
+
+.nickname-container {
+  position: relative;
+}
+
+.nickname-display-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nickname-edit-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+.icons-redactor {
+width: 30px;
+height: 30px;
+padding: 2px;
+}
+.icons-redactor-time {
+width: 20px;
+height: 20px;
+padding: 2px;
+object-fit: contain;
+}
+
+.nickname-edit-btn:hover {
+  transform: scale(1.2);
+}
+
+.nickname-edit-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nickname-edit-buttons {
+  display: flex;
+  gap: 5px;
+}
+
+.nickname-save-btn,
+.nickname-cancel-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.nickname-save-btn:hover {
+  transform: scale(1.2);
+}
+
+.nickname-cancel-btn:hover {
+  transform: scale(1.2);
+}
+
+.name-player-style.editable {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid #fd7921;
+  border-radius: 4px;
+  padding: 8px;
+  color: #f6efd9;
+  font-size: inherit;
+  min-width: 150px;
+}
+
+.nickname-cooldown {
+  display: flex;
+  background: rgba(165, 165, 165, 0.2);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #a1a194;
+  align-items: center; /* Выравнивание по вертикали */
+  justify-content: center; /* Выравнивание по горизонтали */
+  font-family: 'BlackOpsOne', 'BlackOpsOneType', sans-serif;
+  gap: 4px;
+}
+
+.date-picker-notice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ce2727;
+  border-radius: 6px;
+  color: #a1a194;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.date-picker-notice::before {
+  content: '';
+  width: 18px;
+  height: 18px;
+  background: url('/images/icons/icon-promo-line-news.png') center/contain no-repeat;
+  flex-shrink: 0;
+  margin-left: 15px;
+  filter: brightness(0) saturate(100%) invert(76%) sepia(5%) saturate(250%) hue-rotate(9deg) brightness(90%) contrast(90%);
+}
+
+.name-player-style {
+font-family: 'BlackOpsOne', 'BlackOpsOneType', sans-serif;
+    font-size: 34px;
+    color: #f6efd9;
+}
+
+.info-player-style {
+    font-size: 16px;
+    color: #f6efd9;
+    display: flex;
+    align-items: center;
+}
+.country-player {
+    margin-right: 15px;
+    height: 21px;
+    width: 30px;
+}
+.horizontal-row-1 {
+    padding: 10px 20px 10px 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center; /* вертикальное выравнивание по центру с display:flex */
+    justify-content: space-between; /* распределяет пространство между элементами */
+    width: 100%;
+    background: rgba(34, 34, 34, 0.6);
+    border-top: 1px solid #464646;
+    border-radius: 0 0 8px 8px;
+}
+.age-and-status-player-style {
+    font-size: 11px;
+    color: #b2ad9c;
+    text-align: right; /* выравнивание текста по правому краю */
+    position: relative;
+    padding-left: 20px; /* отступ для линии */
+    transition: all 0.3s ease;
+}
+.age-and-status-player-style:first-child {
+      cursor: pointer;
+}
+.age-and-status-player-style:hover {
+    color: #ff6600;
+}
+.age-and-status-player-style::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 3px;
+    background-color: #ff6600; /* оранжевый цвет */
+    border-radius: 1px;
+}
+
+.age-edit-input {
+    width: 40px;
+    background: rgba(255, 102, 0, 0.1);
+    border: 1px solid #ff6600;
+    border-radius: 3px;
+    color: #f6efd9;
+    text-align: center;
+    font-size: 11px;
+    padding: 2px;
+    margin-left: 5px;
+}
+
+.age-edit-input:focus {
+    outline: none;
+    background: rgba(255, 102, 0, 0.2);
+    border-color: #ff8c00;
+}
+.age-and-status-container {
+    display: flex;
+    align-items: flex-end;
+    gap: 60px;
+}
+
+/* ------------------------------------------------------- 2 блок профиля  */
+/* ----------------------------------------------------------------------- */
+
+/* Сетка наград MVP */
+.mvp-rewards-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2 колонки */
+    gap: 2px;
+    height: 100%;
+}
+.block-rewards-mvp {
+    background: rgba(34, 34, 34, 0.6);
+}
+
+/* Элемент награды */
+.mvp-reward-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    background: rgba(34, 34, 34, 0.6);
+    border: 1px solid #464646;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-radius: 8px;
+}
+
+/* Иконка награды */
+.reward-icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    background: transparent;
+    object-fit: contain;
+}
+
+/* Текст награды */
+.reward-text {
+    font-size: 11px;
+    color: #b2ad9c;
+    flex: 1;
+    line-height: 1.5;
+}
+
+/* ------------------------------------- 3 и 4 блоки профиля ------------- */
+/* ----------------------------------------------------------------------- */
+
+.info-sections-container {
+    display: flex;
+    flex: 1;
+    gap: 30px;
+}
+
+.info-sections-container .info-section {
+    min-width: 150px;
+}
+.info-sections-container .info-section:first-child {
+    flex: 2.5; /* блок меньше */
+    min-width: 100px;
+}
+.info-sections-container .info-section:last-child {
+    flex: 4.5; /* блок больше */
+    min-width: 150px;
+}
+.info-sections-container .info-block {
+    height: 90px;
+}
+
+/* ----------------------------------- Только для блока MMR */ 
+.mmr-value {
+    border: 2px solid #ff6600;
+    font-family: 'BlackOpsOne', 'BlackOpsOneType', sans-serif;
+    font-size: 32px;
+    color: #f6efd9;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+/* Создаем контейнер для SVG блока */
+.svg-division-container {
+    position: relative;
+    width: 100%;
+    height: 90px;
+    min-height: 80px;
+    overflow: hidden; /* Обрезаем выходящие за границы части */
+    border-radius: 8px;
+    clip-path: polygon(
+        0% 0%, 
+        95% 0%, 
+        100% 50%, 
+        95% 100%, 
+        0% 100%
+    );
+}
+
+/* SVG блок с оранжевой границей */
+.svg-division-block {
+    width: 100%;
+    height: 100%;
+}
+
+/* Контент внутри SVG блока */
+.svg-division-content {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    color: #f6efd9;
+    font-family: 'BlackOpsOne', 'BlackOpsOneType', sans-serif;
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.division-player {
+    width: 77px;
+    height: 82px;
+}
+
+/* ------------------------------------------------------- Блок 5 и Кнопки */
+/* ----------------------------------------------------------------------- */
+
+/* Контейнер статистики */
+.stats-container {
+    display: flex;
+    gap: 30px;
+    width: 100%;
+    box-sizing: border-box;
+    padding-right: 10px;
+}
+
+/* Контейнер для бокового расположения */
+.stats-actions-container {
+    display: flex;
+    width: 100%;
+    gap: 25px;
+}
+
+.stats-actions-container > .info-section:nth-child(1) {
+    flex: 3.25; /* 60% - статистика */
+    min-width: 0;
+}
+
+/* Специфичные стили для блока статистики */
+.stats-actions-container .info-section:nth-child(1) .info-block {
+    border: none;
+    padding-left: 0;
+}
+
+/* Колонка статистики */
+.stats-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Элемент статистики */
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: 6px;
+    border: 1px solid rgb(37, 37, 37);
+    border-left: 3px solid #ff6600;
+}
+
+/* Метка статистики */
+.stat-label {
+    color: #b2ad9c;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* Значение статистики */
+.stat-value {
+    color: #f6efd9;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+    .stats-actions-container {
+        flex-direction: column;
+    }
+}
+
+/* ------------------------------------------------------ Стили для блока с кнопками */
+/* --------------------------------------------------------------------------------- */
+
+.stats-actions-container > .info-section:nth-child(2) {
+    flex: 2; /* 40% - кнопки */
+    min-width: 0;
+
+}
+
+/* 5 кнопок в 5 горизонтальных линий - вертикальный стек */
+.stats-actions-container .info-section:nth-child(2) .info-block {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 10px);
+    background: rgba(34, 34, 34, 0.6);
+    border: 1px solid #464646;
+    padding: 0;
+    overflow: hidden;
+}
+
+.action-buttons-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    background: rgba(20, 20, 20, 0.8);
+}
+
+.action-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 10px;
+    background: transparent;
+    color: #b2ad9c;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    border-bottom: 1px solid #333;
+    flex: 1;
+    min-height: 0;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.action-btn:last-child {
+    border: 1px solid #e74c3c;
+    border-radius: 0 0 8px 8px;
+    color: #e74c3c;
+}
+.action-btn:last-child:hover {
+    background: rgba(212, 13, 13, 0.1);
+    color: #e74c3c;
+}
+
+.action-btn:hover {
+    color: #ff6600;
+    background: rgba(255, 102, 0, 0.1);
+}
+
+.action-btn.active {
+    color: #ff6600;
+    background: rgba(255, 102, 0, 0.15);
+    border-right: 3px solid #ff6600;
+}
+
+.btn-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    width: 100%;
+}
+
+/* --------------------------------------- 6 блок достижений на всю ширину */
+/* ----------------------------------------------------------------------- */
+
+/* Стили для блока достижений с отдельным классом */
+.achievements-section {
+    width: 100%;
+    max-width: none;
+}
+
+.achievements-section .info-block {
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+    overflow-x: auto; /* Горизонтальная прокрутка если не помещается */
+    border: none;
+}
+
+/* Одна строка достижений */
+.achievements-section .achievements-row {
+    display: flex;
+    gap: 20px;
+    width: max-content; /* Ширина по содержимому */
+    height: 100%;
+    box-sizing: border-box;
+}
+
+/* Элемент достижения */
+.achievements-section .achievement-item {
+    width: 148px;
+    height: 194px;
+    flex-shrink: 0; /* Запрещаем сжатие */
+    border-bottom: 2px solid #ff6600;
+    border-top: 2px solid #ff6600;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.achievements-section .achievement-item:hover {
+    box-shadow: 0 5px 15px rgba(255, 102, 0, 0.3);
+}
+
+/* Иконка достижения */
+.achievements-section .achievement-icon {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 5px;
+    background: transparent;
+    object-fit: contain;
+    opacity: 0.5;
+    filter: grayscale(0.8);
 }
 
 /* -------------------------------------------------------- Стили для выбора аватарки ------------------------------------------------------------------ */
@@ -173,4 +920,181 @@
 
 .avatar-cancel-btn:hover {
   background: rgba(220, 53, 69, 0.8);
+}
+
+/* ---------------------------------------------------------------------- Стили для модального окна выбора страны ------------------------------------------------- */
+
+.country-picker-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+
+.country-picker-modal.show {
+    display: flex;
+}
+
+.country-picker-content {
+    background: #2c2c2c;
+    border: 2px solid #ff6600;
+    border-radius: 10px;
+    padding: 30px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow: hidden;
+    position: relative;
+}
+
+.country-picker-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #f6efd9;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+
+.country-picker-close-btn:hover {
+    opacity: 1;
+    color: #ff6600;
+}
+
+.country-picker-header {
+    color: #f6efd9;
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+}
+
+.country-search-container {
+    margin-bottom: 20px;
+}
+
+.country-search-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #424242;
+    border-radius: 6px;
+    background: #1a1a1a;
+    color: #f6efd9;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.country-search-input:focus {
+    border-color: #d0cbba;
+    box-shadow: 0 0 5px rgba(249, 249, 249, 0.4);
+}
+
+.country-search-input::placeholder {
+    color: #a0a0a0;
+    font-size: 12px;
+}
+
+.countries-list {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.countries-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.countries-list::-webkit-scrollbar-track {
+    background: #2c2c2c;
+    border-radius: 3px;
+}
+
+.countries-list::-webkit-scrollbar-thumb {
+    background: #ff6600;
+    border-radius: 3px;
+}
+
+.countries-list::-webkit-scrollbar-thumb:hover {
+    background: #e55d00;
+}
+
+.country-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    border-bottom: 1px solid #424242;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.country-notice {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ce2727;
+    border-radius: 6px;
+    color: #a1a194;
+    font-size: 11px;
+    font-weight: 500;
+}
+.country-notice::before {
+    content: '';
+    width: 18px;
+    height: 18px;
+    background: url(/images/icons/icon-promo-line-news.png) center / contain no-repeat;
+    flex-shrink: 0;
+    margin-left: 75px;
+    filter: brightness(0) saturate(100%) invert(76%) sepia(5%) saturate(250%) hue-rotate(9deg) brightness(90%) contrast(90%);
+}
+
+.country-item:last-child {
+    border-bottom: none;
+}
+
+.country-item:hover {
+    background: rgba(255, 102, 0, 0.1);
+}
+
+.country-item.selected {
+    background: rgba(255, 102, 0, 0.2);
+    border-left: 3px solid #ff6600;
+}
+
+.country-flag {
+    width: 30px;
+    height: 20px;
+    margin-right: 15px;
+    border-radius: 3px;
+    object-fit: cover;
+}
+
+.country-name {
+    color: #f6efd9;
+    font-size: 14px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+/* Стили для заблокированного состояния */
+.country-picker-modal.disabled .country-item {
+    cursor: not-allowed;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.country-picker-modal.disabled .country-item:hover {
+    background: transparent;
 }

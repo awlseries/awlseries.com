@@ -259,7 +259,7 @@ const Teams = () => {
                   </div>
                 </div>
                 <img 
-                  src="/public/images/icons/icon-updown.png" 
+                  src="/images/icons/icon-updown.png" 
                   alt={t('teams.expand')} 
                   className={`division-toggle ${expandedDivision === division.id ? '' : 'collapsed'}`}
                 />
