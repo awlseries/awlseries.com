@@ -26,41 +26,54 @@ const ResetPassword = () => {
   useEffect(() => {
   const checkAccess = async () => {
     try {
-      console.log('🟡 ResetPassword: Checking access...');
+      console.log('🔵 Current URL:', window.location.href);
       
-      // Получаем и query-параметры и hash-параметры
-      const urlParams = new URLSearchParams(window.location.search);
+      // Сценарий 1: Прямой доступ с токеном в hash (после verify)
       const hashParams = new URLSearchParams(window.location.hash.substring(1));
+      const accessToken = hashParams.get('access_token');
+      const type = hashParams.get('type');
       
-      const token = urlParams.get('token') || hashParams.get('token');
-      const type = urlParams.get('type') || hashParams.get('type');
+      // Сценарий 2: Возможно, токен еще в query params (до verify)
+      const urlParams = new URLSearchParams(window.location.search);
+      const verifyToken = urlParams.get('token');
+      const verifyType = urlParams.get('type');
+      const redirectTo = urlParams.get('redirect_to');
       
-      console.log('🔵 URL search:', window.location.search);
-      console.log('🔵 URL hash:', window.location.hash);
-      console.log('🔵 Token:', token);
-      console.log('🔵 Type:', type);
+      console.log('🔵 Hash access_token:', accessToken);
+      console.log('🔵 Hash type:', type);
+      console.log('🔵 Query token:', verifyToken);
+      console.log('🔵 Query type:', verifyType);
       
-      if (!token || type !== 'recovery') {
-        console.log('🔴 No valid recovery token found');
-        showSingleNotification(t('use_reset_link'), true);
-        setTimeout(() => {
-          window.location.href = '/';
-        }, 7000);
+      // Если есть токен verify в query - это значит пользователь только что перешел по email ссылке
+      // Supabase еще не обработал verify и не перенаправил
+      if (verifyToken && verifyType === 'recovery' && redirectTo) {
+        console.log('🟡 Need to process verify URL first');
+        
+        // Показываем загрузку пока Supabase обрабатывает verify
+        showSingleNotification('Проверка ссылки...');
         return;
       }
-
-      // Сохраняем токен для использования в updateUser
-      // Supabase автоматически использует токен из URL при вызове updateUser
-      // но для надежности можно также установить его вручную
       
-      setIsValidAccess(true);
-      console.log('🟢 Valid recovery token found');
+      // Если есть access_token в hash - значит verify прошел успешно
+      if (accessToken && type === 'recovery') {
+        console.log('🟢 Valid recovery token in hash');
+        setIsValidAccess(true);
+        setIsCheckingAccess(false);
+        return;
+      }
+      
+      // Если нет валидных параметров
+      console.log('🔴 No valid token found');
+      showSingleNotification(t('use_reset_link'), true);
+      setTimeout(() => {
+        window.location.href = '/forgot-password';
+      }, 3000);
       
     } catch (error) {
       console.error('🔴 Access check error:', error);
       showSingleNotification(t('session_expired'), true);
       setTimeout(() => {
-        window.location.href = '/';
+        window.location.href = '/forgot-password';
       }, 3000);
     } finally {
       setIsCheckingAccess(false);
