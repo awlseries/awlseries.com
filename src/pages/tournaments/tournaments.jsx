@@ -4,6 +4,70 @@ import './tournaments.css';
 
 const Tournaments = () => {
   const [activeTab, setActiveTab] = useState('bracket');
+  const [teams, setTeams] = useState([]);
+
+  // Данные команд из таблицы рейтинга
+  const teamData = [
+    {
+      id: 1,
+      name: "Testing",
+      tag: "TEST",
+      logo: "../images/icons/logo-opponent.png",
+      country: "../images/icons/icon-kazakhstan.png",
+      players: "Player1 | Player2 | Player3 | Player4",
+      points: 108,
+      kills: 58,
+      matches: ["1st", "3rd", "5th", "12th"]
+    },
+    {
+      id: 2,
+      name: "Bravo",
+      tag: "BRV",
+      logo: "../images/icons/logo-opponent.png",
+      country: "../images/icons/icon-europe.png",
+      players: "Player1 | Player2 | Player3 | Player4",
+      points: 0,
+      kills: 0,
+      matches: ["2nd", "4th", "8th", "15th"]
+    },
+    {
+      id: 3,
+      name: "Delta",
+      tag: "DLT",
+      logo: "../images/icons/logo-opponent.png",
+      country: "../images/icons/icon-europe.png",
+      players: "Player1 | Player2 | Player3 | Player4",
+      points: 0,
+      kills: 0,
+      matches: ["3rd", "5th", "7th", "11th"]
+    },
+    {
+      id: 4,
+      name: "Charlie",
+      tag: "CHR",
+      logo: "../images/icons/logo-opponent.png",
+      country: "../images/icons/icon-europe.png",
+      players: "Player1 | Player2 | Player3 | Player4",
+      points: 0,
+      kills: 0,
+      matches: ["4th", "9th", "13th", "17th"]
+    },
+    {
+      id: 5,
+      name: "Zeta",
+      tag: "ZTA",
+      logo: "../images/icons/logo-opponent.png",
+      country: "../images/icons/icon-europe.png",
+      players: "Player1 | Player2 | Player3 | Player4",
+      points: 0,
+      kills: 0,
+      matches: ["8th", "20th", "14th", "19th", "1st"]
+    }
+  ];
+
+  useEffect(() => {
+    setTeams(teamData);
+  }, []);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -179,178 +243,52 @@ const Tournaments = () => {
                       <div className="col-stats">Позиции в матчах</div>
                     </div>
                     
-                    <div className="table-row-wsow champion">
-                      <div className="col-rank">
-                        <span className="rank-number">1</span>
-                        <img src="../images/icons/icon-tournament-arrow.png" alt="" className="rank-arrow" />
-                      </div>
-                      <div className="col-logo">
-                        <img src="../images/icons/logo-opponent.png" alt="first-team-on-tournament" className="team-logo-tournaments" />
-                      </div>
-                      <div className="col-team">
-                        <div className="team-info">
-                          <div className="team-name-wrapper">
-                            <img src="../images/icons/icon-kazakhstan.png" alt="country-team-tournament-awl" className="team-flag" />
-                            <span className="team-name-tournament">Testing</span>
+                    {teams.map((team, index) => (
+                      <div key={team.id} className={`table-row-wsow ${index === 0 ? 'champion' : ''}`}>
+                        <div className="col-rank">
+                          <span className="rank-number">{index + 1}</span>
+                          <img src="../images/icons/icon-tournament-arrow.png" alt="" className="rank-arrow" />
+                        </div>
+                        <div className="col-logo">
+                          <img src={team.logo} alt={`${team.name}-team-on-tournament`} className="team-logo-tournaments" />
+                        </div>
+                        <div className="col-team">
+                          <div className="team-info">
+                            <div className="team-name-wrapper">
+                              <img src={team.country} alt="country-team-tournament-awl" className="team-flag" />
+                              <span className="team-name-tournament">{team.name}</span>
+                            </div>
+                            <span className="team-players">{team.players}</span>
                           </div>
-                          <span className="team-players">Player1 | Player2 | Player3 | Player4</span>
                         </div>
-                      </div>
-                      <div className="col-total">
-                        <span className="total-points">108</span>
-                      </div>
-                      <div className="col-kills">
-                        <span className="kills-count">58</span>
-                        <img src="../images/icons/icon-kills.png" alt="kills-icon" className="kills-icon" />
-                      </div>
-                      <div className="col-stats">
-                        <div className="match-performance">
-                          <span className="match-result win">1st</span>
-                          <span className="match-result top3">3rd</span>
-                          <span className="match-result top5">5th</span>
-                          <span className="match-result">12th</span>
+                        <div className="col-total">
+                          <span className="total-points">{team.points}</span>
                         </div>
-                      </div>
-                    </div>
-                    
-                    <div className="table-row-wsow">
-                      <div className="col-rank">
-                        <span className="rank-number">2</span>
-                        <img src="../images/icons/icon-tournament-arrow.png" alt="" className="rank-arrow" />
-                      </div>
-                      <div className="col-logo">
-                        <img src="../images/icons/logo-opponent.png" alt="second-team-on-tournament" className="team-logo-tournaments" />
-                      </div>
-                      <div className="col-team">
-                        <div className="team-info">
-                          <div className="team-name-wrapper">
-                            <img src="../images/icons/icon-europe.png" alt="country-team-tournament-awl" className="team-flag" />
-                            <span className="team-name-tournament">Bravo</span>
+                        <div className="col-kills">
+                          <span className="kills-count">{team.kills}</span>
+                          <img src="../images/icons/icon-kills.png" alt="kills-icon" className="kills-icon" />
+                        </div>
+                        <div className="col-stats">
+                          <div className="match-performance">
+                            {team.matches.map((match, matchIndex) => (
+                              <span 
+                                key={matchIndex} 
+                                className={`match-result ${
+                                  match.includes('1st') ? 'win' : 
+                                  match.includes('2nd') || match.includes('3rd') ? 'top3' :
+                                  match.includes('4th') || match.includes('5th') || match.includes('6th') ? 'top5' : ''
+                                }`}
+                              >
+                                {match}
+                              </span>
+                            ))}
                           </div>
-                          <span className="team-players">Player1 | Player2 | Player3 | Player4</span>
                         </div>
                       </div>
-                      <div className="col-total">
-                        <span className="total-points">000</span>
-                      </div>
-                      <div className="col-kills">
-                        <span className="kills-count">00</span>
-                        <img src="../images/icons/icon-kills.png" alt="kills-icon" className="kills-icon" />
-                      </div>
-                      <div className="col-stats">
-                        <div className="match-performance">
-                          <span className="match-result top3">2nd</span>
-                          <span className="match-result top5">4th</span>
-                          <span className="match-result">8th</span>
-                          <span className="match-result">15th</span>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="table-row-wsow">
-                      <div className="col-rank">
-                        <span className="rank-number">3</span>
-                        <img src="../images/icons/icon-tournament-arrow.png" alt="" className="rank-arrow" />
-                      </div>
-                      <div className="col-logo">
-                        <img src="../images/icons/logo-opponent.png" alt="thirth-team-on-tournament" className="team-logo-tournaments" />
-                      </div>
-                      <div className="col-team">
-                        <div className="team-info">
-                          <div className="team-name-wrapper">
-                            <img src="../images/icons/icon-europe.png" alt="country-team-tournament-awl" className="team-flag"/>
-                            <span className="team-name-tournament">Delta</span>
-                          </div>
-                          <span className="team-players">Player1 | Player2 | Player3 | Player4</span>
-                        </div>
-                      </div>
-                      <div className="col-total">
-                        <span className="total-points">00</span>
-                      </div>
-                      <div className="col-kills">
-                        <span className="kills-count">00</span>
-                        <img src="../images/icons/icon-kills.png" alt="kills-icon" className="kills-icon" />
-                      </div>
-                      <div className="col-stats">
-                        <div className="match-performance">
-                          <span className="match-result top3">3rd</span>
-                          <span className="match-result">5th</span>
-                          <span className="match-result">7th</span>
-                          <span className="match-result">11th</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="table-row-wsow">
-                      <div className="col-rank">
-                        <span className="rank-number">4</span>
-                        <img src="../images/icons/icon-tournament-arrow.png" alt="" className="rank-arrow" />
-                      </div>
-                      <div className="col-logo">
-                        <img src="../images/icons/logo-opponent.png" alt="third-team-on-tournament" className="team-logo-tournaments"/>
-                      </div>
-                      <div className="col-team">
-                        <div className="team-info">
-                          <div className="team-name-wrapper">
-                            <img src="../images/icons/icon-europe.png" alt="country-team-tournament-awl" className="team-flag" />
-                            <span className="team-name-tournament">Charlie</span>
-                          </div>
-                          <span className="team-players">Player1 | Player2 | Player3 | Player4</span>
-                        </div>
-                      </div>
-                      <div className="col-total">
-                        <span className="total-points">00</span>
-                      </div>
-                      <div className="col-kills">
-                        <span className="kills-count">00</span>
-                        <img src="../images/icons/icon-kills.png" alt="kills-icon" className="kills-icon" />
-                      </div>
-                      <div className="col-stats">
-                        <div className="match-performance">
-                          <span className="match-result">4th</span>
-                          <span className="match-result">9th</span>
-                          <span className="match-result">13th</span>
-                          <span className="match-result">17th</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="table-row-wsow">
-                      <div className="col-rank">
-                        <span className="rank-number">5</span>
-                        <img src="../images/icons/icon-tournament-arrow.png" alt="" className="rank-arrow" />
-                      </div>
-                      <div className="col-logo">
-                        <img src="../images/icons/logo-opponent.png" alt="fifth-team-on-tournament" className="team-logo-tournaments" />
-                      </div>
-                      <div className="col-team">
-                        <div className="team-info">
-                          <div className="team-name-wrapper">
-                            <img src="../images/icons/icon-europe.png" alt="country-team-tournament-awl" className="team-flag" />
-                            <span className="team-name-tournament">Zeta</span>
-                          </div>
-                          <span className="team-players">Player1 | Player2 | Player3 | Player4</span>
-                        </div>
-                      </div>
-                      <div className="col-total">
-                        <span className="total-points">00</span>
-                      </div>
-                      <div className="col-kills">
-                        <span className="kills-count">00</span>
-                        <img src="../images/icons/icon-kills.png" alt="kills-icon" className="kills-icon" />
-                      </div>
-                      <div className="col-stats">
-                        <div className="match-performance">
-                          <span className="match-result top5">8th</span>
-                          <span className="match-result">20th</span>
-                          <span className="match-result">14th</span>
-                          <span className="match-result">19th</span>
-                          <span className="match-result win">1th</span>
-                        </div>
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
+
 
                 <div className={`content-tab ${activeTab === 'schedule' ? 'active' : ''}`} id="schedule-tab">
                   {/* Расписание турнира */}
@@ -540,7 +478,22 @@ const Tournaments = () => {
 
                 <div className={`content-tab ${activeTab === 'participants' ? 'active' : ''}`} id="participants-tab">
                   {/* Контент участников */}
-                  <div className="participants-placeholder">Список участников не сформирован</div>
+                  <div className="participants-container">
+                    <div className="participants-grid">
+                      {teams.map(team => (
+                        <div key={team.id} className="participant-team">
+                          <div className="team-logo-participant">
+                            <img src={team.logo} alt={`${team.name} Team`} />
+                          </div>
+                          <span className="team-name-participant">{team.name}</span>
+                          <span className="team-tag-tournament">[{team.tag}]</span>
+                          <div className="team-view-btn">
+                            <img src="../images/icons/icon-eye.png" alt="Просмотр" className="view-icon" />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
 
                 <div className={`content-tab ${activeTab === 'rules' ? 'active' : ''}`} id="rules-tab">

@@ -479,7 +479,8 @@ console.log('DEBUG: Saved password:', localStorage.getItem(STORAGE_KEYS.TEMP_PAS
           division: "calibration",
           mmr: 0,
           stats: null,
-          player_class: "assault"
+          player_class: "assault",
+          contacts: {}
         });
 
       if (dbError) throw dbError;

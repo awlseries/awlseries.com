@@ -24,47 +24,51 @@ const ResetPassword = () => {
 
   // Проверяем, что пользователь пришел по правильной ссылке сброса пароля
   useEffect(() => {
-    const checkAccess = async () => {
-      try {
-        // Получаем hash из URL (Supabase передает токен в hash)
-        const hash = window.location.hash;
-        
-        if (!hash || !hash.includes('type=recovery')) {
-          // Если нет правильного hash, перенаправляем на главную
-          showSingleNotification(t('use_reset_link'), true);
-          setTimeout(() => {
-            window.location.href = '/';
-          }, 3000);
-          return;
-        }
-
-        // Пытаемся получить сессию из hash
-        const { data, error } = await supabase.auth.getSession();
-        
-        if (error || !data.session) {
-          showSingleNotification(t('session_expired'), true);
-          setTimeout(() => {
-            window.location.href = '/';
-          }, 3000);
-          return;
-        }
-
-        // Если все ок, разрешаем доступ
-        setIsValidAccess(true);
-        
-      } catch (error) {
-        console.error('Ошибка проверки доступа:', error);
-        showSingleNotification('✗ Ошибка доступа к странице', true);
+  const checkAccess = async () => {
+    try {
+      console.log('🟡 ResetPassword: Checking access...');
+      
+      // Получаем и query-параметры и hash-параметры
+      const urlParams = new URLSearchParams(window.location.search);
+      const hashParams = new URLSearchParams(window.location.hash.substring(1));
+      
+      const token = urlParams.get('token') || hashParams.get('token');
+      const type = urlParams.get('type') || hashParams.get('type');
+      
+      console.log('🔵 URL search:', window.location.search);
+      console.log('🔵 URL hash:', window.location.hash);
+      console.log('🔵 Token:', token);
+      console.log('🔵 Type:', type);
+      
+      if (!token || type !== 'recovery') {
+        console.log('🔴 No valid recovery token found');
+        showSingleNotification(t('use_reset_link'), true);
         setTimeout(() => {
           window.location.href = '/';
-        }, 3000);
-      } finally {
-        setIsCheckingAccess(false);
+        }, 7000);
+        return;
       }
-    };
 
-    checkAccess();
-  }, []);
+      // Сохраняем токен для использования в updateUser
+      // Supabase автоматически использует токен из URL при вызове updateUser
+      // но для надежности можно также установить его вручную
+      
+      setIsValidAccess(true);
+      console.log('🟢 Valid recovery token found');
+      
+    } catch (error) {
+      console.error('🔴 Access check error:', error);
+      showSingleNotification(t('session_expired'), true);
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 3000);
+    } finally {
+      setIsCheckingAccess(false);
+    }
+  };
+
+  checkAccess();
+}, [t]);
 
   // Функции валидации (возвращают boolean)
   const validatePasswordRealTime = (value) => {

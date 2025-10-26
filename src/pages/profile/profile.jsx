@@ -27,6 +27,8 @@ const Profile = () => {
   const [hasCountryBeenSet, setHasCountryBeenSet] = useState(false);
   const [selectedClass, setSelectedClass] = useState('');
   const [showClassSelector, setShowClassSelector] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isContactsModalOpen, setIsContactsModalOpen] = useState(false);
   const navigate = useNavigate();
   const { t } = useLanguage();
 
@@ -87,6 +89,20 @@ useEffect(() => {
       subscription.unsubscribe();
     };
   }, [navigate]);
+
+  // -------------------------------------------------------- Эффект для блокировки скролла при открытии модального окна
+
+useEffect(() => {
+  if (isDeleteModalOpen) {
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = 'unset';
+  }
+
+  return () => {
+    document.body.style.overflow = 'unset';
+  };
+}, [isDeleteModalOpen]);
 
   // ------------------------------------------------------------------------- Загрузка данных пользователя
 
@@ -584,6 +600,287 @@ if (!userData) {
   const age = userData.birthDate ? calculateAge(userData.birthDate) : null;
   const playerStatus = getPlayerStatus();
 
+  // ------------------------------------------------------------------------ Функция удаления аккаунта
+
+  const handleDeleteAccount = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        showSingleNotification('✗ Пользователь не авторизован', true);
+        return;
+      }
+
+      // Удаляем пользователя из базы данных
+      const { error: deleteError } = await supabase
+        .from('users')
+        .delete()
+        .eq('id', user.id);
+
+      if (deleteError) {
+        throw deleteError;
+      }
+
+      // Выходим из системы
+      const { error: signOutError } = await supabase.auth.signOut();
+      
+      if (signOutError) {
+        throw signOutError;
+      }
+
+      showSingleNotification('✓ Аккаунт успешно удален');
+      navigate('/');
+      
+    } catch (error) {
+      console.error('Ошибка удаления аккаунта:', error);
+      showSingleNotification('✗ Ошибка удаления аккаунта', true);
+    } finally {
+      setIsDeleteModalOpen(false);
+    }
+  };
+
+  // ------------------------------------------------------------------------ Модальное окно подтверждения удаления
+
+  const DeleteConfirmationModal = () => {
+    if (!isDeleteModalOpen) return null;
+
+    return (
+      <div 
+      className="modal-overlay" 
+      onClick={() => {
+        setIsDeleteModalOpen(false);
+        document.body.style.overflow = 'unset';
+      }}
+    >
+        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-header">
+            <h3 className="modal-title">Удаление аккаунта</h3>
+          </div>
+          
+          <div className="modal-body">
+            <div className="delete-warning">
+              <img 
+                src="/images/icons/icon-promo-line-news.png" 
+                alt="warning"
+              />
+              <p>Вы уверены, что хотите удалить свой аккаунт?</p>
+            </div>
+            
+            <div className="delete-consequences">
+              <p>Это действие приведет к:</p>
+              <ul>
+                <li>Полному удалению всех ваших данных</li>
+                <li>Удалению статистики и достижений</li>
+                <li>Удалению информации о команде (если вы в ней состоите)</li>
+                <li>Потере доступа ко всем турнирам</li>
+              </ul>
+              <p className="final-warning">Это действие нельзя отменить!</p>
+            </div>
+          </div>
+          
+          <div className="modal-actions">
+            <button className="cancel-btn" onClick={() => {setIsDeleteModalOpen(false); document.body.style.overflow = 'unset';}}>
+            Отмена
+            </button>
+            <button 
+              className="delete-confirm-btn"
+              onClick={handleDeleteAccount}
+            >
+              Да, удалить все данные
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+  
+  // ------------------------------------------------------------------------ Функция обработки кликов по контактам
+
+const handleContactClick = (platform, contact) => {
+  if (!contact) return;
+  
+  let url = '';
+  
+  switch (platform) {
+    case 'steam':
+      // Проверяем, является ли контакт Steam ID или ссылкой
+      if (contact.startsWith('https://') || contact.startsWith('http://')) {
+        url = contact;
+      } else {
+        // Если это просто ID, формируем ссылку на профиль Steam
+        url = `https://steamcommunity.com/id/${contact}`;
+      }
+      break;
+      
+    case 'telegram':
+      // Проверяем, является ли контакт ссылкой или username
+      if (contact.startsWith('https://') || contact.startsWith('http://') || contact.startsWith('@')) {
+        url = contact.startsWith('@') ? `https://t.me/${contact.slice(1)}` : contact;
+      } else {
+        url = `https://t.me/${contact}`;
+      }
+      break;
+      
+    case 'whatsapp':
+      // Очищаем номер от всего, кроме цифр
+      const cleanPhone = contact.replace(/\D/g, '');
+      
+      // Проверяем, есть ли код страны
+      if (cleanPhone.length < 10) {
+        showSingleNotification('✗ Неверный формат номера WhatsApp', true);
+        return;
+      }
+      
+      // Если номер начинается с 8 (Россия), заменяем на 7
+      let formattedPhone = cleanPhone;
+      if (formattedPhone.startsWith('8') && formattedPhone.length === 11) {
+        formattedPhone = '7' + formattedPhone.slice(1);
+      }
+      
+      url = `https://wa.me/${formattedPhone}`;
+      break;
+      
+    default:
+      return;
+  }
+  
+  window.open(url, '_blank', 'noopener,noreferrer');
+};
+
+  // ------------------------------------------------------------------------------- Функция для открытия модального окна контактов
+// ------------------------------------------------------------------------------------------------------------------------------
+
+const openContactsModal = () => {
+  setIsContactsModalOpen(true);
+};
+
+// Компонент модального окна контактов
+const ContactsModal = () => {
+  const [localContactsData, setLocalContactsData] = useState({
+    steam: '',
+    telegram: '',
+    whatsapp: ''
+  });
+
+  useEffect(() => {
+    if (isContactsModalOpen) {
+      setLocalContactsData({
+        steam: userData?.contacts?.steam || '',
+        telegram: userData?.contacts?.telegram || '',
+        whatsapp: userData?.contacts?.whatsapp || ''
+      });
+    }
+  }, [isContactsModalOpen, userData?.contacts]);
+
+  const handleInputChange = (field, value) => {
+    setLocalContactsData(prev => ({...prev, [field]: value}));
+  };
+
+  const handleSaveContacts = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        showSingleNotification('✗ Пользователь не авторизован', true);
+        return;
+      }
+
+      const { error } = await supabase
+        .from('users')
+        .update({
+          contacts: localContactsData,
+          lastUpdate: new Date().toISOString()
+        })
+        .eq('id', user.id);
+
+      if (error) throw error;
+
+      setUserData(prev => ({ 
+        ...prev, 
+        contacts: localContactsData 
+      }));
+      
+      setIsContactsModalOpen(false);
+      showSingleNotification('✓ Контакты сохранены');
+    } catch (error) {
+      console.error('Ошибка сохранения контактов:', error);
+      showSingleNotification('✗ Ошибка сохранения контактов', true);
+    }
+  };
+
+  if (!isContactsModalOpen) return null;
+
+  return (
+    <div className="modal-overlay">
+      <div className="modal-content contacts-modal">
+        <div className="modal-header">
+          <h3 className="modal-title-contacts">Редактирование контактов</h3>
+        </div>
+        
+        <div className="modal-body">
+          <div className="contacts-inputs-container">
+            {/* Steam */}
+            <div className="contact-input-group">
+              <div className="contact-input-label">
+                <span>Steam</span>
+              </div>
+              <input
+                type="text"
+                className="contact-input"
+                value={localContactsData.steam}
+                onChange={(e) => handleInputChange('steam', e.target.value)}
+                placeholder="Введите Steam никнейм"
+              />
+            </div>
+
+            {/* Telegram */}
+            <div className="contact-input-group">
+              <div className="contact-input-label">
+                <span>Telegram</span>
+              </div>
+              <input
+                type="text"
+                className="contact-input"
+                value={localContactsData.telegram}
+                onChange={(e) => handleInputChange('telegram', e.target.value)}
+                placeholder="Введите никнейм Telegram без @"
+              />
+            </div>
+
+            {/* WhatsApp */}
+            <div className="contact-input-group">
+              <div className="contact-input-label">
+                <span>WhatsApp</span>
+              </div>
+              <input
+                type="text"
+                className="contact-input"
+                value={localContactsData.whatsapp}
+                onChange={(e) => handleInputChange('whatsapp', e.target.value)}
+                placeholder="Введите номер с кодом страны без +"
+              />
+            </div>
+          </div>
+        </div>
+        
+        <div className="modal-actions">
+          <button 
+            className="cancel-btn"
+            onClick={() => setIsContactsModalOpen(false)}
+          >
+            Отмена
+          </button>
+          <button 
+            className="save-contacts-btn"
+            onClick={handleSaveContacts}
+          >
+            Сохранить
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
    // -------------------------------------------------------------------------------------------------------- HTML ---------------------------------------------
 
   return (
@@ -599,10 +896,10 @@ if (!userData) {
 
        {/* Блок информации об игроке */}
       <div className="player-information">
-        <img class="profile-awl-background" src="/images/other/profile-background-awl.webp" alt="awl-logo-profile"/>
+        <img className="profile-awl-background" src="/images/other/profile-background-awl.webp" alt="awl-logo-profile"/>
         {/*  Основной контейнер для первых четырех блоков */}
-        <div class="main-info-container">
-        <div class="info-content-wrapper">
+        <div className="main-info-container">
+        <div className="info-content-wrapper">
           {/*  Первый блок - Игрок */}
         <div className="info-section">
           <h3 className="section-title">Игрок</h3>
@@ -813,19 +1110,19 @@ if (!userData) {
           <div className="info-block second-block">
             <div className="mvp-rewards-grid">
               <div className="mvp-reward-item">
-                <img src="/images/medals/icon-medal1.png" className="reward-icon" alt="Награда"/>
+                <img src="/images/medals/icon-cup-first-place.png" className="reward-icon" alt="Награда"/>
                 <span className="reward-text">Название турнира с призовым местом</span>
               </div>
               <div className="mvp-reward-item">
-                <img src="/images/medals/icon-medal2.png" className="reward-icon" alt="Награда"/>
+                <img src="/images/medals/icon-cup-first-place.png" className="reward-icon" alt="Награда"/>
                 <span className="reward-text">Название турнира с призовым местом</span>
               </div>
               <div className="mvp-reward-item">
-                <img src="/images/medals/icon-medal3.png" className="reward-icon" alt="Награда"/>
+                <img src="/images/medals/icon-cup-first-place.png" className="reward-icon" alt="Награда"/>
                 <span className="reward-text">Название турнира с призовым местом</span>
               </div>
               <div className="mvp-reward-item">
-                <img src="/images/medals/icon-medal2.png" className="reward-icon" alt="Награда"/>
+                <img src="/images/medals/icon-cup-first-place.png" className="reward-icon" alt="Награда"/>
                 <span className="reward-text">Название турнира с призовым местом</span>
               </div>
             </div>
@@ -864,28 +1161,45 @@ if (!userData) {
 
          {/* -------------------------------------------------------------------- Блок для фото и контактов */}
 
-    <div class="fade-block-container">
-                <h3 class="section-title">Контакты</h3>
-        <div class="contacts-profile-block">
-        <div class="contacts-container">
-            <div class="contact-block">
-                <span class="contact-name">Steam</span>
-                <img src="/images/icons/icon-profile-steam.png" alt="Steam" class="contact-icon"/>
-            </div>
-            <div class="contact-block middle">
-                <span class="contact-name">Telegram</span>
-                <img src="/images/icons/icon-profile-telegram.png" alt="Telegram" class="contact-icon"/>
-            </div>
-            <div class="contact-block">
-                <span class="contact-name">WhatsApp</span>
-                <img src="/images/icons/icon-profile-whatsup.png" alt="WhatsApp" class="contact-icon"/>
-            </div>
-        </div>
+    <div className="fade-block-container">
+  <h3 className="section-title">Контакты</h3>
+  <div className="contacts-profile-block">
+    <div className="contacts-container">
+      {/* Steam */}
+      <div 
+        className={`contact-block ${!userData?.contacts?.steam ? 'disabled' : ''}`}
+        onClick={() => userData?.contacts?.steam && handleContactClick('steam', userData.contacts.steam)}
+        title={userData?.contacts?.steam ? "Перейти в Steam" : "Контакт не указан"}
+      >
+        <span className="contact-name">Steam</span>
+        <img src="/images/icons/icon-profile-steam.png" alt="Steam" className="contact-icon"/>
+      </div>
+      
+      {/* Telegram */}
+      <div 
+        className={`contact-block middle ${!userData?.contacts?.telegram ? 'disabled' : ''}`}
+        onClick={() => userData?.contacts?.telegram && handleContactClick('telegram', userData.contacts.telegram)}
+        title={userData?.contacts?.telegram ? "Перейти в Telegram" : "Контакт не указан"}
+      >
+        <span className="contact-name">Telegram</span>
+        <img src="/images/icons/icon-profile-telegram.png" alt="Telegram" className="contact-icon"/>
+      </div>
+      
+      {/* WhatsApp */}
+      <div 
+        className={`contact-block ${!userData?.contacts?.whatsapp ? 'disabled' : ''}`}
+        onClick={() => userData?.contacts?.whatsapp && handleContactClick('whatsapp', userData.contacts.whatsapp)}
+        title={userData?.contacts?.whatsapp ? "Перейти в WhatsApp" : "Контакт не указан"}
+      >
+        <span className="contact-name">WhatsApp</span>
+        <img src="/images/icons/icon-profile-whatsup.png" alt="WhatsApp" className="contact-icon"/>
+      </div>
     </div>
-        <div class="fade-block">
-            <img src="/images/other/team-player-empty.png" alt="awl-player-photo" class="masked-image"/>
-        </div>
-    </div>
+  </div>
+  <div className="fade-block">
+    <img src="/images/other/team-player-empty.png" alt="awl-player-photo" className="masked-image"/>
+  </div>
+</div>
 </div>
 
         {/* -------------------------------------------------------------------- Блок статистики */}
@@ -941,7 +1255,7 @@ if (!userData) {
     <div className="info-section">
         <div className="info-block">
             <div className="action-buttons-container">
-                <button className="action-btn">
+                <button className="action-btn" onClick={openContactsModal}>
                     <span className="btn-text">Контакты</span>
                 </button>
                 <button className="action-btn">
@@ -953,7 +1267,7 @@ if (!userData) {
                 <button className="action-btn">
                     <span className="btn-text">Приватность</span>
                 </button>
-                <button className="action-btn">
+                <button className="action-btn" onClick={() => setIsDeleteModalOpen(true)}>
                     <span className="btn-text">Удалить аккаунт</span>
                 </button>
             </div>
@@ -989,6 +1303,11 @@ if (!userData) {
           </div>
         </div>
       </div>
+
+      {/* Модальное окно подтверждения удаления */}
+      <DeleteConfirmationModal />
+      {/* Модальное окно контактов */}
+      <ContactsModal />
 
        {/* Компонент выбора страны */}
       <CountryPicker

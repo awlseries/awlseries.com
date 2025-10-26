@@ -848,3 +848,152 @@ opacity: 1;
 .scoring-item.kills .points {
     color: #4CAF50;
 }
+
+/* ------------------------------------------------------ Стили КОМАНД ТУРНИРА */
+
+/* Стили для участников турнира - команды из рейтинга */
+.participants-container {
+    padding: 20px;
+}
+
+.participants-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.participant-team {
+    background: rgba(44, 44, 44, 0.6);
+    border: 1px solid rgba(70, 70, 70, 0.5);
+    border-radius: 8px;
+    padding: 25px 20px;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    position: relative;
+    min-height: 180px;
+}
+/* Для каждой команды разный фон */
+.participant-team:nth-child(1) {
+    background: 
+        linear-gradient(rgba(44, 44, 44, 0.9), rgba(44, 44, 44, 0.9)),
+        url('../public/images/icons/logo-opponent.png');
+    background-size: cover;
+    background-position: right center;
+}
+
+.participant-team:hover {
+    border-color: #ff6600;
+    transform: translateY(-2px);
+}
+
+.team-logo-participant {
+    width: 100px;
+    height: 100px;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.team-logo-participant img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: transparent;
+}
+
+.team-name-participant {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    color: #f6efd9;
+    font-weight: 600;
+    text-align: center;
+    letter-spacing: 0.6px; /* Межбуквенный отступ */
+}
+
+.team-tag-tournament {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    color: #ff6600;
+    background-color: #333;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(70, 70, 70, 0.9);
+    text-align: center;
+}
+
+.team-view-btn {
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 6px;
+    right: 10px;
+}
+
+.participant-team:hover .team-view-btn {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.view-icon {
+    width: 24px;
+    height: 24px;
+    background: transparent;
+    filter: grayscale(0.3);
+    transition: all 0.3s ease;
+}
+
+.team-view-btn:hover .view-icon {
+    transform: scale(1.1);
+}
+
+/* Адаптивность */
+@media (max-width: 1200px) {
+    .participants-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .participants-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    
+    .participant-team {
+        padding: 20px 15px;
+        gap: 10px;
+        min-height: 160px;
+    }
+    
+    .team-logo-participant {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .team-name-participant {
+        font-size: 15px;
+    }
+    
+    .team-tag {
+        font-size: 13px;
+        padding: 5px 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .participants-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+}
