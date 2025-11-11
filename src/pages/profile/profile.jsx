@@ -8,6 +8,8 @@ import '/src/styles.css';
 import { useNavigate } from 'react-router-dom';
 import './ProfileInfo.css';
 import SEO from '../../components/Seo/Seo';
+import CreateTeamModal from './CreateTeamModal';
+import AvatarContactsEditor from './AvatarContactsEditor';
 
 // Ленивая загрузка react-world-flags
 const Flag = lazy(() => import('react-world-flags').then(module => {
@@ -29,6 +31,9 @@ const Profile = () => {
   const [showClassSelector, setShowClassSelector] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isContactsModalOpen, setIsContactsModalOpen] = useState(false);
+  // состояния для модалки создания команды
+const [isCreateTeamModalOpen, setIsCreateTeamModalOpen] = useState(false);
+const [teamData, setTeamData] = useState(null);
   const navigate = useNavigate();
   const { t } = useLanguage();
 
@@ -103,6 +108,44 @@ useEffect(() => {
     document.body.style.overflow = 'unset';
   };
 }, [isDeleteModalOpen]);
+
+// ----------------------------------------------------------------------- Функция для загрузки данных команды
+
+useEffect(() => {
+  if (userData?.team && userData.team !== "free agent") {
+    loadTeamData(userData.team_id);
+  }
+}, [userData?.team_id]);
+
+const loadTeamData = async (teamId) => {
+  try {
+    const { data, error } = await supabase
+      .from('teams')
+      .select('*')
+      .eq('id', teamId)
+      .single();
+    if (error) throw error;
+    setTeamData(data);
+  } catch (error) {
+    console.error('Ошибка загрузки данных команды:', error);
+  }
+};
+
+// Функция для обработки нажатия на кнопку "Команда"
+const handleTeamButtonClick = () => {
+  if (userData?.team && userData.team !== "free agent") {
+    // Перенаправляем на страницу команды
+    navigate(`/team/${userData.team_id}`);
+  } else {
+    setIsCreateTeamModalOpen(true);
+  }
+};
+
+// Функция после успешного создания команды
+const handleTeamCreated = (newTeamData) => {
+  setTeamData(newTeamData);
+  setUserData(prev => ({ ...prev, team: newTeamData.name }));
+};
 
   // ------------------------------------------------------------------------- Загрузка данных пользователя
 
@@ -218,6 +261,15 @@ const loadUserData = async (user, mounted) => {
     } else {
       setCanEditNickname(true);
     }
+  };
+
+  // --------------------------------------------------------------------------- Функция обновления аватара
+
+  const handleAvatarUpdate = (newAvatarUrl) => {
+    setUserData(prev => ({ 
+      ...prev, 
+      avatar_url: newAvatarUrl 
+    }));
   };
 
   // -------------------------------------------------------------------------- Функция для обработки выбора класса
@@ -572,7 +624,7 @@ setUserData(prev => ({
     if (userData?.team && userData.team !== "free agent") {
       return {
         text: userData.team,
-        color: '#22b327'
+        color: '#ff6600'
       };
     } else {
       return {
@@ -646,12 +698,7 @@ if (!userData) {
 
     return (
       <div 
-      className="modal-overlay" 
-      onClick={() => {
-        setIsDeleteModalOpen(false);
-        document.body.style.overflow = 'unset';
-      }}
-    >
+      className="modal-overlay">
         <div className="modal-content" onClick={(e) => e.stopPropagation()}>
           <div className="modal-header">
             <h3 className="modal-title">Удаление аккаунта</h3>
@@ -976,7 +1023,7 @@ const ContactsModal = () => {
     
     {showClassSelector && (
       <div className="class-options-row">
-        {['assault', 'medic', 'sniper', 'engineer'].map((playerClass) => (
+        {['assault', 'medic', 'recon', 'engineer'].map((playerClass) => (
           <div
             key={playerClass}
             className={`class-option ${userData?.player_class === playerClass ? 'selected' : ''}`}
@@ -1087,7 +1134,7 @@ const ContactsModal = () => {
                   className={`age-and-status-player-style ${!hasAgeBeenSet ? 'clickable' : ''}`} 
                   onClick={!hasAgeBeenSet ? editAge : undefined}
                   title={!hasAgeBeenSet ? "Кликните для установки возраста" : "Возраст установлен"}
-                >
+                ><span className="class-label">Возраст:</span>
                   {age ? displayAge(age) : 'Установить возраст'}
                 </span>
                 
@@ -1095,7 +1142,7 @@ const ContactsModal = () => {
                 <span 
                   className="age-and-status-player-style" 
                   style={{ color: playerStatus.color }}
-                >
+                ><span className="class-label">Команда:</span>
                   {playerStatus.text}
                 </span>
               </div>
@@ -1196,8 +1243,14 @@ const ContactsModal = () => {
       </div>
     </div>
   </div>
+
+  {/* -------------------------------------------------------------------- Блок смены аватара */}
+  
   <div className="fade-block">
-    <img src="/images/other/team-player-empty.png" alt="awl-player-photo" className="masked-image"/>
+    <AvatarContactsEditor 
+          userData={userData}
+          onAvatarUpdate={handleAvatarUpdate}
+        />
   </div>
 </div>
 </div>
@@ -1258,7 +1311,7 @@ const ContactsModal = () => {
                 <button className="action-btn" onClick={openContactsModal}>
                     <span className="btn-text">Контакты</span>
                 </button>
-                <button className="action-btn">
+                <button className="action-btn" onClick={handleTeamButtonClick}>
                     <span className="btn-text">Команда</span>
                 </button>
                 <button className="action-btn">
@@ -1308,6 +1361,12 @@ const ContactsModal = () => {
       <DeleteConfirmationModal />
       {/* Модальное окно контактов */}
       <ContactsModal />
+      {/* Модальное окно создания команды */}
+      <CreateTeamModal 
+  isOpen={isCreateTeamModalOpen}
+  onClose={() => setIsCreateTeamModalOpen(false)}
+  onTeamCreated={handleTeamCreated}
+/>
 
        {/* Компонент выбора страны */}
       <CountryPicker

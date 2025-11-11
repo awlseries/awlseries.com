@@ -18,6 +18,7 @@ const Rules = lazy(() => import('./pages/Rules/Rules'));
 const Registration = lazy(() => import('./pages/Registration/Registration.jsx'));
 const VerificationSuccess = lazy(() => import('./components/VerificationSuccess/VerificationSuccess.jsx'));
 const ResetPassword = lazy(() => import('/utils/ResetPassword'));
+const TeamPage = lazy(() => import('./pages/TeamPage/TeamPage'));
 
 // Простой inline компонент для загрузки
 function LoadingFallback() {
@@ -113,6 +114,14 @@ function AppContent() {
             element={
               <Suspense fallback={<LoadingFallback />}>
                 <Transfers />
+              </Suspense>
+            } 
+          />
+          <Route 
+            path="team/:teamId" 
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <TeamPage />
               </Suspense>
             } 
           />

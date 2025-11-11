@@ -462,17 +462,6 @@ font-family: 'BlackOpsOne', 'BlackOpsOneType', sans-serif;
 .age-and-status-player-style:hover {
     color: #ff6600;
 }
-.age-and-status-player-style::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 10px;
-    height: 3px;
-    background-color: #ff6600; /* оранжевый цвет */
-    border-radius: 1px;
-}
 
 .age-edit-input {
     width: 40px;
@@ -494,7 +483,7 @@ font-family: 'BlackOpsOne', 'BlackOpsOneType', sans-serif;
 .age-and-status-container {
     display: flex;
     align-items: flex-end;
-    gap: 60px;
+    gap: 30px;
 }
 
 /* ------------------------------------------------------- 2 блок профиля  */
@@ -829,11 +818,12 @@ font-family: 'BlackOpsOne', 'BlackOpsOneType', sans-serif;
     filter: grayscale(0.8);
 }
 
-/* -------------------------------------------------------- Стили для выбора аватарки ------------------------------------------------------------------ */
+/* -------------------------------------------------------- Стили для выбора аватара */
 
 /* Стили для контейнера аватара */
 .avatar-container {
   position: relative;
+  height: 335px;
   width: 100%;
   height: 100%;
 }
@@ -842,47 +832,60 @@ font-family: 'BlackOpsOne', 'BlackOpsOneType', sans-serif;
   position: relative;
   width: 100%;
   height: 100%;
+  cursor: pointer;
 }
 
-.avatar-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+/* Иконка добавления данных - изначально скрыта */
+.add-contacts-btn-icon {
+  all: unset;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 30px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.avatar-display-container:hover .avatar-overlay {
-  opacity: 1;
-}
-
-.avatar-upload-btn,
-.avatar-remove-btn {
-  background: rgba(255, 102, 0, 0.8);
-  border: none;
+  background: transparent;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease;
+  padding: 0;
+  filter: brightness(0) invert(1); 
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
-.avatar-upload-btn:hover,
-.avatar-remove-btn:hover {
-  background: rgba(255, 102, 0, 1);
-  transform: scale(1.1);
+.avatar-display-container:hover .add-contacts-btn-icon {
+  opacity: 0.3;
 }
 
+.avatar-display-container:hover .add-contacts-btn-icon:hover {
+  opacity: 0.7;
+  transform: translate(-50%, -50%) scale(1.05);
+}
+
+/* Кнопки загрузки/удаления */
+.avatar-upload-btn,
+.avatar-remove-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Стили для режима редактирования */
 .avatar-edit-container {
   position: relative;
   width: 100%;
@@ -896,7 +899,7 @@ font-family: 'BlackOpsOne', 'BlackOpsOneType', sans-serif;
 .avatar-preview {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain; /* Сохраняет пропорции без обрезки */
 }
 
 .avatar-edit-buttons {
@@ -906,26 +909,62 @@ font-family: 'BlackOpsOne', 'BlackOpsOneType', sans-serif;
   gap: 10px;
 }
 
-.avatar-save-btn,
+.avatar-save-btn {
+  background: rgba(255, 102, 0, 0.7);
+    border: 1px solid rgba(255, 102, 0, 0.5);
+    color: #f6efd9;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+}
 .avatar-cancel-btn {
-  background: rgba(44, 44, 44, 0.9);
-  border: 2px solid #ff6600;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
+   background: rgba(70, 70, 70, 0.7);
+    border: 1px solid rgba(70, 70, 70, 0.5);
+    color: #a1a194;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
 }
 
 .avatar-save-btn:hover {
-  background: rgba(34, 139, 34, 0.8);
+    background: rgba(255, 102, 0.7);
+    border-color: rgba(255, 102, 0);
 }
 
 .avatar-cancel-btn:hover {
-  background: rgba(220, 53, 69, 0.8);
+  background: rgba(70, 70, 70);
+    border-color: rgba(80, 80, 80);
+    color: #f6efd9;
+}
+
+.avatar-delete-btn {
+    all: unset;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0;
+}
+
+.avatar-display-container:hover .avatar-remove-btn .avatar-delete-btn {
+    opacity: 1;
+    transition: all 0.3s ease;
 }
 
 /* ---------------------------------------------------------------------- Стили для модального окна выбора страны ------------------------------------------------- */
@@ -1129,7 +1168,6 @@ font-family: 'BlackOpsOne', 'BlackOpsOneType', sans-serif;
   padding: 0;
   width: 90%;
   max-width: 500px;
-  max-height: 80vh;
   overflow: hidden;
   position: relative;
 }
@@ -1328,4 +1366,217 @@ font-family: 'BlackOpsOne', 'BlackOpsOneType', sans-serif;
 .save-contacts-btn:hover {
   background: #e55d00;
   border-color: #e55d00;
+}
+
+/* -------------------------------------------------------------------- Стили для модального окна создания команды */
+/* --------------------------------------------------------------------------------------------------------------- */
+
+.create-team-modal {
+  max-width: 500px;
+  border: 1px solid #ff6600;
+}
+
+.create-team-modal .modal-title {
+  color: #f6efd9;
+}
+
+.team-create-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-hint {
+  font-size: 12px;
+  color: #b2ad9c;
+}
+
+/* Стили для поля тега */
+.tag-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.tag-prefix {
+  position: absolute;
+  left: 12px;
+  color: #b2ad9c;
+  font-weight: 500;
+  z-index: 1;
+}
+
+.tag-input {
+  padding-left: 25px !important;
+  text-transform: uppercase;
+}
+
+/* Стили для загрузки логотипа */
+.logo-upload-area {
+  border: 2px dashed #464646;
+  border-radius: 8px;
+  padding: 30px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logo-upload-area:hover {
+  border-color: #ff6600;
+  background: rgba(255, 102, 0, 0.05);
+}
+
+.logo-upload-input {
+  display: none;
+}
+
+.logo-upload-label {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Стили для иконки папки с перекрашиванием */
+.upload-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.folder-icon {
+  width: 36px;
+  height: 36px;
+  filter: invert(42%) sepia(90%) saturate(1352%) hue-rotate(360deg) brightness(99%) contrast(105%);
+}
+
+.upload-text {
+  color: #f6efd9;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.upload-hint {
+  color: #b2ad9c;
+  font-size: 12px;
+}
+
+/* Стили для превью логотипа */
+.logo-preview-container {
+  position: relative;
+  display: flex;
+  border: 2px solid #464646;
+  border-radius: 8px;
+  padding: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-preview {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  border-radius: 4px;
+  background: transparent;
+}
+
+.clear-logo-btn {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #e74c3c;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clear-logo-btn:hover {
+  background: #c0392b;
+}
+
+/* Уведомление о создании команды */
+.create-team-notice {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 15px 20px;
+  background: rgba(255, 102, 0, 0.1);
+  border: 1px solid #ff6600;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+.notice-text {
+  color: #f6efd9;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* Кнопка создания команды */
+.create-team-btn {
+  padding: 12px 25px;
+  background: #ff6600;
+  border: 1px solid #ff6600;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.create-team-btn:hover:not(:disabled) {
+  background: #e55d00;
+  border-color: #e55d00;
+}
+
+.create-team-btn:disabled {
+  background: #666;
+  border-color: #666;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* --------------------------------------------------------------------------------------- Стили для блока региона */
+/* --------------------------------------------------------------------------------------------------------------- */
+.region-display-container {
+  position: relative;
+}
+
+.region-display {
+  background: rgba(70, 70, 70, 0.3);
+  border: 1px solid #464646;
+  color: #a1a194;
+  cursor: not-allowed;
+}
+
+.region-loading {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #ff6600;
+  animation: spin 1s linear infinite;
+}
+
+.region-hint {
+  color: #7a7a6d;
+  font-size: 11px;
+  margin-top: 5px;
+  font-style: italic;
+}
+
+@keyframes spin {
+  0% { transform: translateY(-50%) rotate(0deg); }
+  100% { transform: translateY(-50%) rotate(360deg); }
 }

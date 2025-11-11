@@ -1,0 +1,1520 @@
+/* ------------------------------------------------------------------ Стили для страницы команды -------------------------- */
+
+.player-team {
+    padding: 40px 20px;
+    min-height: 100vh;
+}
+
+.team-container {
+    display: flex;
+    max-width: 1400px;
+    margin: 40px auto;
+    gap: 20px;
+    align-items: flex-start; /* Выравнивание по верху */
+}
+
+/* Левый блок - информация о команде */
+/* Обновленные стили для блока информации о команде */
+/* Обновленные стили для блока информации о команде */
+.team-info-block {
+    flex: 0 0 400px;
+    background: rgba(44, 44, 44, 0.8);
+    border-radius: 12px;
+    padding: 30px;
+    border: 1px solid #464646;
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    position: relative;
+}
+
+.team-header {
+    margin-bottom: 0;
+    text-align: center;
+}
+
+.team-header > .section-title,
+.roster-header h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 24px;
+    color: #f6efd9;
+    font-weight: 600;
+    letter-spacing: 1px;
+    background: rgba(34, 34, 34, 0.6);
+    border-radius: 8px;
+    padding: 15px 35px; /* 15px сверху/снизу, 35px слева/справа */
+    border: 1px solid rgba(70, 70, 70, 0.5);
+    margin: 0 auto; /* Центрирование */
+    width: fit-content; /* Ширина по содержимому */
+}
+.roster-header h2 {
+    margin-bottom: 20px;
+}
+
+.team-basic-info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+    padding-top: 20px;
+}
+
+.team-logo-large {
+    position: absolute;
+    top: -10px;
+    left: 0;
+}
+
+.team-logo-large img {
+    width: 110px;
+    height: 110px;
+    background: transparent;
+
+}
+
+.team-name-section {
+    text-align: right;
+    margin-left: 135px; /* Отступ для логотипа */
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(255, 102, 0, 0.3);
+}
+
+.team-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 28px;
+    color: #f6efd9;
+    margin: 0 0 5px 0;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+}
+
+.team-tag {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #ff6600;
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+
+.team-stats-row {
+    display: flex;
+    justify-content: space-between;
+    background: rgba(34, 34, 34, 0.6);
+    border-radius: 8px;
+    padding: 15px;
+    border: 1px solid rgba(70, 70, 70, 0.5);
+}
+.stat-item-team.roster-status {
+    border-left: 3px solid #ff4444;
+    background: rgba(255, 68, 68, 0.03);
+}
+
+.roster-status .stat-label-team {
+    color: #ff4444;
+}
+
+.roster-status .stat-value-team.incomplete {
+    color: #ff4444;
+    font-weight: 600;
+}
+
+.team-details {
+    background: rgba(34, 34, 34, 0.6);
+    border-radius: 8px;
+    padding: 15px;
+    border: 1px solid rgba(70, 70, 70, 0.5);
+}
+
+.team-meta {
+    display: flex;
+    justify-content: space-between;
+}
+
+.meta-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.meta-label {
+    font-size: 10px;
+    color: #a1a194;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.meta-value {
+    font-size: 12px;
+    color: #f6efd9;
+    font-weight: 500;
+}
+
+.team-contacts {
+    background: rgba(34, 34, 34, 0.6);
+    border-radius: 12px;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid rgba(70, 70, 70, 0.5);
+}
+
+.contacts-title {
+    color: #a1a194;
+    font-size: 16px;
+    margin: 0;
+    padding: 15px;
+    background: rgba(255, 102, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 102, 0, 0.2);
+    text-align: center;
+    border-radius: 12px;
+}
+
+.contacts-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 15px;
+    transition: background-color 0.3s ease;
+    border-bottom: 1px solid rgba(70, 70, 70, 0.3);
+}
+
+.contact-item:last-child {
+    border-bottom: none;
+}
+
+.contact-icon-team {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    filter: grayscale(0.2);
+
+}
+
+.contact-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.contact-label {
+    font-size: 10px;
+    color: #a1a194;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.contact-value {
+    font-size: 12px;
+    color: #f6efd9;
+    font-weight: 500;
+}
+
+.contact-action {
+    background: rgba(255, 102, 0, 0.2);
+    border: 1px solid rgba(255, 102, 0, 0.4);
+    color: #f6efd9;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.contact-action:hover {
+    background: rgba(255, 102, 0, 0.3);
+    border-color: rgba(255, 102, 0, 0.6);
+}
+
+/* Колонка статистики */
+.stats-column-team {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+/* Элемент статистики */
+.stat-item-team {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: 6px;
+    border: 1px solid rgb(37, 37, 37);
+    border-left: 3px solid #ff6600;
+}
+/* Метка статистики */
+.stat-label-team {
+    color: #b2ad9c;
+    font-size: 12px;
+    font-weight: 500;
+}
+/* Значение статистики */
+.stat-value-team {
+    color: #f6efd9;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* ------------------------------------- Исправленные стили для матчей */
+
+.recent-matches {
+    background: rgba(34, 34, 34, 0.8);
+    border-radius: 12px;
+    border: 1px solid rgba(70, 70, 70, 0.5);
+    padding-bottom: 20px;
+}
+
+.match-item {
+    padding: 15px 0 0 0;
+}
+
+.match-tournament {
+    font-size: 12px;
+    color: #ff6600;
+    font-weight: 600;
+    margin-bottom: 6px;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.match-teams {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px; /* Добавляем расстояние между матчами */
+}
+
+.team-side {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    padding: 10px;
+    background: linear-gradient(135deg, #5b605f, #464646); /* Ваши цвета из палитры */
+    position: relative;
+    background: #2d2d2d;
+}
+
+/* Левая команда: название → лого → счет */
+.team-side:first-child {
+    justify-content: flex-start;
+    flex-direction: row;
+    
+    /* Пятиугольник с вырезами сверху и снизу справа */
+    clip-path: polygon(
+        0% 0%,           /* Левый верхний угол */
+        90% 0%,          /* Начало выступа справа (сверху) */
+        100% 50%,        /* Центральный угол - ВЫСТУП наружу */
+        90% 100%,        /* Конец выступа справа (снизу) */
+        0% 100%          /* Левый нижний угол */
+    );
+}
+
+/* Правая команда: счет → лого → название (зеркально) */
+.team-side:last-child {
+    justify-content: flex-end;
+    flex-direction: row;
+    /* Симметричный пятиугольник с выступами слева и справа */
+    clip-path: polygon(
+        10% 0%,          /* Начало выступа слева (сверху) */
+        100% 0%,         /* Правый верхний угол */
+        100% 100%,       /* Правый нижний угол */
+        10% 100%,        /* Конец выступа слева (снизу) */
+        0% 50%           /* Центральный угол - ВЫСТУП слева */
+    );
+}
+
+.team-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.team-avatar img {
+    object-fit: contain;
+    background: transparent;
+}
+
+.team-name-short {
+    font-size: 12px;
+    color: #f6efd9;
+    font-weight: 600;
+    min-width: 60px;
+}
+
+.match-score {
+    font-size: 16px;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+    min-width: 20px;
+    text-align: center;
+    color: #a1a194;
+}
+
+.match-score.win {
+    color: #9acd32;
+}
+
+.match-score.lose {
+    color: #e74c3c;
+}
+
+.vs-separator {
+    color: #a1a194;
+    font-size: 18px;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+}
+
+
+.br-match-teams {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.br-team-side {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
+    background: linear-gradient(135deg, #5b605f, #464646); /* Ваши цвета из палитры */
+    position: relative;
+    background: #2d2d2d;
+}
+
+/* Левая команда: название → лого → счет */
+.br-team-side:first-child {
+    justify-content: flex-start;
+    flex-direction: row;
+    padding-right: 30px;
+    padding-left: 30px;
+    /* Пятиугольник с вырезами сверху и снизу справа */
+    clip-path: polygon(
+        0% 0%,           /* Левый верхний угол */
+        90% 0%,          /* Начало выступа справа (сверху) */
+        100% 50%,        /* Центральный угол - ВЫСТУП наружу */
+        90% 100%,        /* Конец выступа справа (снизу) */
+        0% 100%          /* Левый нижний угол */
+    );
+}
+
+/* Правая команда: счет → лого → название (зеркально) */
+.br-team-side:last-child {
+    justify-content: center;
+    flex-direction: row;
+    background: none;
+    border-top: 1px solid #343434;
+    border-bottom: 1px solid #343434;
+    flex-wrap: wrap; /* Добавляем перенос для двух рядов */
+    clip-path: polygon(
+        10% 0%,          /* Начало выступа слева (сверху) */
+        100% 0%,         /* Правый верхний угол */
+        100% 100%,       /* Правый нижний угол */
+        10% 100%,        /* Конец выступа слева (снизу) */
+        0% 50%           /* Центральный угол - ВЫСТУП слева */
+    );
+}
+.br-score-kills {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+    align-items: center;
+}
+
+/* --------------------------------------------------------------------- Стили для гостей команды */
+/* Стили для пустых контактов */
+.contact-item.empty-contact {
+    opacity: 0.7;
+}
+
+.contact-item.empty-contact .contact-value {
+    color: #a1a194;
+    font-style: italic;
+}
+
+.contact-item.empty-contact .contact-action:disabled {
+    background: rgba(70, 70, 70, 0.3);
+    border-color: rgba(70, 70, 70, 0.5);
+    color: #a1a194;
+    cursor: not-allowed;
+}
+
+/* --------------------------------------------------------------------- Стили блоков команды без информации */
+/* Стили для пустого блока контактов с иконкой-кнопкой */
+
+.contacts-empty-state {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+}
+
+.add-contacts-btn-icon {
+    all: unset;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+    filter: brightness(0) invert(1); 
+    opacity: 0.3;
+}
+
+.add-contacts-btn-icon:hover {
+    transform: scale(1.05);
+}
+
+.add-contacts-btn-icon:hover {
+    opacity: 0.7;
+}
+
+/* Стили для пустого блока последних матчей */
+
+.matches-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 10px;
+    text-align: center;
+}
+
+.empty-matches-icon {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    filter: brightness(0) saturate(100%) invert(48%) sepia(4%) saturate(669%) hue-rotate(13deg) brightness(92%) contrast(85%);
+    margin-bottom: 10px;
+}
+
+.empty-matches-subtext {
+    color: #7a7a6d;
+    font-size: 12px;
+    margin: 0;
+    font-style: italic;
+    max-width: 250px;
+    line-height: 1.4;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .matches-empty-state {
+        padding: 30px 15px;
+        gap: 12px;
+    }
+    
+    .empty-matches-icon {
+        width: 48px;
+        height: 48px;
+    }
+    
+    .empty-matches-icon img {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .empty-matches-text {
+        font-size: 14px;
+    }
+    
+    .empty-matches-subtext {
+        font-size: 11px;
+    }
+}
+
+.upcoming-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    padding: 40px 20px;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+/* Силуэты карточек матчей */
+.match-silhouettes {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    z-index: 1;
+    opacity: 0.1;
+    pointer-events: none;
+}
+
+.silhouette-card {
+    width: 180px;
+    height: 120px;
+    background: rgba(70, 70, 70, 0.3);
+    border-radius: 8px;
+    border: 1px solid rgba(122, 122, 109, 0.2);
+    position: relative;
+}
+
+.silhouette-card::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    height: 20px;
+    background: rgba(122, 122, 109, 0.2);
+    border-radius: 4px;
+}
+
+.silhouette-card::after {
+    content: '';
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    right: 15px;
+    height: 30px;
+    background: rgba(122, 122, 109, 0.15);
+    border-radius: 4px;
+}
+
+/* Слегка разный размер для силуэтов */
+.silhouette-card:nth-child(1) {
+    transform: scale(0.9) translateY(-5px);
+}
+
+.silhouette-card:nth-child(2) {
+    transform: scale(1) translateY(0);
+}
+
+.silhouette-card:nth-child(3) {
+    transform: scale(0.95) translateY(3px);
+}
+
+.empty-upcoming-text {
+    color: #a1a194;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+}
+
+.empty-upcoming-subtext {
+    color: #7a7a6d;
+    font-size: 12px;
+    margin: 0;
+}
+
+.browse-tournaments-btn {
+    background: rgba(255, 102, 0, 0.2);
+    border: 1px solid rgba(255, 102, 0, 0.4);
+    color: #f6efd9;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+}
+
+.browse-tournaments-btn:hover {
+    background: rgba(255, 102, 0, 0.3);
+}
+
+/* Адаптивность для силуэтов */
+@media (max-width: 768px) {
+    .match-silhouettes {
+        gap: 10px;
+    }
+    
+    .silhouette-card {
+        width: 120px;
+        height: 80px;
+    }
+    
+    .silhouette-card::before {
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        height: 15px;
+    }
+    
+    .silhouette-card::after {
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+        height: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .match-silhouettes {
+        opacity: 0.05; /* Еще более прозрачные на мобильных */
+    }
+    
+    .silhouette-card {
+        width: 80px;
+        height: 60px;
+    }
+}
+
+.upcoming-br-section.empty-upcoming {
+    background: rgba(34, 34, 34, 0.4);
+    height: auto;
+    border: 1px solid #464646;
+    min-height: 200px;
+    position: relative;
+    overflow: hidden;
+        margin-bottom: 0;
+}
+
+.upcoming-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    padding: 40px 20px;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+/* -------------------------------------------------- Силуэты только блоков - без текста */
+
+/* Центральный блок с игрой */
+.br-match-card-compact.silhouette .br-game-info {
+    width: 80px;
+    height: 20px;
+    background: rgba(28, 28, 28, 0.8);
+}
+
+/* Нижние блоки с датой/временем */
+.br-match-card-compact.silhouette .br-match-date,
+.br-match-card-compact.silhouette .br-match-time,
+.br-match-card-compact.silhouette .br-match-mode {
+    height: 20px;
+    background: rgba(122, 122, 109, 0.2);
+}
+
+.br-match-card-compact.silhouette .br-match-date {
+    flex: 1;
+    margin: 0 4px 0 8px;
+}
+
+.br-match-card-compact.silhouette .br-match-time {
+    width: 40px;
+    background: rgba(122, 122, 109, 0.3);
+}
+
+.br-match-card-compact.silhouette .br-match-mode {
+    flex: 1;
+    margin: 0 8px 0 4px;
+}
+.empty-upcoming-icon {
+    display: flex;
+    align-items: center;
+}
+
+.empty-upcoming-icon img {
+    width: 24px;
+    height: 28px;
+    filter: brightness(0) invert(0.4);
+    opacity: 0.5;
+}
+.empty-upcoming-icon .icon-versus {
+    width: 50px;  /* Больше других */
+    height: 54px; /* Больше других */
+}
+
+.empty-upcoming-text {
+    color: #a1a194;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+}
+
+.empty-upcoming-subtext {
+    color: #7a7a6d;
+    font-size: 12px;
+    margin: 0;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .match-silhouettes {
+        gap: 8px;
+        opacity: 0.08;
+    }
+    
+    .br-match-card-compact.silhouette {
+        flex: 0 0 180px;
+        height: 140px;
+    }
+    
+    .br-match-card-compact.silhouette .br-game-info {
+        width: 60px;
+        height: 8px;
+    }
+    
+    .br-match-card-compact.silhouette .br-match-time {
+        width: 30px;
+    }
+}
+
+/* Правый блок - ростер */
+/* --------------------------------------- Стили для блока ростра команды */
+
+.team-roster-block {
+    flex: 1;
+    border-radius: 12px;
+}
+
+.roster-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.player-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 12px;
+    border: 1px solid #464646;
+    transition: all 0.3s ease;
+    text-align: left;
+    width: 200px;
+    min-height: 300px;
+    flex-shrink: 0;
+    margin-top: 10px;
+    background: rgba(34, 34, 34, 0.6);
+}
+
+.player-card:hover {
+    border-color: #f6efd9;
+    transform: translateY(-2px);
+}
+
+.player-card.captain {
+    border-color: #ff6600;
+}
+
+.player-photo {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 10px 15px;
+    background: rgba(34, 34, 34, 0.6);
+    border-radius: 12px;
+}
+.player-photo::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60%; 
+    /* Высота затемнения */
+    background: linear-gradient(to top, 
+    rgba(0, 0, 0, 0.85) 0%, 
+    rgba(0, 0, 0, 0.65) 25%,
+    rgba(10, 10, 10, 0.45) 50%,
+    rgba(12, 12, 12, 0.25) 75%,
+    transparent 100%);
+    border-radius: 12px;
+    pointer-events: none; /* Чтобы не блокировал клики */
+    z-index: 0; /* Под текстом, но над фото */
+}
+
+.player-photo-position {
+    top: 0;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background-position: center top;
+    background: transparent;
+}
+
+.captain-badge {
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    border: 1px solid #ff6600;
+    color: white;
+    width: 25px;
+    height: 25px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.player-info {
+    width: 100%;
+    text-align: left;
+    z-index: 1;
+}
+.empty-slot-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    z-index: 1;
+}
+
+.player-real-name {
+    color: #a1a194;
+    font-size: 11px;
+    font-weight: 500;
+}
+/* Стили для центрирования текста в пустых слотах */
+.player-card.empty-slot .player-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    padding-top: 30px;
+}
+
+.player-card.empty-slot .player-real-name {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.player-nickname {
+    color: #f6efd9;
+    font-size: 14px;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+.player-role {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    text-align: left;
+}
+
+.player-role img {
+    width: 24px;
+    height: 24px;
+}
+
+.profile-btn {
+    background: rgba(255, 102, 0, 0.3);
+    border: 1px solid rgba(255, 102, 0, 0.5);
+    color: #f6efd9;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: auto;
+    text-align: center;
+}
+
+.profile-btn:hover {
+    background: rgba(255, 102, 0, 0.5);
+    border-color: rgba(255, 102, 0, 0.7);
+}
+
+/* Стили для кнопки Покинуть */
+.leave-btn {
+    background: rgba(231, 76, 60, 0.3);
+    border: 1px solid rgba(231, 76, 60, 0.5);
+    color: #e74c3c;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: auto;
+    text-align: center;
+    font-weight: 600;
+}
+
+.leave-btn:hover {
+    background: rgba(231, 76, 60, 0.5);
+    border-color: rgba(231, 76, 60, 0.7);
+}
+
+/* -------------------------------------------------------------------- Стили для карточки управления командой */
+/* ----------------------------------------------------------------------------------------------------------- */
+
+/* Горизонтальное меню управления командой */
+.team-management-horizontal {
+    width: 100%;
+    margin: 10px 0;
+}
+
+.team-management-horizontal .action-buttons-container.horizontal {
+    display: flex;
+    flex-direction: row;
+    background: rgba(20, 20, 20, 0.9);
+    border-radius: 8px;
+    border: 1px solid #464646;
+    overflow: hidden;
+    height: auto;
+}
+
+.team-management-horizontal .team-action-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 15px;
+    background: transparent;
+    color: #b2ad9c;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    border-right: 1px solid #333;
+    flex: 1;
+    min-height: 0;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.team-management-horizontal .team-action-btn:last-child {
+    border-right: none;
+}
+
+.team-management-horizontal .team-action-btn:hover {
+    color: #ff6600;
+    background: rgba(255, 102, 0, 0.1);
+}
+
+.team-management-horizontal .team-action-btn.active {
+    color: #ff6600;
+    background: rgba(255, 102, 0, 0.15);
+    border-bottom: 3px solid #ff6600;
+}
+
+/* Специальный стиль для кнопки расформирования */
+.team-management-horizontal .team-action-btn.disband-btn {
+    color: #e74c3c;
+}
+
+.team-management-horizontal .team-action-btn.disband-btn:hover {
+    color: #e74c3c;
+    background: rgba(231, 76, 60, 0.1);
+}
+
+/* Адаптивность для горизонтального меню */
+@media (max-width: 1024px) {
+    .team-management-horizontal .action-buttons-container.horizontal {
+        flex-wrap: wrap;
+    }
+    
+    .team-management-horizontal .team-action-btn {
+        flex: 1 0 33.333%;
+        border-right: 1px solid #333;
+        border-bottom: 1px solid #333;
+    }
+    
+    .team-management-horizontal .team-action-btn:nth-child(3n) {
+        border-right: none;
+    }
+    
+    .team-management-horizontal .team-action-btn:nth-last-child(-n+3) {
+        border-bottom: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .team-management-horizontal .team-action-btn {
+        flex: 1 0 50%;
+        font-size: 11px;
+        padding: 12px 8px;
+    }
+    
+    .team-management-horizontal .team-action-btn:nth-child(2n) {
+        border-right: none;
+    }
+    
+    .team-management-horizontal .team-action-btn:nth-last-child(-n+2) {
+        border-bottom: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .team-management-horizontal .action-buttons-container.horizontal {
+        flex-direction: column;
+    }
+    
+    .team-management-horizontal .team-action-btn {
+        flex: 1;
+        border-right: none;
+        border-bottom: 1px solid #333;
+    }
+    
+    .team-management-horizontal .team-action-btn:last-child {
+        border-bottom: none;
+    }
+}
+
+/* Стили для пустого слота */
+.empty-slot {
+    border: 2px solid #464646;
+}
+
+.empty-slot:hover {
+    border: 2px solid #464646;
+}
+
+/* Адаптивность */
+@media (max-width: 1200px) {
+    .roster-grid {
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 1024px) {
+    .team-container {
+        flex-direction: column;
+    }
+    
+    .team-info-block {
+        flex: none;
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .roster-grid {
+        justify-content: center;
+    }
+    
+    .team-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .match-teams {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .team-side:last-child {
+        flex-direction: row;
+    }
+}
+
+@media (max-width: 480px) {
+    .player-card {
+        width: 100%;
+        max-width: 200px;
+    }
+}
+
+/* ------------------------------------------------------------------------------------ Блок предстоящих матчей BR */
+
+.upcoming-br-section {
+    flex: 1;
+    height: 200px;
+    background: linear-gradient(135deg, rgba(255, 102, 0, 0.1) 0%, rgba(255, 148, 77, 0.05) 100%);
+    border: 1px solid rgba(255, 102, 0, 0.3);
+    border-radius: 12px;
+    padding: 10px;
+    backdrop-filter: blur(10px);
+    margin-bottom: 20px;
+}
+
+.upcoming-br-cards {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    height: 100%;
+}
+
+.upcoming-br-cards::-webkit-scrollbar {
+    height: 4px;
+}
+
+.upcoming-br-cards::-webkit-scrollbar-thumb {
+    background: rgba(255, 102, 0, 0.3);
+    border-radius: 2px;
+}
+
+/* Карточка матча BR */
+.br-match-card-compact {
+    flex: 0 0 230px;
+    background: rgba(44, 44, 44, 0.8);
+    border-radius: 8px;
+    border: 1px solid #464646;
+    position: relative;
+    transition: all 0.3s ease;
+    height: 100%;
+    background: rgba(34, 34, 34);
+}
+
+.br-match-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px 8px 0 0;
+    z-index: 1; /* Под текстом */
+    object-fit: cover;
+    background-position: center;
+    z-index: 1;
+    opacity: 0.8;
+}
+
+.br-match-content {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.br-match-tournament {
+    font-size: 9px;
+    color: #ff6600;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+    flex: 0 0 65%; /* Занимает 65% высоты */
+    background: #343434;
+    border-radius: 8px 8px 0px 0;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+.mini-tournament-name {
+    margin: 0;
+    font-weight: 400;
+    position: relative;
+    font-size: 18px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8),
+                 0 0 10px rgba(0, 0, 0, 0.6),
+                 0 1px 3px rgba(0, 0, 0, 0.9);
+    z-index: 2; /* Поверх изображения */
+    font-family: 'BlackOpsOne', 'BlackOpsOneType', sans-serif;
+    color: #f6efd9;
+}
+
+/* GMT в правом верхнем углу */
+.br-match-gmt {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    font-size: 10px;
+    color: #a1a194;
+    font-weight: 500;
+    z-index: 3;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+.br-game-info {
+    position: absolute;
+    bottom: 28%; /* Располагаем между блоками */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: center;
+    padding: 0 20px;
+    background: rgba(28, 28, 28, 0.95);
+    width: auto; /* Ширина по содержимому */
+    white-space: nowrap; /* Текст в одну строку */
+    z-index: 3; /* Поверх всего */
+    border-radius: 10px; /* Закругленные углы */
+    border: 1px solid #ff6600;
+}
+
+.br-game-icon {
+    width: 24px;
+    height: 24px;
+    opacity: 0.9;
+}
+
+.br-game-name {
+    font-size: 10px;
+    color: #f6efd9;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Инфо о турнире (мини блок) */
+.br-match-datetime {
+    display: flex;
+    flex: 0 0 35%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: rgba(28, 28, 28, 0.95);
+    border-top: 1px solid #ff6600;
+    width: 100%;
+    padding-top: 18px;
+    border-radius: 8px;
+}
+
+.br-match-date {
+    font-size: 10px;
+    color: #a1a194;
+    font-weight: 600;
+    flex: 1;
+    text-align: left;
+    padding: 4px 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px 0 0 8px;
+}
+
+.br-match-time {
+    font-size: 11px;
+    color: #ff6600;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 4px;
+    background: rgba(255, 102, 0, 0.15);
+    border: 1px solid rgba(255, 102, 0, 0.4);
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(255, 102, 0, 0.2);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.br-match-mode {
+    font-size: 10px;
+    color: #a1a194;
+    font-weight: 500;
+    flex: 1;
+    text-align: right;
+    padding: 4px 8px;
+     border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0  8px  8px 0;
+}
+
+/* ------------------------------------------------------------------ Стили для редактирования контактов -------------------------- */
+
+/* Форма редактирования контактов */
+.contacts-edit-form {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.contact-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.contact-input-group label {
+    font-size: 12px;
+    color: #a1a194;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.contact-input-group input {
+    background: rgba(44, 44, 44, 0.8);
+    border: 1px solid #464646;
+    border-radius: 6px;
+    padding: 10px 12px;
+    color: #f6efd9;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.contact-input-group input:focus {
+    outline: none;
+    border-color: #ff6600;
+    background: rgba(44, 44, 44, 0.9);
+}
+
+.contact-input-group input::placeholder {
+    color: #7a7a6d;
+    font-size: 12px;
+}
+
+/* Кнопки действий формы */
+.contacts-edit-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.save-btn {
+    background: rgba(255, 102, 0, 0.3);
+    border: 1px solid rgba(255, 102, 0, 0.5);
+    color: #f6efd9;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+}
+
+.save-btn:hover {
+    background: rgba(255, 102, 0, 0.5);
+    border-color: rgba(255, 102, 0, 0.7);
+    transform: translateY(-1px);
+}
+
+.cancel-btn {
+    background: rgba(70, 70, 70, 0.3);
+    border: 1px solid rgba(70, 70, 70, 0.5);
+    color: #a1a194;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+}
+
+.cancel-btn:hover {
+    background: rgba(70, 70, 70, 0.5);
+    border-color: rgba(70, 70, 70, 0.7);
+    color: #f6efd9;
+}
+
+/* Адаптивность для формы редактирования */
+@media (max-width: 768px) {
+    .contacts-edit-form {
+        padding: 12px;
+        gap: 12px;
+    }
+    
+    .contacts-edit-actions {
+        flex-direction: column;
+    }
+    
+    .save-btn,
+    .cancel-btn {
+        flex: 1;
+        text-align: center;
+    }
+}
+
+/* Стили для контейнера действий контакта */
+.contact-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* Кнопка редактирования (иконка) */
+.contact-edit {
+    all: unset;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.contact-edit img {
+    filter: brightness(0) invert(0.6); /* Серый цвет по умолчанию */
+    transition: all 0.3s ease;
+}
+
+.contact-edit:hover img {
+    filter: brightness(0) invert(0.8); /* Белый цвет при наведении */
+}
+
+/* Адаптивность для кнопок контактов */
+@media (max-width: 480px) {
+    .contact-actions {
+        gap: 6px;
+    }
+    
+    .contact-action {
+        padding: 6px 10px;
+        font-size: 10px;
+    }
+    
+    .contact-edit {
+        width: 22px;
+        height: 22px;
+    }
+    
+    .contact-edit img {
+        width: 12px;
+        height: 12px;
+    }
+}
