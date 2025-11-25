@@ -1,11 +1,11 @@
-// src/App.jsx
 import { createBrowserRouter, RouterProvider, createRoutesFromElements, Route } from 'react-router-dom';
 import { useEffect, Suspense, lazy, useState } from 'react';
 import MainLayout from './components/Layout/MainLayout';
 import Home from './pages/Home/Home';
 import { LanguageProvider } from '/utils/language-context.jsx';
 import MobileBlockMessage from './components/MobileBlockMessage/MobileBlockMessage';
-import './supabase';
+import { supabase } from './supabase';
+import { useAdminCache } from './components/Services/useAdminCache';
 import '/src/styles.css';
 
 // Ленивая загрузка только тяжелых компонентов
@@ -19,6 +19,7 @@ const Registration = lazy(() => import('./pages/Registration/Registration.jsx'))
 const VerificationSuccess = lazy(() => import('./components/VerificationSuccess/VerificationSuccess.jsx'));
 const ResetPassword = lazy(() => import('/utils/ResetPassword'));
 const TeamPage = lazy(() => import('./pages/TeamPage/TeamPage'));
+const PublicProfile = lazy(() => import('./pages/profile/PublicProfile'));
 
 // Простой inline компонент для загрузки
 function LoadingFallback() {
@@ -32,12 +33,70 @@ function LoadingFallback() {
   );
 }
 
-
-// Создаем отдельный компонент для контента с роутингом
 function AppContent() {
+  const [user, setUser] = useState(null);
+  const [authChecked, setAuthChecked] = useState(false);
+  
+  // Используем хук с кэшированием
+  const { isAdmin, loading: adminLoading, clearAdminCache, getCachedNews, invalidateNewsCache } = useAdminCache(user?.id);
+
   useEffect(() => {
-    console.log('App initialized');
-  }, []);
+    let mounted = true;
+
+    const getCurrentUser = async () => {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (!mounted) return;
+        
+        if (error) {
+          setAuthChecked(true);
+          return;
+        }
+
+        if (session?.user) {
+          setUser(session.user);
+        } else {
+          setUser(null);
+          clearAdminCache();
+        }
+      } catch (error) {
+        if (mounted) {
+          setUser(null);
+          clearAdminCache();
+        }
+      } finally {
+        if (mounted) {
+          setAuthChecked(true);
+        }
+      }
+    };
+
+    getCurrentUser();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (!mounted) return;
+
+      
+      try {
+        if (session?.user) {
+          setUser(session.user);
+        } else {
+          setUser(null);
+          clearAdminCache();
+        }
+      } catch (error) {
+        console.error('❌ Ошибка при изменении состояния авторизации:', error);
+        setUser(null);
+        clearAdminCache();
+      }
+    });
+
+    return () => {
+      mounted = false;
+      subscription?.unsubscribe();
+    };
+  }, [clearAdminCache]);
 
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -73,10 +132,23 @@ function AppContent() {
               <ResetPassword />
             </Suspense>
           } 
-        />
+          />
         
-        <Route path="/" element={<MainLayout />}>
-          <Route index element={<Home />} />
+          <Route path="/" element={
+        <MainLayout 
+          isAdmin={isAdmin} 
+          getCachedNews={getCachedNews}
+          invalidateNewsCache={invalidateNewsCache}
+        />
+      }>
+        <Route index element={
+          <Home 
+            isAdmin={isAdmin} 
+            getCachedNews={getCachedNews}
+            invalidateNewsCache={invalidateNewsCache}
+          />
+        } />
+
           <Route 
             path="tournaments" 
             element={
@@ -125,16 +197,23 @@ function AppContent() {
               </Suspense>
             } 
           />
+          <Route 
+            path="player/:userId" 
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <PublicProfile />
+              </Suspense>
+            } 
+          />
         </Route>
       </>
-    ),
-    {
-      future: {
-        v7_startTransition: true,
-        v7_relativeSplatPath: true
-      }
-    }
+    )
   );
+
+  // Показываем загрузку пока проверяем авторизацию
+  if (!authChecked) {
+    return <LoadingFallback />;
+  }
 
   return (
     <div className="app">
@@ -146,16 +225,17 @@ function AppContent() {
 function App() {
   const [isMobile, setIsMobile] = useState(false);
   const [shouldRedirect, setShouldRedirect] = useState(false);
+  const [appReady, setAppReady] = useState(false);
 
   // Проверка мобильного устройства и редирект
   useEffect(() => {
-    // Проверка на мобильное устройство
+    
     const checkMobile = () => {
       const mobile = window.innerWidth <= 1024;
       setIsMobile(mobile);
+      setAppReady(true);
     };
 
-    // Проверка редиректа при первом посещении
     const isFirstVisit = !localStorage.getItem('hasVisited');
     const shouldRedirectToRegistration = isFirstVisit && window.location.pathname === '/';
     
@@ -166,18 +246,35 @@ function App() {
       return;
     }
 
-    checkMobile();
+    // Небольшая задержка для стабилизации
+    const timer = setTimeout(() => {
+      checkMobile();
+    }, 100);
+
     window.addEventListener('resize', checkMobile);
     
-    return () => window.removeEventListener('resize', checkMobile);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', checkMobile);
+    };
   }, []);
 
-  // Если редирект сработал, не рендерим контент
   if (shouldRedirect) {
     return null;
   }
 
-  // Показываем мобильное сообщение вместо контента
+  // Показываем загрузку пока приложение не готово
+  if (!appReady) {
+    return (
+      <div className="loading-container">
+        <div className="spinner">
+          <div className="spinner-circle"></div>
+        </div>
+        <p>Загрузка приложения...</p>
+      </div>
+    );
+  }
+
   return (
     <LanguageProvider>
       {isMobile ? <MobileBlockMessage /> : <AppContent />}

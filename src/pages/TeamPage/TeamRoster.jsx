@@ -247,7 +247,7 @@ const EmptySlot = ({ userRole, onInvite }) => {
               <img src="/images/icons/icon-add-data.png" alt="add-player-team-awl" />
             </button>
           ) : (
-            <p className="empty-slot-text">Ожидается игрок</p>
+            <p className="empty-slot-text"></p>
           )}
         </div>
       </div>
@@ -261,11 +261,19 @@ const InvitePlayerModal = ({ team, onInvite, onClose }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [searching, setSearching] = useState(false);
 
+    // Блокировка скролла при открытии модалки
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
+
   // Поиск игроков
   const handleSearch = async (query) => {
     setSearchQuery(query);
     
-    if (query.length < 2) {
+    if (query.length < 3) {
       setSearchResults([]);
       return;
     }
@@ -275,7 +283,7 @@ const InvitePlayerModal = ({ team, onInvite, onClose }) => {
       const { data, error } = await supabase
         .from('users')
         .select('id, battlefield_nickname, fullname, player_class, team_id')
-        .or(`battlefield_nickname.ilike.%${query}%,fullname.ilike.%${query}%`)
+        .or(`battlefield_nickname.ilike.%${query}%`)
         .is('team_id', null) // Только свободные агенты
         .limit(10);
 
@@ -290,11 +298,10 @@ const InvitePlayerModal = ({ team, onInvite, onClose }) => {
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content invite-modal" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-overlay">
+      <div className="modal-content-invite" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h3 className="modal-title">Пригласить игрока в команду</h3>
-          <button className="modal-close" onClick={onClose}>×</button>
         </div>
         
         <div className="modal-body">
@@ -302,7 +309,7 @@ const InvitePlayerModal = ({ team, onInvite, onClose }) => {
             <input
               type="text"
               className="search-input"
-              placeholder="Поиск по никнейму или имени..."
+              placeholder="Поиск по никнейму свободного игрока"
               value={searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
             />
@@ -333,12 +340,19 @@ const InvitePlayerModal = ({ team, onInvite, onClose }) => {
                   </button>
                 </div>
               ))
-            ) : searchQuery.length >= 2 ? (
+            ) : searchQuery.length >= 3 ? (
               <div className="no-results">Игроки не найдены</div>
             ) : (
-              <div className="search-hint">Введите минимум 2 символа для поиска</div>
+              <div className="search-hint">Введите минимум 3 символа для поиска</div>
             )}
           </div>
+        </div>
+        
+        {/* блок для кнопки Отмена */}
+        <div className="modal-actions">
+          <button className="cancel-btn" onClick={onClose}>
+            Отмена
+          </button>
         </div>
       </div>
     </div>

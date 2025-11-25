@@ -46,8 +46,8 @@ const EmptyState = ({
               <img className="icon-versus" src="/images/icons/icon-versus.png" alt="no-data-tournaments-matches-awl" />
               <img src="/images/icons/icon-kills.png" alt="no-data-tournaments-matches-awl" />
             </div>
-            <p class="empty-upcoming-text">Нет предстоящих матчей</p>
-            <p class="empty-upcoming-subtext">Команда не зарегистрирована на турниры</p>
+            <p className="empty-upcoming-text">Нет предстоящих матчей</p>
+            <p className="empty-upcoming-subtext">Команда не зарегистрирована на турниры</p>
           </div>
         )
       },

@@ -10,6 +10,8 @@ import './ProfileInfo.css';
 import SEO from '../../components/Seo/Seo';
 import CreateTeamModal from './CreateTeamModal';
 import AvatarContactsEditor from './AvatarContactsEditor';
+import MvpAwards from './MvpAwards';
+import useUserStatus from '/utils/useUserStatus';
 
 // Ленивая загрузка react-world-flags
 const Flag = lazy(() => import('react-world-flags').then(module => {
@@ -31,9 +33,9 @@ const Profile = () => {
   const [showClassSelector, setShowClassSelector] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isContactsModalOpen, setIsContactsModalOpen] = useState(false);
-  // состояния для модалки создания команды
-const [isCreateTeamModalOpen, setIsCreateTeamModalOpen] = useState(false);
-const [teamData, setTeamData] = useState(null);
+  const isUserOnline = useUserStatus(userData?.id); // хук для отслеживания статуса онлайн/офлайн
+  const [isCreateTeamModalOpen, setIsCreateTeamModalOpen] = useState(false); // состояния для модалки создания команды
+  const [teamData, setTeamData] = useState(null); // состояния для модалки создания команды
   const navigate = useNavigate();
   const { t } = useLanguage();
 
@@ -949,7 +951,13 @@ const ContactsModal = () => {
         <div className="info-content-wrapper">
           {/*  Первый блок - Игрок */}
         <div className="info-section">
+          <div className="section-title-with-status">
           <h3 className="section-title">Игрок</h3>
+          <div className={`status-indicator ${isUserOnline ? 'online' : 'offline'}`}>
+          <span className="status-dot"></span>
+          {isUserOnline ? 'Online' : 'Offline'}
+          </div>
+          </div>
           <div className="info-block first-block">
             <div className="nickname-and-class-container">
             {/* Ник игрока - с возможностью редактирования */}
@@ -1152,29 +1160,7 @@ const ContactsModal = () => {
 
         {/* ------------------------------------------------------------- 2 блок - Награды MVP */}
 
-        <div className="info-section">
-          <h3 className="section-title">Награды MVP</h3>
-          <div className="info-block second-block">
-            <div className="mvp-rewards-grid">
-              <div className="mvp-reward-item">
-                <img src="/images/medals/icon-cup-first-place.png" className="reward-icon" alt="Награда"/>
-                <span className="reward-text">Название турнира с призовым местом</span>
-              </div>
-              <div className="mvp-reward-item">
-                <img src="/images/medals/icon-cup-first-place.png" className="reward-icon" alt="Награда"/>
-                <span className="reward-text">Название турнира с призовым местом</span>
-              </div>
-              <div className="mvp-reward-item">
-                <img src="/images/medals/icon-cup-first-place.png" className="reward-icon" alt="Награда"/>
-                <span className="reward-text">Название турнира с призовым местом</span>
-              </div>
-              <div className="mvp-reward-item">
-                <img src="/images/medals/icon-cup-first-place.png" className="reward-icon" alt="Награда"/>
-                <span className="reward-text">Название турнира с призовым местом</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <MvpAwards userId={userData?.id} />
         
         {/* ------------------------------------------------------------- 3 и 4 блоки - MMR и Дивизион */}
 
@@ -1314,11 +1300,13 @@ const ContactsModal = () => {
                 <button className="action-btn" onClick={handleTeamButtonClick}>
                     <span className="btn-text">Команда</span>
                 </button>
-                <button className="action-btn">
+                <button className="action-btn disabled">
                     <span className="btn-text">Турниры</span>
+                    <span className="coming-soon-indicator">Скоро</span>
                 </button>
-                <button className="action-btn">
+                <button className="action-btn disabled">
                     <span className="btn-text">Приватность</span>
+                    <span className="coming-soon-indicator">Скоро</span>
                 </button>
                 <button className="action-btn" onClick={() => setIsDeleteModalOpen(true)}>
                     <span className="btn-text">Удалить аккаунт</span>

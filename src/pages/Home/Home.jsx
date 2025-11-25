@@ -1,7 +1,83 @@
-// src/pages/index/index.jsx
 import SEO from '../../components/Seo/Seo';
+import './Home.css';
+import { useState, useEffect } from 'react';
+import { getNews } from '../../components/Services/newsService';
+import { useLanguage } from '/utils/language-context';
+import NewsAdmin from '../../components/Admin/NewsAdmin';
 
-const Home = () => {
+const Home = ({ isAdmin, getCachedNews, invalidateNewsCache }) => {
+  const [expandedNews, setExpandedNews] = useState(null);
+  const [newsData, setNewsData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [showAdmin, setShowAdmin] = useState(false);
+  const [newsCache, setNewsCache] = useState({});
+  
+  const { currentLanguage } = useLanguage();
+
+  const handleNewsUpdate = () => {
+  invalidateNewsCache();
+  
+  const loadNews = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const news = await getNews(currentLanguage);
+      setNewsData(news);
+      setNewsCache(prev => ({
+        ...prev,
+        [currentLanguage]: news
+      }));
+    } catch (err) {
+      console.error('Ошибка загрузки новостей:', err);
+      setError('Ошибка загрузки новостей');
+    } finally {
+      setLoading(false); // ВАЖНО: сбрасываем загрузку
+    }
+  };
+  loadNews();
+};
+
+  // Загрузка новостей с учетом текущего языка
+  useEffect(() => {
+    
+    const loadNewsData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        if (newsCache[currentLanguage]) {
+          setNewsData(newsCache[currentLanguage]);
+          setLoading(false);
+          return;
+        }
+        
+        const news = await getCachedNews(currentLanguage);
+        
+        setNewsData(news);
+        setNewsCache(prev => ({ ...prev, [currentLanguage]: news }));
+        
+      } catch (error) {
+        console.error('❌ Home: ошибка загрузки новостей', error);
+        setError('Ошибка загрузки новостей');
+        setNewsData([]); // Устанавливаем пустой массив при ошибке
+      } finally {
+        setLoading(false); // ВАЖНО: сбрасываем загрузку в ЛЮБОМ случае
+      }
+    };
+
+    // Убираем setTimeout - он может мешать
+    loadNewsData();
+  }, [currentLanguage, getCachedNews]);
+
+  const toggleNews = (index) => {
+    setExpandedNews(expandedNews === index ? null : index);
+  };
+
+  const toggleAdminPanel = () => {
+    setShowAdmin(!showAdmin);
+  };
+
   return (
     <>
       <SEO 
@@ -10,23 +86,34 @@ const Home = () => {
         keywords="battlefield 6 tournaments, bf6 competitive, esports bf6, battlefield 6 league, gaming tournaments"
         canonicalUrl="/"
       />
-    <div>
-      {/* Баннер */}
-      <section className="hero-banner">
-        <div className="maintenance-container">
-          <img src="/images/icons/icon-processing-works.png" alt="technical-works" className="maintenance-icon" loading="eager" />
-          <div className="maintenance-text">Ведутся технические работы</div>
-        </div>
-      </section>
+      
+      <div>
+        {/* Баннер */}
+        <section className="hero-banner">
+          <div className="maintenance-container">
+            <img src="/images/icons/icon-processing-works.png" alt="technical-works" className="maintenance-icon" loading="eager" />
+            <div className="maintenance-text">Ведутся технические работы</div>
+          </div>
+        </section>
 
-      {/* Основной контент страницы */}
+        {/* 👇 Админ-панель поверх всей страницы */}
+        {isAdmin && showAdmin && (
+          <div className="admin-panel-overlay">
+            <NewsAdmin 
+              onClose={() => setShowAdmin(false)}
+              onNewsUpdate={handleNewsUpdate}
+            />
+          </div>
+        )}
+
+        {/* Основной контент страницы */}
       <section className="main-content-home">
         <div className="content-grid">
-          {/* Левая колонка - текущие турниры */}
+          {/* Лева¤ колонка - текущие турниры */}
           <div className="tournaments-column">
             <div className="content-section">
               <div className="section-header">
-                <h2 className="section-title">Текущие турниры</h2>
+                <h2 className="section-title-home">Текущие турниры</h2>
               </div>
               <div className="tournaments-list">
                 {/* Первый турнир */}
@@ -69,7 +156,7 @@ const Home = () => {
                       <div className="unavailable-icon">
                         <img src="/images/icons/icon-warning-skull.png" alt="unavailable-icon-skull-awl" />
                       </div>
-                      <div className="unavailable-text">Информация временно недоступна</div>
+                      <div className="unavailable-text">Информаци¤ временно недоступна</div>
                     </div>
                   </div>
                   <div className="tournament-header">
@@ -108,7 +195,7 @@ const Home = () => {
                       <div className="unavailable-icon">
                         <img src="/images/icons/icon-warning-skull.png" alt="unavailable-icon-skull-awl" />
                       </div>
-                      <div className="unavailable-text">Информация временно недоступна</div>
+                      <div className="unavailable-text">Информаци¤ временно недоступна</div>
                     </div>
                   </div>
                   <div className="tournament-header">
@@ -144,65 +231,93 @@ const Home = () => {
               </div>
             </div>
           </div>
-          
-          {/* Правая колонка - новости */}
-          <div className="news-column">
-            <div className="content-section">
-              <div className="section-header">
-                <h2 className="section-title">Последние новости</h2>
-              </div>
-              
-              <div className="news-list">
-                <div className="news-item">
-                  <div className="news-image">
-                    <img src="/images/banners/news-bf6-1.webp" alt="news-one-awl" />
-                    <div className="news-content-overlay">
-                      <div className="news-content-wrapper">
-                        <h3 className="news-title">Важная информация о подтверждении результатов на стартовых турнирах</h3>
-                        <div className="news-meta">
-                          <span className="news-source">AWL Пресса</span>
-                        </div>
-                        <p className="news-excerpt">В связи с отсутствием официального API от разработчиков Battlefield 6, подтверждение результатов матчей на 
-                          первых соревнованиях будет осуществляться...</p>
-                        <div className="news-actions">
-                          <button className="news-details-btn">Детали</button>
-                          <button className="news-rate-btn">
-                            <img src="/images/icons/icon-share.png" alt="share-icon" />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+            
+             {/* Правая колонка - новости */}
+            <div className="news-column">
+              <div className="content-section">
+                <div className="section-header">
+                  <h2 className="section-title-home">Последние новости</h2>
+                  
+                  {/* Кнопка редактирования для админа */}
+                  {isAdmin && (
+                    <button 
+                      className="edit-news-btn"
+                      onClick={toggleAdminPanel}
+                    >
+                      {showAdmin ? 'Закрыть' : 'Редактировать'}
+                    </button>
+                  )}
                 </div>
+                
+                {/* Основной контент новостей */}
+                <>
+                  {/* Состояние загрузки */}
+                  {loading && (
+                    <div className="loading-container">
+      <div className="spinner">
+        <div className="spinner-circle"></div>
+      </div>
+      <p>Загрузка новостей...</p>
+    </div>
+                  )}
 
-                <div className="news-item">
-                  <div className="news-image">
-                    <img src="/images/banners/news-awlandvk-two.webp" alt="news-awl-and-vk" />
-                    <div className="news-content-overlay">
-                      <div className="news-content-wrapper">
-                        <h3 className="news-title">Возможное стратегическое партнерство с крупными группами VK</h3>
-                        <div className="news-meta">
-                          <span className="news-source">AWL Пресса</span>
-                        </div>
-                        <p className="news-excerpt">Arena Warborn League обсуждает возможности сотрудничества с крупными 
-                          проектами внутри социальной сети VK в рамках подготовки к запуску соревновательной 
-                          сцены по Battlefield 6...</p>
-                        <div className="news-actions">
-                          <button className="news-details-btn">Детали</button>
-                          <button className="news-rate-btn">
-                            <img src="/images/icons/icon-share.png" alt="share-icon" />
-                          </button>
+                  {/* Сообщение об ошибке */}
+                  {error && !loading && (
+                    <div className="news-error">
+                      <p>{error}</p>
+                    </div>
+                  )}
+
+                  {/* Список новостей */}
+                  <div className="news-list">
+                    {!loading && !error && newsData.map((news, index) => (
+                      <div className="news-item" key={news.id || index}>
+                        <div className="news-image">
+                          <img src={news.image} alt={news.alt} />
+                          <div className={`news-content-overlay ${expandedNews === index ? 'expanded' : ''}`}>
+                            <div className="news-content-wrapper">
+                              <h3 className="news-title">{news.title}</h3>
+                              <div className="news-meta">
+                                <span className="news-source">{news.source}</span>
+                              </div>
+                              <div className={`news-text ${expandedNews === index ? 'full' : 'excerpt'}`}>
+                                {expandedNews === index 
+                                  ? news.fullText.map((paragraph, i) => (
+                                      <p key={i}>{paragraph}</p>
+                                    ))
+                                  : news.excerpt
+                                }
+                              </div>
+                              <div className="news-actions">
+                                <button 
+                                  className="news-details-btn" 
+                                  onClick={() => toggleNews(index)}
+                                >
+                                  {expandedNews === index ? 'Свернуть' : 'Детали'}
+                                </button>
+                                <button className="news-rate-btn">
+                                  <img src="/images/icons/icon-share.png" alt="share-icon" />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    ))}
                   </div>
-                </div>
+
+                  {/* Сообщение если нет новостей */}
+                  {!loading && !error && newsData.length === 0 && (
+                    <div className="no-news">
+                      <p>Новостей пока нет</p>
+                    </div>
+                  )}
+                </>
               </div>
             </div>
           </div>
-        </div>
-      </section>
-    </div>
+        </section>
+      </div>
     </>
   );
 };

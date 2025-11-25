@@ -1,0 +1,873 @@
+/* -------------------------------------------------------------- */
+/* --------------------------------------------------------------------- Стили для основного контента главной страницы --------------------------------- */
+/* -------------------------------------------------------------- */
+
+.main-content-home {
+    padding: 60px 0px;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+.content-grid {
+    display: flex;
+    margin-bottom: 60px;
+    gap: 60px;
+}
+
+/* Левая колонка - текущие турниры (30%) */
+.tournaments-column {
+    flex: 1;
+}
+
+/* Правая колонка - новости (70%) */
+.news-column {
+    flex: 2;
+}
+
+/* ------------------------------------------------------- Стили для админ-панели */
+/* ------------------------------------------------------------------------------ */
+/* Кнопка редактирования для админа */
+.edit-news-btn {
+  background: transparent;
+  border: 1px solid #ff6600;
+  color: #ff6600;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  margin-left: auto;
+}
+
+.edit-news-btn:hover {
+  background: rgba(255, 102, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+/* Блокируем скролл основной страницы когда открыта админка */
+body.admin-panel-open {
+  overflow: hidden;
+}
+/* Оверлей админ панели */
+.admin-panel-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-start; /* Изменяем на flex-start */
+  justify-content: center;
+  padding: 20px;
+  overflow-y: auto; /* Добавляем скролл */
+}
+
+.admin-panel-overlay .news-admin {
+  width: 95%; /* Шире */
+  max-width: 1400px; /* Максимальная ширина */
+  max-height: 95%;
+  overflow-y: auto;
+  background: #2c2c2c;
+  border-radius: 12px;
+  padding: 30px;
+  border: 2px solid #ff6600;
+}
+
+/* Двухколоночный layout для админки */
+.news-admin-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Две колонки */
+  gap: 30px;
+  align-items: start;
+}
+
+/* Левая колонка - форма создания */
+.create-news-form {
+  background: rgba(44, 44, 44, 0.8);
+  padding: 25px;
+  border-radius: 8px;
+  border: 1px solid #555;
+}
+
+/* Правая колонка - список новостей */
+.news-list-admin {
+  background: rgba(44, 44, 44, 0.8);
+  padding: 25px;
+  border-radius: 8px;
+  border: 1px solid #555;
+  max-height: 800px;
+  overflow-y: auto;
+}
+
+/* Заголовки в админке */
+.news-admin h2 {
+  grid-column: 1 / -1; /* Заголовок на всю ширину */
+  color: #f6efd9;
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 28px;
+}
+
+.news-admin h3 {
+  color: #f6efd9;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #ff6600;
+  padding-bottom: 10px;
+}
+
+/* Адаптивность */
+@media (max-width: 1200px) {
+  .news-admin-grid {
+    grid-template-columns: 1fr; /* На мобильных одна колонка */
+    gap: 20px;
+  }
+  
+  .admin-panel-overlay .news-admin {
+    width: 98%;
+    padding: 20px;
+  }
+}
+
+/* ------------------------------------------ Общие стили для блоков */
+
+.content-section {
+    background: rgba(34, 34, 34, 0.8);
+    border-radius: 12px;
+    padding: 25px;
+    border: 1px solid #464646;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #ff6600;
+}
+
+.section-title-home {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #f6efd9;
+    margin: 0;
+}
+
+.section-link {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    color: #ff6600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.section-link:hover {
+    color: #f6efd9;
+    text-decoration: underline;
+}
+
+/* ----------------------------- Стили для мини-блоков турниров с фоном и blur */
+
+.tournaments-column .section-header {
+    justify-content: center;
+}
+
+.tournament-item {
+    background: rgba(44, 44, 44, 0.7);
+    border: 1px solid rgba(255, 102, 0, 0.3);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.tournament-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('/images/medals/medal-weeknd-challenge-prizer.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center top -60px; /* Поднимаем на 20px от верха */
+    z-index: -1;
+    opacity: 0.1;
+}
+
+.tournament-item:nth-child(2)::before {
+    background-image: url('/images/medals/medal-weeknd-challenge-prizer.png');
+}
+
+.tournament-item:nth-child(3)::before {
+    background-image: url('/images/medals/medal-weeknd-challenge-prizer.png');
+}
+
+/* Контейнер для форматов на одной строке */
+.tournament-formats-container {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* Позиционирование даты в правом верхнем углу */
+.tournament-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 1;
+}
+
+.tournament-title-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.tournament-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #ff6600;
+    margin-bottom: 5px;
+    max-width: 180px;
+}
+
+.tournament-format,
+.tournament-format-2 {
+    font-size: 11px;
+    color: #a1a194;
+    padding: 2px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(86, 86, 86);
+    width: fit-content;
+}
+
+.tournament-date {
+    font-size: 11px;
+    color: #f6efd9;
+    background: rgba(70, 70, 70, 0.5);
+    padding: 4px 8px;
+    border-radius: 0 0 0 8px;
+    position: absolute;
+    top: -22px; /* Компенсируем padding-top родителя .tournament-item */
+    right: -22px; /* Компенсируем padding-right родителя .tournament-item */
+    border: 1px solid rgba(255, 102, 0, 0.3);
+}
+
+/* Горизонтальный блок типа турнира */
+.tournament-type-selector {
+    display: flex;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 20px;
+    padding: 2px;
+    margin-top: 12px;
+    border: 1px solid rgba(100, 100, 100, 0.5);
+    position: relative;
+}
+
+.tournament-type-option {
+    flex: 1;
+    text-align: center;
+    padding: 6px 12px;
+    font-size: 10px;
+    color: #a1a194;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    border-radius: 18px;
+}
+
+.tournament-type-option.active {
+    background: rgba(255, 102, 0, 0.3);
+    color: #f6efd9;
+    font-weight: 500;
+}
+
+.tournament-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    position: relative;
+    z-index: 1;
+}
+
+.tournament-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.tournament-prize {
+    font-size: 14px;
+    color: #ff6600;
+    font-weight: 600;
+}
+
+.tournament-teams {
+    font-size: 11px;
+    color: #a1a194;
+}
+
+.tournament-progress {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 8px;
+    position: relative;
+    z-index: 1;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #ff6600, #ff8c00);
+    border-radius: 3px;
+}
+
+.tournament-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.tournament-status {
+    font-size: 11px;
+    color: #a1a194;
+}
+
+.tournament-details-btn {
+    background: rgba(255, 102, 0, 0.3);
+    border: 1px solid rgba(255, 102, 0, 0.5);
+    color: #f6efd9;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-family: 'Montserrat', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0.8;
+}
+
+.tournament-details-btn:hover {
+    background: rgba(255, 102, 0, 0.5);
+    border-color: rgba(255, 102, 0, 0.7);
+    opacity: 1;
+    transform: translateY(-1px);
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 768px) {
+    .tournament-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .tournament-details {
+        align-items: flex-start;
+    }
+    
+    .tournament-footer {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+    
+    .tournament-details-btn {
+        align-self: flex-end;
+    }
+}
+
+/* Стили для недоступных турниров */
+.tournament-item.unavailable {
+    position: relative;
+    overflow: hidden;
+}
+
+.tournament-item.unavailable::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        repeating-linear-gradient(
+            45deg,
+            rgba(0, 0, 0, 0.1),
+            rgba(0, 0, 0, 0.1) 10px,
+            rgba(255, 255, 255, 0.05) 10px,
+            rgba(255, 255, 255, 0.05) 20px
+        );
+    z-index: 2;
+    pointer-events: none;
+}
+
+.unavailable-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(44, 44, 44, 0.95);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    border-radius: 8px;
+}
+
+.unavailable-content {
+    text-align: center;
+    padding: 20px;
+    max-width: 250px;
+}
+
+.unavailable-icon {
+    width: 45px;
+    height: 45px;
+    margin: 0 auto 10px auto; /* Центрируем по горизонтали */
+    filter: grayscale(0.5);
+}
+
+.unavailable-text {
+    font-size: 12px;
+    color: #a1a194;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* Эффект искажения при наведении */
+.tournament-item.unavailable:hover .unavailable-overlay {
+    background: rgba(44, 44, 44, 0.85);
+}
+
+.tournament-item.unavailable:hover .unavailable-text {
+    color: #ff6600;
+    animation: glitch 0.3s ease-in-out;
+}
+
+@keyframes glitch {
+    0% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-2px);
+    }
+    50% {
+        transform: translateX(2px);
+    }
+    75% {
+        transform: translateX(-1px);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+/* Делаем оригинальный контент полупрозрачным */
+.tournament-item.unavailable > *:not(.unavailable-overlay) {
+    opacity: 0.3;
+    filter: blur(1px);
+    pointer-events: none;
+}
+
+
+/* --------------------------------------------------- Стили для обновленного новостного блока */
+
+.news-item {
+    position: relative;
+    height: 400px;
+    margin-bottom: 30px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #2c2c2c;
+    border: 1px solid #464646;
+}
+
+.news-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    opacity: 0.7;
+    transition: opacity 0.4s ease-in-out;
+}
+
+.news-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.news-content-overlay {
+    position: absolute;
+    top: 0;
+    left: -50px;
+    width: 65%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+     /* Правильное значение для скошенного правого края */
+    transform: skew(15deg);
+    display: flex;
+    align-items: center;
+    transition: all 0.4s ease-in-out;
+}
+
+.news-content-wrapper {
+    transform: skew(-15deg);
+    position: relative; /* Меняем на relative */
+    left: 130px;
+    max-width: 500px;
+    padding: 20px 0; /* Добавляем вертикальные отступы */
+    transition: all 0.4s ease-in-out;
+}
+
+.news-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #f6efd9;
+    line-height: 1.3;
+    text-shadow: 2px 2px 3px rgb(0, 0, 0);
+    max-width: 450px;
+}
+
+.news-meta {
+    margin-bottom: 30px;
+}
+
+.news-source {
+    font-size: 12px;
+    color: #ff6600;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.news-excerpt {
+    font-size: 12px;
+    color: #a1a194;
+    line-height: 1.5;
+    margin: 25px 0 25px 0; /* Упрощаем отступы */
+}
+
+.news-actions {
+    margin-top: -10px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.news-details-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #f6efd9;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.news-details-btn:hover,
+.news-rate-btn:hover {
+    border-color: rgba(255, 102, 0, 1);
+    transform: translateY(-1px);
+}
+
+.news-rate-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.news-rate-btn img {
+    width: 15px;
+    height: 15px;
+    background: transparent;
+    filter: invert(89%) sepia(9%) saturate(267%) hue-rotate(9deg) brightness(102%) contrast(92%);
+}
+
+.news-content-overlay.expanded {
+    width: 100%;
+    left: 0;
+    transform: skew(0deg);
+    background: rgba(0, 0, 0, 0.85);
+}
+
+.news-content-overlay.expanded .news-content-wrapper {
+    transform: skew(0deg);
+    left: 50px;
+    max-width: 80%;
+}
+
+.news-content-overlay.expanded ~ .news-image img {
+    opacity: 0.3;
+}
+
+/* Стили для текста новости */
+.news-text {
+  transition: all 0.4s ease-in-out;
+  line-height: 1.5;
+}
+
+.news-text.excerpt {
+  font-size: 12px;
+  color: #a1a194;
+  width: 350px;
+  max-height: 60px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.news-text.full {
+  font-size: 12px;
+    color: #a1a194;
+  width: 100%;
+  max-width: 600px;
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+/* Стили для скроллбара полного текста */
+.news-text.full::-webkit-scrollbar {
+  width: 4px;
+}
+
+.news-text.full::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+.news-text.full::-webkit-scrollbar-thumb {
+  background: rgba(255, 102, 0, 0.5);
+  border-radius: 2px;
+}
+
+.news-text.full::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 102, 0, 0.7);
+}
+
+/* Адаптивность для расширенного состояния */
+@media (max-width: 768px) {
+  .news-content-overlay.expanded .news-content-wrapper {
+    left: 25px;
+    max-width: 85%;
+  }
+  
+  .news-content-overlay.expanded {
+    width: 100%;
+  }
+  
+  .news-text.excerpt {
+    width: 280px;
+    font-size: 11px;
+  }
+  
+  .news-text.full {
+    font-size: 13px;
+    max-height: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .news-content-overlay.expanded .news-content-wrapper {
+    left: 15px;
+    max-width: 90%;
+  }
+  
+  .news-text.excerpt {
+    width: 200px;
+    font-size: 11px;
+  }
+  
+  .news-text.full {
+    font-size: 12px;
+    max-height: 120px;
+  }
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+    .news-item {
+        height: 300px;
+    }
+    
+    .news-content-overlay {
+        width: 80%;
+        clip-path: polygon(10% 0%, 100% 0%, 100% 100%, 0% 100%);
+    }
+    
+    .news-content-wrapper {
+        margin-right: 20px;
+        max-width: 200px;
+    }
+    
+    .news-title {
+        font-size: 16px;
+    }
+    
+    .news-excerpt {
+        font-size: 12px;
+    }
+    
+    .news-actions {
+        gap: 10px;
+    }
+    
+    .news-details-btn {
+        padding: 8px 15px;
+        font-size: 11px;
+    }
+    
+    .news-rate-btn {
+        padding: 8px;
+    }
+    
+    .news-rate-btn img {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .news-item {
+        height: 250px;
+    }
+    
+    .news-content-overlay {
+        width: 85%;
+        padding: 0 15px;
+    }
+    
+    .news-content-wrapper {
+        margin-right: 15px;
+        max-width: 150px;
+    }
+    
+    .news-title {
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+    
+    .news-excerpt {
+        font-size: 11px;
+        margin-bottom: 15px;
+    }
+    
+    .news-source {
+        font-size: 10px;
+    }
+}
+
+/* Стили для новостного блока БЕЗ НОВОСТЕЙ */
+
+/* Стили для ошибки */
+.news-error {
+  text-align: center;
+  padding: 30px;
+  background: rgba(211, 47, 47, 0.1);
+  border: 1px solid #d32f2f;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.news-error p {
+  color: #f44336;
+  margin-bottom: 15px;
+}
+
+.retry-btn {
+  background: #ff6600;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.retry-btn:hover {
+  background: #e55d00;
+}
+
+/* Сообщение когда нет новостей */
+.no-news {
+  text-align: center;
+  padding: 40px;
+  color: #a1a194;
+  font-style: italic;
+}
+
+/* Кнопка обновления в заголовке */
+.refresh-btn {
+  background: transparent;
+  border: 1px solid #464646;
+  color: #a1a194;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.refresh-btn:hover:not(:disabled) {
+  border-color: #ff6600;
+  color: #ff6600;
+}
+
+.refresh-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Адаптивность для новых элементов */
+@media (max-width: 768px) {
+  .news-error {
+    padding: 20px;
+    margin: 15px 0;
+  }
+  
+  .retry-btn {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+  
+  .refresh-btn {
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+}

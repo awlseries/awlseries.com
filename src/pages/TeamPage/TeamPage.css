@@ -456,6 +456,9 @@
     color: #a1a194;
     cursor: not-allowed;
 }
+.team-right-column > .team-roster-block {
+    margin-top: 20px;
+}
 
 /* --------------------------------------------------------------------- Стили блоков команды без информации */
 /* Стили для пустого блока контактов с иконкой-кнопкой */
@@ -1517,4 +1520,180 @@
         width: 12px;
         height: 12px;
     }
+}
+
+/* ------------------------------------------------------------------------------ Стили для модального окна приглашения в команду */
+/* ------------------------------------------------------------------------------------------------------------------------------ */
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 25px;
+  border-bottom: 1px solid #464646;
+  background: rgba(34, 34, 34, 0.6);
+}
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+.modal-body {
+  padding: 25px;
+}
+.modal-title {
+  color: #f6efd9;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+}
+.modal-content-invite {
+  background: rgba(44, 44, 44, 0.95);
+  border-radius: 12px;
+  border: 1px solid #464646;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: #a1a194;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+  background: rgba(255, 102, 0, 0.1);
+  color: #ff6600;
+}
+
+/* Стили для поиска */
+.search-input-container {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+/* Стили для результатов поиска */
+.search-results {
+  min-height: 200px;
+}
+
+.loading-search {
+  text-align: center;
+  color: #a1a194;
+  padding: 40px 0;
+  font-style: italic;
+}
+
+.no-results, .search-hint {
+  text-align: center;
+  color: #7a7a6d;
+  padding: 40px 0;
+  font-style: italic;
+}
+
+/* Стили для карточки игрока в результатах */
+.player-search-result {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: rgba(34, 34, 34, 0.6);
+  border-radius: 8px;
+  border: 1px solid #464646;
+  margin-bottom: 10px;
+  transition: all 0.3s ease;
+}
+
+.player-search-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.player-class-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+}
+
+.player-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.player-nickname-search {
+  color: #f6efd9;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.player-name-search {
+  color: #a1a194;
+  font-size: 11px;
+}
+
+.invite-btn {
+  background: rgba(154, 205, 50, 0.2);
+  border: 1px solid rgba(154, 205, 50, 0.4);
+  color: #9acd32;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.invite-btn:hover {
+  background: rgba(154, 205, 50, 0.3);
+  border-color: rgba(154, 205, 50, 0.6);
+}
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px;
+  border-top: 1px solid #464646;
+  background: rgba(34, 34, 34, 0.8);
+}
+
+.cancel-btn {
+  background: rgba(70, 70, 70, 0.3);
+  border: 1px solid rgba(70, 70, 70, 0.5);
+  color: #a1a194;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancel-btn:hover {
+  background: rgba(70, 70, 70, 0.5);
+  border-color: rgba(70, 70, 70, 0.7);
+  color: #f6efd9;
 }

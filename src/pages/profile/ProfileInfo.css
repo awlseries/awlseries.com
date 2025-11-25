@@ -2,7 +2,6 @@
 
 .content-index {
   position: relative;
-  background-image: url('/images/other/profile-structure.webp');
   background-size: cover; /* или contain в зависимости от needs */
   background-position: center;
   background-repeat: no-repeat;
@@ -486,6 +485,65 @@ font-family: 'BlackOpsOne', 'BlackOpsOneType', sans-serif;
     gap: 30px;
 }
 
+/* Отключаем hover эффекты для выбора класса в публичном профиле */
+.public-profile-class-selector,
+.public-profile-class-selector .current-class,
+.public-profile-class-selector .class-options-row,
+.public-profile-class-selector .class-option {
+  pointer-events: none;
+  cursor: default;
+}
+
+/* Отключаем hover эффекты для возраста и статуса в публичном профиле */
+.public-profile-age-status {
+  pointer-events: none;
+  cursor: default;
+}
+
+/* ------------------------- Стили для статуса онлайн/офлайн -------------------------------------------- */
+/* ------------------------------------------------------------------------------------------------------ */
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 1px 8px;
+  border-radius: 12px;
+  background: rgba(34, 34, 34, 0.2);
+  border: 1px solid rgb(37, 37, 37);
+  margin-bottom: 5px;
+}
+
+.status-indicator.online .status-dot {
+  background-color: #22c55e;
+  box-shadow: 0 0 6px #22c55e;
+}
+
+.status-indicator.offline .status-dot {
+  background-color: #ef4444;
+  box-shadow: 0 0 6px #ef4444;
+}
+.section-title-with-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-indicator.online {
+  color: #22c55e;
+}
+
+.status-indicator.offline {
+  color: #e74c3c;
+}
+
+.status-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+
 /* ------------------------------------------------------- 2 блок профиля  */
 /* ----------------------------------------------------------------------- */
 
@@ -529,6 +587,87 @@ font-family: 'BlackOpsOne', 'BlackOpsOneType', sans-serif;
     flex: 1;
     line-height: 1.5;
 }
+
+/* --------------- Стили для турнирного блока (ЕСЛИ НАГРАД ЕЩЕ НЕТУ) -------------------- */
+/* -------------------------------------------------------------------------------------- */
+
+.mvp-rewards-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 20px;
+  text-align: center;
+}
+
+.empty-awards-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.empty-awards-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.empty-awards-title img {
+  opacity: 1;
+  width: 32px;
+  height: 32px;
+  filter: brightness(0) saturate(100%) invert(76%) sepia(5%) saturate(250%) hue-rotate(9deg) brightness(90%) contrast(90%);
+  background: rgba(178, 173, 156, 0.05);
+  border-radius: 50%;
+}
+
+.empty-awards-title p {
+  color: #b2ad9c;
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.empty-awards-text span {
+  color: #666;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* Загрузочный спиннер в блоке 2 */
+.mvp-rewards-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  margin-top: 30px;
+  text-align: center;
+}
+
+.mvp-reward-item.empty {
+  pointer-events: none;
+}
+
+.mvp-rewards-empty-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(34, 34, 34, 0.8);
+  border-radius: 8px;
+  text-align: center;
+  padding: 20px;
+}
+
 
 /* ------------------------------------- 3 и 4 блоки профиля ------------- */
 /* ----------------------------------------------------------------------- */
@@ -681,8 +820,8 @@ font-family: 'BlackOpsOne', 'BlackOpsOneType', sans-serif;
     }
 }
 
-/* ------------------------------------------------------ Стили для блока с кнопками */
-/* --------------------------------------------------------------------------------- */
+/* ------------------------------------------------------ Стили для блока меню с кнопками */
+/* -------------------------------------------------------------------------------------- */
 
 .stats-actions-container > .info-section:nth-child(2) {
     flex: 2; /* 40% - кнопки */
@@ -756,6 +895,58 @@ font-family: 'BlackOpsOne', 'BlackOpsOneType', sans-serif;
     text-overflow: ellipsis;
     text-align: center;
     width: 100%;
+}
+
+/* ---------------------------------------------------------------------- Стили для временно неактивных кнопок */
+/* ----------------------------------------------------------------------------------------------------------- */
+
+.action-btn.disabled {
+  cursor: not-allowed !important;
+  opacity: 0.4;
+  pointer-events: none;
+  color: #666 !important;
+  border-bottom: 1px solid #333 !important;
+}
+
+.action-btn.disabled:hover {
+  background: transparent !important;
+  color: #666 !important;
+  border-bottom: 1px solid #333 !important;
+}
+
+.action-btn.disabled .btn-text {
+  color: #666 !important;
+}
+
+/* Специфичные стили для последней кнопки (удаление) в неактивном состоянии */
+.action-btn:last-child.disabled {
+  border: 1px solid #666 !important;
+  color: #666 !important;
+}
+
+.action-btn:last-child.disabled:hover {
+  background: transparent !important;
+  color: #666 !important;
+  border: 1px solid #666 !important;
+}
+
+/* Стили для текста "В разработке" */
+.btn-text.disabled-text {
+  color: #666;
+}
+
+/* Индикатор "скоро" */
+.coming-soon-indicator {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: #ff6600;
+  color: #1a1a1a;
+  font-size: 8px;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-weight: bold;
+  text-transform: uppercase;
 }
 
 /* --------------------------------------- 6 блок достижений на всю ширину */
@@ -865,7 +1056,6 @@ font-family: 'BlackOpsOne', 'BlackOpsOneType', sans-serif;
 
 .avatar-display-container:hover .add-contacts-btn-icon:hover {
   opacity: 0.7;
-  transform: translate(-50%, -50%) scale(1.05);
 }
 
 /* Кнопки загрузки/удаления */

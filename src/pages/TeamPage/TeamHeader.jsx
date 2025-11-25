@@ -104,16 +104,20 @@ const TeamHeader = ({ team, userRole, captainName }) => {
         <h3 className="contacts-title">Контакты команды</h3>
         
         {!hasContacts && !isEditingContacts ? (
-          <div className="contacts-empty-state">
-            <button 
-              className="add-contacts-btn-icon" 
-              title="Добавить контакты"
-              onClick={handleEditContacts}
-            >
-              <img src="/images/icons/icon-add-data.png" alt="add-contacts-team-awl" />
-            </button>
-          </div>
-        ) : isEditingContacts ? (
+  <div className="contacts-empty-state">
+    {userRole === 'captain' ? (
+      <button 
+        className="add-contacts-btn-icon" 
+        title="Добавить контакты"
+        onClick={handleEditContacts}
+      >
+        <img src="/images/icons/icon-add-data.png" alt="add-contacts-team-awl" />
+      </button>
+    ) : (
+      <p className="empty-upcoming-subtext">Контактов не добавлено</p>
+    )}
+  </div>
+) : isEditingContacts ? (
           <TeamContactsEdit 
             contacts={contacts}
             onSave={handleSaveContacts}

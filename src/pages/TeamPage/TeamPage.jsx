@@ -103,7 +103,11 @@ const TeamPage = () => {
           
           {userRole === 'captain' && <TeamManagement team={team} />}
           
-          <TeamRoster team={team} userRole={userRole} />
+          <TeamRoster 
+          team={team} 
+          userRole={userRole} 
+          className={userRole === 'guest' ? 'guest-roster' : ''}
+        />
         </div>
       </div>
     </section>

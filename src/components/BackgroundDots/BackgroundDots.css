@@ -1,0 +1,89 @@
+/* Компонент динамических точек в пустых областях по краям */
+
+.advanced-background-dots {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  overflow: hidden;
+  
+  /* вид точек */
+  --dot-spacing: 25px;
+  --dot-size: 2px;
+  --dot-color: #a1a194;
+  --dot-opacity: 0.12;
+  --left-side-width: 0px;
+  --right-side-width: 0px;
+}
+
+/* Боковые области с точками */
+.left-dots {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: var(--left-side-width);
+  background-image: 
+    radial-gradient(circle, var(--dot-color) var(--dot-size), transparent var(--dot-size));
+  background-size: var(--dot-spacing) var(--dot-spacing);
+  background-position: right calc(var(--dot-spacing) / 2); /* Выравниваем по правому краю */
+  opacity: var(--dot-opacity);
+  transition: all 0.3s ease;
+}
+
+.right-dots {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: var(--right-side-width);
+  background-image: 
+    radial-gradient(circle, var(--dot-color) var(--dot-size), transparent var(--dot-size));
+  background-size: var(--dot-spacing) var(--dot-spacing);
+  background-position: left calc(var(--dot-spacing) / 2); /* Выравниваем по левому краю */
+  opacity: var(--dot-opacity);
+  transition: all 0.3s ease;
+}
+
+/* Вертикальные разделительные линии */
+.left-dots::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(to bottom, 
+    transparent 0%, 
+    rgba(161, 161, 148, 0.1) 50%, 
+    transparent 100%);
+}
+
+.right-dots::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(to bottom, 
+    transparent 0%, 
+    rgba(161, 161, 148, 0.1) 50%, 
+    transparent 100%);
+}
+
+/* На узких экранах скрываем точки */
+@media (max-width: 1024px) {
+  .advanced-background-dots {
+    --dot-opacity: 0.05;
+  }
+}
+
+@media (max-width: 768px) {
+  .advanced-background-dots {
+    display: none;
+  }
+}
