@@ -39,7 +39,7 @@
   margin-bottom: 20px;
 }
 
-.form-group label {
+.form-group-admin label {
   display: block;
   color: #f6efd9;
   margin-bottom: 8px;
@@ -47,8 +47,8 @@
   font-weight: 500;
 }
 
-.form-group input,
-.form-group textarea {
+.form-group-admin input,
+.form-group-admin textarea {
   width: 100%;
   padding: 10px;
   border: 1px solid #555;
@@ -58,8 +58,8 @@
   font-family: inherit;
 }
 
-.form-group input:focus,
-.form-group textarea:focus {
+.form-group-admin input:focus,
+.form-group-admin textarea:focus {
   outline: none;
   border-color: #ff6600;
 }
@@ -173,7 +173,7 @@
 }
 
 /* Улучшенные стили для формы */
-.form-group small {
+.form-group-admin small {
   color: #a1a194;
   font-size: 11px;
   margin-top: 5px;

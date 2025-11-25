@@ -197,7 +197,7 @@ const NewsAdmin = ({ onClose, onNewsUpdate }) => {
           <h3>➕ Создать новость</h3>
           
           <form onSubmit={handleSubmit}>
-            <div className="form-group">
+            <div className="form-group-admin">
               <label>Url-адрес (английскими буквами):</label>
               <input
                 type="text"
@@ -209,7 +209,7 @@ const NewsAdmin = ({ onClose, onNewsUpdate }) => {
               <small>Только английские буквы, цифры и дефисы</small>
             </div>
 
-            <div className="form-group">
+            <div className="form-group-admin">
               <label>Изображение:</label>
               <input
                 type="file"
@@ -235,7 +235,7 @@ const NewsAdmin = ({ onClose, onNewsUpdate }) => {
               </div>
             )}
 
-            <div className="form-group">
+            <div className="form-group-admin">
               <label>URL изображения (если не загружаете файл):</label>
               <input
                 type="text"
@@ -250,7 +250,7 @@ const NewsAdmin = ({ onClose, onNewsUpdate }) => {
             <div className="translation-section">
               <h4>🇷🇺 Русская версия *</h4>
               
-              <div className="form-group">
+              <div className="form-group-admin">
                 <label>Заголовок *:</label>
                 <input
                   type="text"
@@ -260,7 +260,7 @@ const NewsAdmin = ({ onClose, onNewsUpdate }) => {
                 />
               </div>
 
-              <div className="form-group">
+              <div className="form-group-admin">
                 <label>Краткое описание:</label>
                 <textarea
                   value={formData.translations.ru.excerpt}
@@ -269,7 +269,7 @@ const NewsAdmin = ({ onClose, onNewsUpdate }) => {
                 />
               </div>
 
-              <div className="form-group">
+              <div className="form-group-admin">
                 <label>Полный текст:</label>
                 <textarea
                   value={formData.translations.ru.full_text}
@@ -278,7 +278,7 @@ const NewsAdmin = ({ onClose, onNewsUpdate }) => {
                 />
               </div>
 
-              <div className="form-group">
+              <div className="form-group-admin">
                 <label>Источник:</label>
                 <input
                   type="text"
@@ -300,7 +300,7 @@ const NewsAdmin = ({ onClose, onNewsUpdate }) => {
           <div className="translation-section english-section">
             <h4>🇺🇸 English version</h4>
             
-            <div className="form-group">
+            <div className="form-group-admin">
               <label>Title:</label>
               <input
                 type="text"
@@ -309,7 +309,7 @@ const NewsAdmin = ({ onClose, onNewsUpdate }) => {
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group-admin">
               <label>Excerpt:</label>
               <textarea
                 value={formData.translations.en.excerpt}
@@ -318,7 +318,7 @@ const NewsAdmin = ({ onClose, onNewsUpdate }) => {
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group-admin">
               <label>Full text:</label>
               <textarea
                 value={formData.translations.en.full_text}
@@ -327,7 +327,7 @@ const NewsAdmin = ({ onClose, onNewsUpdate }) => {
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group-admin">
               <label>Source:</label>
               <input
                 type="text"
