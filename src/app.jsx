@@ -41,6 +41,43 @@ function AppContent() {
   const { isAdmin, loading: adminLoading, clearAdminCache, getCachedNews, invalidateNewsCache } = useAdminCache(user?.id);
 
   useEffect(() => {
+    const handleMagicLink = async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const token = urlParams.get('token');
+      const type = urlParams.get('type');
+      
+      if (token && type === 'magiclink') {
+        console.log('🔄 Processing Magic Link...');
+        
+        try {
+          // Верифицируем Magic Link токен
+          const { data, error } = await supabase.auth.verifyOtp({
+            token,
+            type: 'magiclink'
+          });
+
+          if (error) {
+            console.error('❌ Magic Link verification failed:', error);
+            return;
+          }
+
+          console.log('✅ Magic Link successful, session created');
+          
+          // Редирект на reset-password если нужно
+          if (window.location.pathname === '/') {
+            window.location.href = '/reset-password/';
+          }
+          
+        } catch (error) {
+          console.error('❌ Magic Link error:', error);
+        }
+      }
+    };
+
+    handleMagicLink();
+  }, []);
+  
+  useEffect(() => {
     let mounted = true;
 
     const getCurrentUser = async () => {

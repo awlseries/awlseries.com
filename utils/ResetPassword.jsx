@@ -22,66 +22,45 @@ const ResetPassword = () => {
     changeLanguage(lang);
   };
 
-  // Проверяем, что пользователь пришел по правильной ссылке сброса пароля
   useEffect(() => {
   const checkAccess = async () => {
     try {
-      console.log('🔵 Current URL:', window.location.href);
-      
-      // Сценарий 1: Прямой доступ с токеном в hash (после verify)
-      const hashParams = new URLSearchParams(window.location.hash.substring(1));
-      const accessToken = hashParams.get('access_token');
-      const type = hashParams.get('type');
-      
-      // Сценарий 2: Возможно, токен еще в query params (до verify)
       const urlParams = new URLSearchParams(window.location.search);
-      const verifyToken = urlParams.get('token');
-      const verifyType = urlParams.get('type');
-      const redirectTo = urlParams.get('redirect_to');
+      const token_hash = urlParams.get('token_hash');
+      const type = urlParams.get('type');
       
-      console.log('🔵 Hash access_token:', accessToken);
-      console.log('🔵 Hash type:', type);
-      console.log('🔵 Query token:', verifyToken);
-      console.log('🔵 Query type:', verifyType);
-      
-      // Если есть токен verify в query - это значит пользователь только что перешел по email ссылке
-      // Supabase еще не обработал verify и не перенаправил
-      if (verifyToken && verifyType === 'recovery' && redirectTo) {
-        console.log('🟡 Need to process verify URL first');
+      // Простая проверка - если есть токен в URL, показываем форму
+      if (token_hash && type === 'email') {
+        console.log('🟢 Token found in URL, showing reset form');
         
-        // Показываем загрузку пока Supabase обрабатывает verify
-        showSingleNotification('Проверка ссылки...');
-        return;
-      }
-      
-      // Если есть access_token в hash - значит verify прошел успешно
-      if (accessToken && type === 'recovery') {
-        console.log('🟢 Valid recovery token in hash');
+        // НЕБЛОКИРУЮЩАЯ попытка верификации (не ждем результат)
+        supabase.auth.verifyOtp({
+          token_hash,
+          type: 'email'
+        })
+        .then(({ data }) => {
+          if (data) console.log('✅ Background verification successful');
+        })
+        .catch(error => {
+          console.log('⚠️ Background verification failed, but form is shown');
+        });
+        
         setIsValidAccess(true);
-        setIsCheckingAccess(false);
-        return;
+      } else {
+        setError('Используйте ссылку из письма для сброса пароля');
       }
-      
-      // Если нет валидных параметров
-      console.log('🔴 No valid token found');
-      showSingleNotification(t('use_reset_link'), true);
-      setTimeout(() => {
-        window.location.href = '/forgot-password';
-      }, 3000);
       
     } catch (error) {
-      console.error('🔴 Access check error:', error);
-      showSingleNotification(t('session_expired'), true);
-      setTimeout(() => {
-        window.location.href = '/forgot-password';
-      }, 3000);
+      console.error('🔴 Unexpected error:', error);
+      // В случае любой ошибки все равно показываем форму
+      setIsValidAccess(true);
     } finally {
       setIsCheckingAccess(false);
     }
   };
 
   checkAccess();
-}, [t]);
+}, []);
 
   // Функции валидации (возвращают boolean)
   const validatePasswordRealTime = (value) => {

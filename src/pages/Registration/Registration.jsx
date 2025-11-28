@@ -577,9 +577,9 @@ const handlePasswordRecoverySubmit = async (e) => {
   }
 
   try {
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `https://awlseries.com/reset-password`,
-    });
+    const { error } = await supabase.auth.signInWithOtp({
+  email: email
+});
 
     if (error) {
       console.error('Supabase error:', error);
