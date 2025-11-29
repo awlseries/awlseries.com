@@ -263,13 +263,18 @@ const handleSkullClick = () => {
                 )}
 
                 {/* Кнопка выхода для верифицированных пользователей */}
-                {isAuthenticated && isEmailVerified && isAuthChecked && (
+                {isAuthenticated && isEmailVerified && isAuthChecked && (<>
+                <button 
+                    className="change-password-btn"
+                    onClick={() => navigate('/reset-password')}>
+                    {t('change_password_button')}
+                  </button>
                   <button 
                     className="logout-btn"
-                    onClick={handleLogout}
-                  >
+                    onClick={handleLogout}>
                     {t('logout_button')}
                   </button>
+                  </>
                 )}
               </div>
 

@@ -5,6 +5,7 @@ import { showSingleNotification } from '/utils/notifications';
 import Footer from '../src/components/footer/footer';
 import FeedbackModal from '../src/components/feedbackmodal/feedbackmodal.jsx';
 import './ResetPassword.css';
+import '../src/components/VerificationSuccess/VerificationSuccess.css';
 
 const ResetPassword = () => {
   const { currentLanguage, changeLanguage, t } = useLanguage();
@@ -22,45 +23,25 @@ const ResetPassword = () => {
     changeLanguage(lang);
   };
 
+  // проверяем активную сессию вместо токена
   useEffect(() => {
-  const checkAccess = async () => {
-    try {
-      const urlParams = new URLSearchParams(window.location.search);
-      const token_hash = urlParams.get('token_hash');
-      const type = urlParams.get('type');
-      
-      // Простая проверка - если есть токен в URL, показываем форму
-      if (token_hash && type === 'email') {
-        console.log('🟢 Token found in URL, showing reset form');
+    const checkAccess = async () => {
+      try {        
+        const { data: { session } } = await supabase.auth.getSession();
         
-        // НЕБЛОКИРУЮЩАЯ попытка верификации (не ждем результат)
-        supabase.auth.verifyOtp({
-          token_hash,
-          type: 'email'
-        })
-        .then(({ data }) => {
-          if (data) console.log('✅ Background verification successful');
-        })
-        .catch(error => {
-          console.log('⚠️ Background verification failed, but form is shown');
-        });
+        if (session?.user) {
+          setIsValidAccess(true);
+        }
         
-        setIsValidAccess(true);
-      } else {
-        setError('Используйте ссылку из письма для сброса пароля');
+      } catch (error) {
+        setError('Ошибка проверки доступа');
+      } finally {
+        setIsCheckingAccess(false);
       }
-      
-    } catch (error) {
-      console.error('🔴 Unexpected error:', error);
-      // В случае любой ошибки все равно показываем форму
-      setIsValidAccess(true);
-    } finally {
-      setIsCheckingAccess(false);
-    }
-  };
+    };
 
-  checkAccess();
-}, []);
+    checkAccess();
+  }, []);
 
   // Функции валидации (возвращают boolean)
   const validatePasswordRealTime = (value) => {
@@ -200,7 +181,24 @@ const ResetPassword = () => {
         </div>
         
         <div className="main-content-registration-reset-password">
+        <div className="verification-success-container">
+          <div className="success-icon">
+            <img src="/images/icons/awl-icon-error.png" alt="Invalid Access" />
+          </div>
+          <h1 className="success-title" style={{color: '#e74c3c'}}>
+            {t('verification_success.invalid_access')}
+          </h1>
+          <p className="success-message">
+            {t('error_invalid_access_message')}
+          </p>
+          <button 
+            className="success-btn"
+            onClick={() => window.location.href = '/'}
+          >
+            {t('main_page_link')}
+          </button>
         </div>
+      </div>
 
         <Footer 
           onFeedbackClick={() => setFeedbackOpen(true)} 

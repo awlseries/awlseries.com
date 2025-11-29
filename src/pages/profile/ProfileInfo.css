@@ -1,4 +1,19 @@
 /* --------------------------------------------------------------- Стили для контента PROFILE ------------------------------- */
+.error-message-id-profile {
+  text-align: center;
+}
+.error-message-id-profile p {
+  color: #ff6600; 
+  font-size: 12px;
+  padding-top: 5px;
+}
+.content-index-no-id {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  width: 100%;
+}
 
 .content-index {
   position: relative;

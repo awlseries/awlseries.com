@@ -16,6 +16,8 @@ export const translations = {
   confirm_new_password_placeholder: "Повторите новый пароль",
   password_updated: "Пароль успешно обновлен!",
   use_reset_link: '✗ Доступ запрещен, используйте ссылку из письма для сброса пароля',
+  change_password_button: "Смена пароля",
+  error_invalid_access_message: "Для смены пароля требуется авторизация",
   session_expired: '✗ Сессия истекла или недействительна',
 
   // СТРАНИЦА ПОДТВЕРЖДЕНИЯ EMAIL
@@ -285,6 +287,8 @@ export const translations = {
   confirm_new_password_placeholder: "Repeat new password",
   password_updated: "Password successfully updated!",
   use_reset_link: 'Access Denied, use the link from the email to reset your password',
+  change_password_button: "Change password",
+  error_invalid_access_message: "Authorization is required to change the password",
   session_expired: '✗ The session has expired or is invalid',
 
   // PAGE - VERIFICATION EMAIL

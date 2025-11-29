@@ -38,8 +38,6 @@ const PublicProfile = () => {
         
 
         if (data) {
-          console.log('Загруженные данные пользователя:', data); // ДЛЯ ОТЛАДКИ
-        console.log('Страна пользователя:', data.country); // ДЛЯ ОТЛАДКИ
           setUserData({
             ...data,
             stats: data.stats || null
@@ -50,8 +48,6 @@ const PublicProfile = () => {
             loadTeamData(data.team_id);
           }
         }
-      } catch (error) {
-        console.error('Ошибка загрузки публичного профиля:', error);
       } finally {
         setLoading(false);
       }
@@ -217,17 +213,10 @@ const PublicProfile = () => {
 
   if (!userData) {
     return (
-      <div className="content-index">
-        <div className="error-message" style={{ 
-          textAlign: 'center', 
-          padding: '50px',
-          color: '#f6efd9'
-        }}>
+      <div className="content-index-no-id">
+        <div className="error-message-id-profile">
           <h2>Профиль не найден</h2>
           <p>Пользователь с таким ID не существует</p>
-          <Link to="/" style={{ color: '#ff6600', textDecoration: 'none' }}>
-            Вернуться на главную
-          </Link>
         </div>
       </div>
     );
