@@ -1,4 +1,8 @@
 /* --------------------------------------------------------------- Стили для контента PROFILE ------------------------------- */
+.loading-profile {
+min-height: 50vh;
+}
+
 .error-message-id-profile {
   text-align: center;
 }

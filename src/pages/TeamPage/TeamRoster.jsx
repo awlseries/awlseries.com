@@ -172,7 +172,7 @@ const PlayerCard = ({
       <div className="player-photo" data-player={player.id}>
         <img 
           className="player-photo-position" 
-          src={player.photo_url || '/images/other/team-player-empty.png'} 
+          src={player.avatar_url || '/images/other/team-player-empty.png'} 
           alt={`Фото ${player.battlefield_nickname}`} 
         />
         

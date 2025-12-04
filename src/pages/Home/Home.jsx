@@ -12,7 +12,7 @@ const Home = ({ isAdmin, getCachedNews, invalidateNewsCache }) => {
   const [error, setError] = useState(null);
   const [showAdmin, setShowAdmin] = useState(false);
   const [newsCache, setNewsCache] = useState({});
-  
+  const { t } = useLanguage();
   const { currentLanguage } = useLanguage();
 
   const handleNewsUpdate = () => {
@@ -92,7 +92,7 @@ const Home = ({ isAdmin, getCachedNews, invalidateNewsCache }) => {
         <section className="hero-banner">
           <div className="maintenance-container">
             <img src="/images/icons/icon-processing-works.png" alt="technical-works" className="maintenance-icon" loading="eager" />
-            <div className="maintenance-text">Ведутся технические работы</div>
+            <div className="maintenance-text">{t('technical_works_title')}</div>
           </div>
         </section>
 
@@ -113,7 +113,7 @@ const Home = ({ isAdmin, getCachedNews, invalidateNewsCache }) => {
           <div className="tournaments-column">
             <div className="content-section">
               <div className="section-header">
-                <h2 className="section-title-home">Текущие турниры</h2>
+                <h2 className="section-title-home">{t('current_tournaments_title')}</h2>
               </div>
               <div className="tournaments-list">
                 {/* Первый турнир */}
@@ -236,7 +236,7 @@ const Home = ({ isAdmin, getCachedNews, invalidateNewsCache }) => {
             <div className="news-column">
               <div className="content-section">
                 <div className="section-header">
-                  <h2 className="section-title-home">Последние новости</h2>
+                  <h2 className="section-title-home">{t('last_news_title')}</h2>
                   
                   {/* Кнопка редактирования для админа */}
                   {isAdmin && (
@@ -293,7 +293,7 @@ const Home = ({ isAdmin, getCachedNews, invalidateNewsCache }) => {
                                   className="news-details-btn" 
                                   onClick={() => toggleNews(index)}
                                 >
-                                  {expandedNews === index ? 'Свернуть' : 'Детали'}
+                                  {expandedNews === index ? t('details_back_button') : t('details_button')}
                                 </button>
                                 <button className="news-rate-btn">
                                   <img src="/images/icons/icon-share.png" alt="share-icon" />

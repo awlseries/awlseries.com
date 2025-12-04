@@ -1,9 +1,9 @@
 // src/components/Footer/Footer.jsx
-import '/src/styles.css';
-import { useLanguage } from '/utils/language-context.jsx'; // Добавляем хук
+import './footer.css';
+import { useLanguage } from '/utils/language-context.jsx';
 
-const Footer = ({ onFeedbackClick }) => { // Убираем t из пропсов
-const { t } = useLanguage(); // Используем хук
+const Footer = ({ onFeedbackClick }) => {
+const { t } = useLanguage();
   
   const handleFeedbackClick = () => {
     // Блокируем скролл при открытии модального окна

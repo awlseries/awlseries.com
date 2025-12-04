@@ -170,7 +170,7 @@ const handleSkullClick = () => {
   } else if (isAuthenticated && !isEmailVerified) {
     showSingleNotification('✗ Подтвердите email для доступа к профилю', true);
   } else {
-    showSingleNotification('✗ Для доступа к профилю требуется авторизация', true);
+    showSingleNotification(t('notifications.authorization_required'), true);
   }
 };
 

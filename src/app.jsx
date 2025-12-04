@@ -20,6 +20,7 @@ const VerificationSuccess = lazy(() => import('./components/VerificationSuccess/
 const ResetPassword = lazy(() => import('/utils/ResetPassword'));
 const TeamPage = lazy(() => import('./pages/TeamPage/TeamPage'));
 const PublicProfile = lazy(() => import('./pages/profile/PublicProfile'));
+const TrackerApiTest = lazy(() => import('./components/Test/TrackerApiTest'));
 
 // Простой inline компонент для загрузки
 function LoadingFallback() {
@@ -242,6 +243,14 @@ function AppContent() {
               </Suspense>
             } 
           />
+          <Route 
+  path="/api-test" 
+  element={
+    <Suspense fallback={<LoadingFallback />}>
+      <TrackerApiTest />
+    </Suspense>
+  } 
+/>
         </Route>
       </>
     )

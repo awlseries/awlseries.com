@@ -12,6 +12,17 @@ Clean-param: ref /teams/
 Clean-param: sort /rating/
 Clean-param: filter /tournaments/
 
+# add permission JS/CSS
+Allow: /*.css$
+Allow: /*.js$
+
+# block dubbling content
+Disallow: /*?sort=
+Disallow: /*?filter=
+
+# Host adress
+Host: https://awlseries.com
+
 # Crawling delay
 Crawl-delay: 1
 

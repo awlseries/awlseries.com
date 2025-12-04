@@ -41,6 +41,20 @@
     <priority>0.7</priority>
   </url>
 
+  <!-- Команды -->
+  <url>
+  <loc>https://awlseries.com/team/{teamId}</loc>
+  <changefreq>weekly</changefreq>
+  <priority>0.7</priority>
+  </url>
+
+  <!-- Игроки -->
+  <url>
+  <loc>https://awlseries.com/player/{userId}</loc>
+  <changefreq>weekly</changefreq>
+  <priority>0.6</priority>
+  </url>
+
   <!-- Профиль (базовая страница) -->
   <url>
     <loc>https://awlseries.com/profile</loc>

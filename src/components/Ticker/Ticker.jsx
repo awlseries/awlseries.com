@@ -1,13 +1,15 @@
 // components/Ticker/Ticker.jsx
 import React from 'react';
 import '/src/styles.css';
+import { useLanguage } from '/utils/language-context.jsx';
 
 const Ticker = () => {
+  const { t } = useLanguage();
   const tickerData = [
-    'Открыт набор в команду дизайна и back/front-end разработки! Присоединяйся к Arena Warborn League',
-    'Осенью стартует первая серия турниров выходного дня « WKND CHALLENGE Series 24/25 »',
-    'Все вопросы сотрудничества через форму обратной связи',
-    'Ищешь команду? В разделе "Трансферы" найдешь напарников'
+    t('ticker.message1'),
+    t('ticker.message2'),
+    t('ticker.message3'),
+    t('ticker.message4')
   ];
 
   return (

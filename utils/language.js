@@ -178,8 +178,16 @@ export const translations = {
       feedback_success: 'Сообщение отправлено!',
       feedback_error: 'Ошибка отправки',
       logout_success: "Вы успешно вышли из системы",
+      authorization_required: "✗ Для доступа к профилю требуется авторизация",
       logout_error: "Ошибка при выходе из системы"
     },
+
+    // СТРАНИЦА ТРАНСФЕРОВ
+    last_news_title: 'Последние новости',
+    current_tournaments_title: 'Текущие турниры',
+    technical_works_title: 'Технические работы',
+    details_back_button: 'Свернуть',
+    details_button: 'Детали',
 
     // СТРАНИЦА ПРОФИЛЯ
     stats: {
@@ -191,6 +199,62 @@ export const translations = {
       wins: "Побед",
       losses: "Поражений",
       inDevelopment: "В разработке"
+    },
+
+    // СТРАНИЦА РЕЙТИНГА
+    rating: {
+      title: "Рейтинг игроков",
+      description: "Топ игроков Arena Warborn League по MMR и статистике",
+      search_placeholder: "Поиск игрока...",
+      search_button: "Поиск",
+      division_filter_all: "Все дивизионы",
+      division_filter_assault: "Штурмовик",
+      division_filter_special: "Спецназ", 
+      division_filter_vanguard: "Авангард",
+      my_position: "Моя позиция",
+      reset_filters: "Сбросить",
+      loading: "Загрузка...",
+      searching: "Поиск...",
+      
+      // Заголовки таблицы
+      rank: "#",
+      player: "Игрок",
+      team: "Команда",
+      mmr: "MMR",
+      kd: "K/D",
+      winrate: "Win Rate",
+      matches: "Матчи",
+      
+      // Сообщения
+      no_players: "Игроки не найдены",
+      loading_data: "Загрузка данных...",
+      filters_reset: "Фильтры сброшены",
+      players_found: "Найдено игроков: {count}",
+      no_players_found: "Игроки по вашему запросу не найдены",
+      
+      // Поиск позиции
+      enter_nickname: "Введите ваш игровой nickname для поиска в рейтинге:",
+      player_not_found: "Игрок с таким nickname не найден в рейтинге",
+      multiple_players_found: "Найдено несколько игроков:\n{players}\n\nВведите номер нужного игрока:",
+      invalid_choice: "Неверный выбор",
+      position_found: "Ваша позиция: #{position}\n{nickname} | MMR: {mmr}",
+      position_error: "Ошибка при поиске вашей позиции",
+      search_error: "Ошибка при поиске игрока",
+      
+      // Пагинация
+      prev_page: "Назад",
+      next_page: "Вперед",
+      
+      // Статусы команды
+      no_team: "Без команды"
+    },
+
+    // ТИКЕРЫ
+    ticker: {
+      message1: "Открыт набор в команду дизайна и back/front-end разработки! Присоединяйся к Arena Warborn League",
+      message2: "Осенью стартует первая серия турниров выходного дня « WKND CHALLENGE Series 24/25 »",
+      message3: "Все вопросы сотрудничества через форму обратной связи", 
+      message4: "Ищешь команду? В разделе 'Трансферы' найдешь напарников"
     },
 
     // СТРАНИЦА ТРАНСФЕРОВ
@@ -449,8 +513,16 @@ verification_success: {
       feedback_success: 'Message sent successfully!',
       feedback_error: 'Sending error',
       logout_success: "You have successfully logged out",
+      authorization_required: "✗ Authorization is required to access the profile",
       logout_error: "Logout error"
     },
+
+    // HOME PAGE
+    last_news_title: 'Last News',
+    current_tournaments_title: 'Current Tournaments',
+    technical_works_title: 'Technical work',
+    details_back_button: 'Back',
+    details_button: 'Details',
 
     // PROFILE PAGE
     stats: {
@@ -479,6 +551,62 @@ verification_success: {
     details: 'Details',
     loading: 'Loading players...',
     playerInfo: 'Player information',
+
+    // RATING PAGE
+    rating: {
+      title: "Player Ratings",
+      description: "Top Arena Warborn League players by MMR and statistics",
+      search_placeholder: "Search player...",
+      search_button: "Search",
+      division_filter_all: "All divisions",
+      division_filter_assault: "Assault",
+      division_filter_special: "Special Forces",
+      division_filter_vanguard: "Vanguard",
+      my_position: "My position",
+      reset_filters: "Reset",
+      loading: "Loading...",
+      searching: "Searching...",
+      
+      // Table headers
+      rank: "#",
+      player: "Player",
+      team: "Team",
+      mmr: "MMR",
+      kd: "K/D",
+      winrate: "Win Rate",
+      matches: "Matches",
+      
+      // Messages
+      no_players: "No players found",
+      loading_data: "Loading data...",
+      filters_reset: "Filters reset",
+      players_found: "Players found: {count}",
+      no_players_found: "No players found for your query",
+      
+      // Position search
+      enter_nickname: "Enter your gaming nickname to search in ratings:",
+      player_not_found: "Player with this nickname not found in ratings",
+      multiple_players_found: "Multiple players found:\n{players}\n\nEnter the number of the required player:",
+      invalid_choice: "Invalid choice",
+      position_found: "Your position: #{position}\n{nickname} | MMR: {mmr}",
+      position_error: "Error searching for your position",
+      search_error: "Error searching for player",
+      
+      // Pagination
+      prev_page: "Previous",
+      next_page: "Next",
+      
+      // Team statuses
+      no_team: "No team"
+    },
+
+    // TICKERS
+    ticker: {
+      message1: "Open recruitment for design and back/front-end development team! Join Arena Warborn League",
+      message2: "The first series of weekend tournaments « WKND CHALLENGE Series 24/25 » starts in autumn",
+      message3: "All cooperation questions through the feedback form",
+      message4: "Looking for a team? Find partners in the 'Transfers' section"
+    },
   
   // TEAMS PAGE
     teams: {

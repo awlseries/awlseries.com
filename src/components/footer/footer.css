@@ -1,0 +1,418 @@
+/* ----------------------------------------------------------------------- Стили футера ------------------------------------------------------------------------------- */
+
+.main-footer {
+    width: 100%;
+    height: 360px;
+    background-color: #2c2c2c;
+    box-shadow: 0 -23px 60px rgba(0, 0, 0, 1);
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid #444;
+    position: relative;
+}
+
+.main-footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/images/other/footer-bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.03; /* Прозрачность 10% */
+    z-index: -1;
+}
+
+.footer-container {
+       display: flex;
+       height: 100%;
+       margin: 0 auto;
+}
+.footer-block {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.footer-text {
+  color: #f6efd9;
+  line-height: 1.35; /* Уменьшаем межстрочный интервал */
+  font-size: 13px;
+  margin-left: 10px;
+}
+.footer-icon {
+  background: transparent;
+  width: 100px;
+  height: 123px;
+  margin-left: 15px;
+}
+.footer-content {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Уменьшаем расстояние между иконкой и текстом */
+}
+/* Окрашиваем "Arena Warborn League" в оранжевый */
+.footer-text strong, .footer-right-text strong {
+    color: #ff6600;
+    font-weight: 300;
+}
+/* Левый блок - ширина 480px */
+.footer-block:first-child {
+    flex: 0 0 480px;
+    max-width: 480px;
+    padding: 30px 20px; /* Уменьшаем отступы */
+}
+/* Правый блок - ширина 480px */
+.footer-block:last-child {
+    flex: 0 0 480px;
+    max-width: 480px;
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    gap: 30px; /* Расстояние между элементами */
+}
+/* Заголовок Правого блока*/
+.footer-right-title {
+    color: #f6efd9;
+    font-size: 24px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    text-align: center;
+    margin: 0;
+}
+/* Текст правого блока*/
+.footer-right-text {
+    color: #f6efd9;
+    font-size: 13px;
+    font-family: 'Open Sans', sans-serif;
+    text-align: center;
+    line-height: 1.35;
+    margin: 0;
+    max-width: 400px;
+}
+/* Контейнер для кнопок правого блока*/
+.footer-buttons {
+    display: flex;
+    gap: 50px;
+    justify-content: center;
+}
+/* Круглые кнопки правого блока 2 и 3*/
+.footer-button2, .footer-button3 {
+    width: 75px;
+    height: 75px;
+    border: 2px solid #f6efd9;
+    border-radius: 50%;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+/* Круглые кнопка 1 правого блока*/
+.footer-button1 {
+    width: 75px;
+    height: 75px;
+    border: 2px solid #f6efd9;
+    border-radius: 50%;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor:not-allowed;
+    transition: all 0.3s ease;
+    opacity: 0.4;
+}
+.footer-button2:hover, .footer-button3:hover {
+    border-color: #ff6600;
+    filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(1deg) brightness(118%) contrast(119%);
+}
+/* Иконка внутри кнопки 1*/
+.footer-button-icon1 {
+    margin-bottom: 5px;
+    width: 38px;
+    height: 34px;
+    background: transparent;
+    object-fit: contain;
+}
+/* Иконка внутри кнопки 2*/
+.footer-button-icon2 {
+    width: 36px;
+    height: 26px;
+    background: transparent;
+    object-fit: contain;
+}
+/* Иконка внутри кнопки 3*/
+.footer-button-icon3 {
+    width: 39px;
+    height: 29px;
+    background: transparent;
+    object-fit: contain;
+    margin-left: -4px;
+}
+/* Центральный блок с оранжевыми полосами */
+.footer-block:nth-child(2) {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
+}
+/* Контейнер для иконок центр блок*/
+.footer-icons {
+    display: flex;
+    gap: 60px; /* Расстояние между иконками */
+    align-items: center;
+    justify-content: center;
+    margin-top: 100px; /* Отступ между иконками и текстом */
+}
+/* Стили для иконок центр блок*/
+.footer-center-icon {
+    background: transparent;
+    object-fit: contain;
+    opacity: 0.3;
+}
+/* Контейнер для текста внизу центр блок*/
+.footer-bottom-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: auto;
+}
+/* Основной текст центр блок*/
+.footer-copyright {
+    color: #f6efd9;
+    font-size: 13px;
+    opacity: 0.5;
+    text-align: center;
+    margin: 0;
+}
+/* Текст с ссылками центр блок*/
+.footer-links {
+    color: #f6efd9;
+    font-size: 13px;
+    opacity: 0.5;
+    text-align: center;
+    margin: 0;
+}
+/* Нерабочая ссылка "Правила турнира"*/
+.footer-links strong {
+    opacity: 0.4;
+    font-weight: 100;
+}
+/* Стили для отдельных ссылок */
+.footer-link {
+    color: #f6efd9;
+    text-decoration: none;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+}
+
+.footer-link:hover {
+    opacity: 1;
+    color: #ff6600;
+    text-decoration: underline;
+}
+/* Оранжевые полосы по бокам центрального блока */
+.footer-block:nth-child(2)::before,
+.footer-block:nth-child(2)::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2px;
+    height: 200px;
+    background-color: #e75d00; /* Оранжевый цвет */
+}
+/* Левая полоса */
+.footer-block:nth-child(2)::before {
+    left: 0;
+}
+
+/* Правая полоса */
+.footer-block:nth-child(2)::after {
+    right: 0;
+}
+/* Контейнер основных элементов страницы регистрации */
+.main-content-registration {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 40px 20px;
+    position: relative;
+    min-height: 110vh;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 50vh;
+}
+
+.main-content {
+  flex: 1 0 auto; /* Занимает все доступное пространство */
+}
+
+/* -------------------------------------------- Модальное окно обратной связи --------------------------------------------------------------------------- */
+
+.feedback-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.feedback-modal.show {
+    opacity: 1;
+}
+
+.feedback-modal-content {
+    background: #2c2c2c;
+    padding: 50px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+    border: 2px solid #e75d00;
+}
+
+.feedback-close-btn {
+    position: absolute;
+    top: 7px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: #f6efd9;
+    cursor: pointer;
+    opacity: 0.2;
+    transition: opacity 0.3s ease;
+}
+
+.feedback-close-btn:hover {
+    opacity: 1;
+    color: #ff6600;
+}
+
+.feedback-modal h3 {
+    color: #f6efd9;
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.feedback-form .form-group {
+    margin-bottom: 20px;
+}
+
+.feedback-form label {
+    display: block;
+    color: #d0cbba;
+    margin-bottom: 6px;
+    font-size: 12px;
+}
+
+.feedback-form input,
+.feedback-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #424242;
+    border-radius: 5px;
+    background: #1a1a1a;
+    color: #ff6600;
+    font-family: 'Open Sans', sans-serif;
+    transition: all 0.3s ease; /* Добавляем плавный переход */
+}
+/* ОДИНАКОВОЕ ПОДСВЕЧИВАНИЕ ДЛЯ ВСЕХ ПОЛЕЙ ВВОДА ПРИ ФОКУСЕ */
+.feedback-form input:focus,
+.feedback-form textarea:focus {
+    outline: none;
+    border-color: #d0cbba;
+    box-shadow: 0 0 5px rgba(249, 249, 249, 0.4);
+}
+/* Стиль для placeholder в модальном окне */
+.feedback-form input::placeholder,
+.feedback-form textarea::placeholder {
+    color: #a0a0a0 !important;
+    opacity: 1 !important;
+    font-size: 10px !important;
+}
+
+.feedback-form textarea {
+    resize: vertical;
+    min-height: 200px;
+}
+
+.feedback-submit-btn {
+    width: 100%;
+    max-width: 256px;
+    padding: 12px;
+    background: #ff6600;
+    color: #e4e4e4;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    transition: background 0.3s ease;
+    opacity: 0.5;
+    display: block;
+    margin: 20px auto 0; /* Центрируем и добавляем отступ сверху */
+}
+
+.feedback-submit-btn:hover {
+    background: #ff6600;
+    opacity: 1;
+}
+
+.feedback-submit-btn:disabled {
+    background: #707070;
+    cursor: not-allowed;
+}
+
+/* Кнопка восстановления пароля */
+.recover-password-btn {
+  display: block;
+  width: 100%;
+  max-width: 214px; /* Ограничиваем максимальную ширину */
+  padding: 10px;
+  margin: 35px auto; /* Центрируем по горизонтали */ 
+  color: #d0cbba;
+  border: 1px solid #ff6600;
+  background: transparent;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  opacity: 0.4;
+}
+
+.recover-password-btn:hover {
+  opacity: 1;
+  transform: translateY(-2px);
+
+}
+
+.recover-password-btn:active {
+  transform: translateY(2px);
+}

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import SEO from '../../components/Seo/Seo';
 import { showSingleNotification } from '/utils/notifications';
 import { supabase } from '../../supabase';
+import { useLanguage } from '/utils/language-context.jsx';
 import './rating.css';
 
 const Rating = () => {
@@ -12,6 +13,7 @@ const Rating = () => {
   const [divisionFilter, setDivisionFilter] = useState('all');
   const [isLoading, setIsLoading] = useState(false);
   const [filteredPlayers, setFilteredPlayers] = useState([]);
+  const { t } = useLanguage();
 
   const playersPerPage = 20;
 
@@ -53,8 +55,7 @@ const Rating = () => {
       setFilteredPlayers(playersData || []);
       
     } catch (error) {
-      console.error('Ошибка загрузки данных:', error);
-      showSingleNotification('Ошибка загрузки данных. Пожалуйста, попробуйте позже.', 'error');
+      showSingleNotification(t('notifications.general_error'), 'error');
     } finally {
       setIsLoading(false);
     }
@@ -74,9 +75,9 @@ const Rating = () => {
     setFilteredPlayers(filtered);
 
     if (searchTerm && filtered.length === 0) {
-      showSingleNotification('Игроки по вашему запросу не найдены', 'warning');
+      showSingleNotification(t('rating.no_players_found'), 'warning');
     } else if (searchTerm) {
-      showSingleNotification(`Найдено игроков: ${filtered.length}`, 'success');
+      showSingleNotification(t('rating.players_found', { count: filtered.length }), 'success');
     }
   }, [searchTerm, players]);
 
@@ -104,15 +105,14 @@ const Rating = () => {
         findMyPositionByNickname();
       }
     } catch (error) {
-      console.error('Ошибка поиска позиции:', error);
-      showSingleNotification('Ошибка при поиске вашей позиции', 'error');
+      showSingleNotification(t('rating.position_error'), 'error');
     }
   }, []);
 
   // ----------------------------------------------------------------------------------------------- Поиск своей позиции (findMyPositionByNickname)
 
   const findMyPositionByNickname = useCallback(async () => {
-    const userNickname = prompt('Введите ваш игровой nickname для поиска в рейтинге:');
+    const userNickname = prompt(t('rating.enter_nickname'));
     
     if (!userNickname) return;
 
@@ -126,7 +126,7 @@ const Rating = () => {
       if (error) throw error;
       
       if (players.length === 0) {
-        showSingleNotification('Игрок с таким nickname не найден в рейтинге', 'error');
+        showSingleNotification(t('rating.player_not_found'), 'error');
         return;
       }
       
@@ -136,11 +136,11 @@ const Rating = () => {
           `${index + 1}. ${p.battlefield_nickname}${p.team && p.team !== 'free agent' ? ` (${p.team})` : ''}  - MMR: ${p.mmr}`
         ).join('\n');
         
-        const choice = prompt(`Найдено несколько игроков:\n${playerNames}\n\nВведите номер нужного игрока:`);
+        const choice = prompt(t('rating.multiple_players_found', { players: playerNames }));
         const index = parseInt(choice) - 1;
         
         if (isNaN(index) || index < 0 || index >= players.length) {
-          showSingleNotification('Неверный выбор', 'error');
+          showSingleNotification(t('rating.invalid_choice'), 'error');
           return;
         }
         
@@ -151,8 +151,7 @@ const Rating = () => {
       
       await scrollToPlayerPosition(player);
     } catch (error) {
-      console.error('Ошибка поиска по nickname:', error);
-      showSingleNotification('Ошибка при поиске игрока', 'error');
+      showSingleNotification(t('rating.search_error'), 'error');
     }
   }, []);
 
@@ -194,9 +193,7 @@ const Rating = () => {
       }
       
       showSingleNotification(
-        `Ваша позиция: #${myPosition}<br>${player.battlefield_nickname} | MMR: ${player.mmr}`, 
-        'success'
-      );
+        t('rating.position_found', { position: myPosition, nickname: player.battlefield_nickname, mmr: player.mmr }), 'success');
     }, 500);
   }, [currentPage, loadPlayersData, playersPerPage]);
 
@@ -205,7 +202,7 @@ const Rating = () => {
     setSearchTerm('');
     setDivisionFilter('all');
     loadPlayersData(1);
-    showSingleNotification('Фильтры сброшены', 'info');
+    showSingleNotification(t('rating.filters_reset'), 'info');
   }, [loadPlayersData]);
 
   // -------------------------------------------------------------------------------------------- Пагинация
@@ -322,7 +319,7 @@ const Rating = () => {
     </div>
   )}
   <div className="rating-team-name">
-    {player.team && player.team !== 'free agent' ? player.team : 'Без команды'}
+    {player.team && player.team !== 'free agent' ? player.team : t('rating.no_team')}
   </div>
 </div>
         <div className="rating-col-mmr">{player.mmr || 0}</div>
@@ -352,7 +349,7 @@ const Rating = () => {
               <input 
                 type="text" 
                 className="rating-player-search" 
-                placeholder="Поиск игрока..." 
+                placeholder={t('rating.search_placeholder')}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -366,20 +363,20 @@ const Rating = () => {
                 value={divisionFilter}
                 onChange={(e) => setDivisionFilter(e.target.value)}
               >
-                <option value="all">Все дивизионы</option>
-                <option value="assault">Тест</option>
-                <option value="special">Тест</option>
-                <option value="vanguard">Тест</option>
+                <option value="all">{t('rating.division_filter_all')}</option>
+                <option value="assault">{t('rating.division_filter_assault')}</option>
+                <option value="special">{t('rating.division_filter_special')}</option>
+                <option value="vanguard">{t('rating.division_filter_vanguard')}</option>
               </select>
               <button 
                 className="rating-my-position-btn" 
                 onClick={findMyPosition}
                 disabled={isLoading}
               >
-                {isLoading ? 'Поиск...' : 'Моя позиция'}
+                {isLoading ? t('rating.searching') : t('rating.my_position')}
               </button>
               <button className="rating-reset-filters" onClick={resetFilters}>
-                Сбросить
+                {t('rating.reset_filters')}
               </button>
             </div>
           </div>
@@ -387,12 +384,12 @@ const Rating = () => {
           <div className="rating-table-container">
             <div className="rating-table-header">
               <div className="rating-col-rank">#</div>
-              <div className="rating-col-player">Игрок</div>
-              <div className="rating-col-team">Команда</div>
-              <div className="rating-col-mmr">MMR</div>
-              <div className="rating-col-kd">K/D</div>
-              <div className="rating-col-winrate">Win Rate</div>
-              <div className="rating-col-matches">Матчи</div>
+              <div className="rating-col-player">{t('rating.player')}</div>
+              <div className="rating-col-team">{t('rating.team')}</div>
+              <div className="rating-col-mmr">{t('rating.mmr')}</div>
+              <div className="rating-col-kd">{t('rating.kd')}</div>
+              <div className="rating-col-winrate">{t('rating.winrate')}</div>
+              <div className="rating-col-matches">{t('rating.matches')}</div>
             </div>
             
             <div className="rating-table-body">
@@ -400,9 +397,9 @@ const Rating = () => {
                 <div className="loading-container">
                 <div className="spinner">
                   <div className="spinner-circle"></div></div>
-                <p>Загрузка данных...</p></div>
+                <p>{t('rating.loading_data')}</p></div>
               ) : filteredPlayers.length === 0 ? (
-                <div className="no-players-message">Игроки не найдены</div>
+                <div className="no-players-message">{t('rating.no_players')}</div>
               ) : (
                 filteredPlayers.map((player, index) => renderPlayerRow(player, index))
               )}
@@ -415,7 +412,7 @@ const Rating = () => {
               onClick={handlePrevPage}
               disabled={currentPage === 1 || isLoading}
             >
-              Назад
+              {t('rating.prev_page')}
             </button>
             <div className="rating-page-numbers">
               {renderPageNumbers()}
@@ -425,7 +422,7 @@ const Rating = () => {
               onClick={handleNextPage}
               disabled={currentPage === totalPages || isLoading}
             >
-              Вперед
+              {t('rating.next_page')}
             </button>
           </div>
         </div>
