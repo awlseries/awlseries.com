@@ -1,0 +1,6 @@
+{
+  "imports": {
+    "@std/http": "jsr:@std/http@^1.0.0",
+    "tesseract.js": "npm:tesseract.js@^5.1.0"
+  }
+}

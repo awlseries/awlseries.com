@@ -20,6 +20,7 @@ const VerificationSuccess = lazy(() => import('./components/VerificationSuccess/
 const ResetPassword = lazy(() => import('/utils/ResetPassword'));
 const TeamPage = lazy(() => import('./pages/TeamPage/TeamPage'));
 const PublicProfile = lazy(() => import('./pages/profile/PublicProfile'));
+const TournamentPage = lazy(() => import('./pages/tournaments/TournamentPage.jsx'));
 
 // Простой inline компонент для загрузки
 function LoadingFallback() {
@@ -191,6 +192,14 @@ function AppContent() {
             element={
               <Suspense fallback={<LoadingFallback />}>
                 <Tournaments />
+              </Suspense>
+            } 
+          />
+          <Route 
+            path="tournaments/:slug" 
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <TournamentPage />
               </Suspense>
             } 
           />

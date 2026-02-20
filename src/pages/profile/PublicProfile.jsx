@@ -8,6 +8,7 @@ import { useParams, Link } from 'react-router-dom';
 import './ProfileInfo.css';
 import SEO from '../../components/Seo/Seo';
 import MvpAwards from './MvpAwards';
+import PublicPlayerStats from './PublicPlayerStats';
 import useUserStatus from '/utils/useUserStatus';
 
 
@@ -40,7 +41,8 @@ const PublicProfile = () => {
         if (data) {
           setUserData({
             ...data,
-            stats: data.stats || null
+            stats: data.stats || null,
+            contacts: data.contacts || {}
           });
           setSelectedCountry(data.country || 'EMPTY');
 
@@ -119,7 +121,7 @@ const PublicProfile = () => {
     let yearsText = 'лет';
     if (age % 10 === 1 && age % 100 !== 11) yearsText = 'год';
     else if ([2,3,4].includes(age % 10) && ![12,13,14].includes(age % 100)) yearsText = 'года';
-    return `${age} ${yearsText}`;
+    return t('age.years', { count: age, form: yearsText });
   };
 
   const getPlayerStatus = () => {
@@ -206,7 +208,7 @@ const PublicProfile = () => {
         <div className="spinner">
           <div className="spinner-circle"></div>
         </div>
-        <p>Загрузка профиля...</p>
+        <p>{t('loading_text')}</p>
       </div>
     </div>;
   }
@@ -215,8 +217,8 @@ const PublicProfile = () => {
     return (
       <div className="content-index-no-id">
         <div className="error-message-id-profile">
-          <h2>Профиль не найден</h2>
-          <p>Пользователь с таким ID не существует</p>
+          <h2>{t('profile.notFound')}</h2>
+          <p>{t('profile.userNotFound')}</p>
         </div>
       </div>
     );
@@ -229,7 +231,7 @@ const PublicProfile = () => {
     <>
       <SEO 
         title={`${userData.battlefield_nickname || 'Player'} - AWL Battlefield 6 Profile`}
-        description={`Профиль игрока ${userData.battlefield_nickname || ''} в Arena Warborn League. Статистика, достижения и рейтинг в Battlefield 6.`}
+        description={`${t('profile.seoDescription', { nickname: userData.battlefield_nickname || '' })}`}
         keywords={`${userData.battlefield_nickname}, bf6 profile, player statistics, AWL, Arena Warborn League`}
         canonicalUrl={`/player/${userId}`}
       />
@@ -248,10 +250,10 @@ const PublicProfile = () => {
               {/* Первый блок - Игрок */}
               <div className="info-section">
                 <div className="section-title-with-status">
-                  <h3 className="section-title">Игрок</h3>
+                  <h3 className="section-title">{t('player.player')}</h3>
                   <div className={`status-indicator ${isUserOnline ? 'online' : 'offline'}`}>
                     <span className="status-dot"></span>
-                    {isUserOnline ? 'Online' : 'Offline'}
+                    {isUserOnline ? t('player.online') : t('player.offline')}
                   </div>
                 </div>
                 <div className="info-block first-block">
@@ -260,14 +262,14 @@ const PublicProfile = () => {
                     <div className="nickname-container">
                       <div className="nickname-display-container">
                         <span className="name-player-style">
-                          {userData.battlefield_nickname || 'Ник не указан'}
+                          {userData.battlefield_nickname || t('nickname.empty')}
                         </span>
                       </div>
                     </div>
 
                     {/* Контейнер для класса игрока */}
                     <div className="class-selector-container">
-                      <span className="class-label">Класс:</span>
+                      <span className="class-label">{t('player.class')}:</span>
                       <div className="class-selector public-profile-class-selector">
                         <div className="current-class">
                           <img 
@@ -288,7 +290,6 @@ const PublicProfile = () => {
                           <Suspense fallback={
                             <div style={{
                               width: '30px',
-                              height: '23px',
                               backgroundColor: '#b2ad9c',
                               display: 'flex',
                               alignItems: 'center',
@@ -304,11 +305,9 @@ const PublicProfile = () => {
                               code={selectedCountry} 
                               style={{ 
                               width: '30px',
-                              height: '23px',
                               borderRadius: '2px',
                               objectFit: 'cover',
                               display: 'block',
-                              marginRight: '15px'
                           }}
                           title={userData.countryName || getCountryName(selectedCountry)}
                           />
@@ -316,7 +315,6 @@ const PublicProfile = () => {
                         ) : (
                           <div style={{
                             width: '30px',
-                            height: '23px',
                             backgroundColor: '#b2ad9c',
                             display: 'flex',
                             alignItems: 'center',
@@ -342,7 +340,7 @@ const PublicProfile = () => {
                           color: '#f6efd9',
                           lineHeight: '1.2'
                         }}>
-                          {userData.fullname || 'Имя не указано'}
+                          {userData.fullname || t('player.fullnameNotSet')}
                         </span>
                       </div>
                     </div>
@@ -350,8 +348,8 @@ const PublicProfile = () => {
                     <div className="age-and-status-container">
                       {/* Возраст */}
                       <span className="age-and-status-player-style public-profile-age-status">
-                        <span className="class-label">Возраст:</span>
-                        {age ? displayAge(age) : 'Не указан'}
+                        <span className="class-label">{t('player.age')}:</span>
+                        {age ? displayAge(age) : t('age.notSet')}
                       </span>
                       
                       {/* Статус игрока */}
@@ -359,7 +357,7 @@ const PublicProfile = () => {
                         className="age-and-status-player-style" 
                         style={{ color: playerStatus.color }}
                       >
-                        <span className="class-label">Команда:</span>
+                        <span className="class-label">{t('player.team')}:</span>
                         {playerStatus.text}
                       </span>
                     </div>
@@ -381,7 +379,7 @@ const PublicProfile = () => {
                 </div>
                 
                 <div className="info-section">
-                  <h3 className="section-title">Дивизион</h3>
+                  <h3 className="section-title">{t('division')}</h3>
                   <div className="svg-division-container">
                     <svg className="svg-division-block" viewBox="0 0 302 92" preserveAspectRatio="none">
                       <path 
@@ -393,7 +391,7 @@ const PublicProfile = () => {
                       />
                     </svg>
                     <div className={`svg-division-content ${userData.division === "calibration" ? "calibration" : ""}`}>
-                      {userData.division === "calibration" ? "Калибровка" : userData.division}
+                      {userData.division === "calibration" ? t('calibration') : userData.division}
                     </div>
                   </div>
                 </div>
@@ -402,14 +400,14 @@ const PublicProfile = () => {
 
             {/* Блок для фото и контактов */}
             <div className="fade-block-container">
-              <h3 className="section-title">Контакты</h3>
+              <h3 className="section-title">{t('contacts')}</h3>
               <div className="contacts-profile-block">
                 <div className="contacts-container">
                   {/* Steam */}
                   <div 
                     className={`contact-block ${!userData.contacts?.steam ? 'disabled' : ''}`}
                     onClick={() => userData.contacts?.steam && handleContactClick('steam', userData.contacts.steam)}
-                    title={userData.contacts?.steam ? "Перейти в Steam" : "Контакт не указан"}
+                    title={userData.contacts?.steam ? t('goToSteam') : t('contactNotSet')}
                   >
                     <span className="contact-name">Steam</span>
                     <img src="/images/icons/icon-profile-steam.png" alt="Steam" className="contact-icon"/>
@@ -419,7 +417,7 @@ const PublicProfile = () => {
                   <div 
                     className={`contact-block middle ${!userData.contacts?.telegram ? 'disabled' : ''}`}
                     onClick={() => userData.contacts?.telegram && handleContactClick('telegram', userData.contacts.telegram)}
-                    title={userData.contacts?.telegram ? "Перейти в Telegram" : "Контакт не указан"}
+                    title={userData.contacts?.telegram ? t('goToTelegram') : t('contactNotSet')}
                   >
                     <span className="contact-name">Telegram</span>
                     <img src="/images/icons/icon-profile-telegram.png" alt="Telegram" className="contact-icon"/>
@@ -429,7 +427,7 @@ const PublicProfile = () => {
                   <div 
                     className={`contact-block ${!userData.contacts?.whatsapp ? 'disabled' : ''}`}
                     onClick={() => userData.contacts?.whatsapp && handleContactClick('whatsapp', userData.contacts.whatsapp)}
-                    title={userData.contacts?.whatsapp ? "Перейти в WhatsApp" : "Контакт не указан"}
+                    title={userData.contacts?.whatsapp ? t('goToWhatsApp') : t('contactNotSet')}
                   >
                     <span className="contact-name">WhatsApp</span>
                     <img src="/images/icons/icon-profile-whatsup.png" alt="WhatsApp" className="contact-icon"/>
@@ -442,7 +440,7 @@ const PublicProfile = () => {
                 <div className="avatar-container">
                   <img 
                     src={userData.avatar_url || '/images/other/team-player-empty.png'}
-                    alt="Аватар игрока" 
+                    alt={t('player.avatar')} 
                     className="masked-image"
                   />
                 </div></div>
@@ -452,72 +450,29 @@ const PublicProfile = () => {
 
           {/* Блок статистики и действий */}
           <div className="stats-actions-container">
-            <div className="info-section">
-              <h3 className="section-title">Статистика</h3>
-              <div className="info-block">
-                <div className="stats-container">
-                  <div className="stats-column">
-                    <div className="stat-item">
-                      <span className="stat-label">{t('stats.kdRatio')}</span>
-                      <span className="stat-value">{userData.stats?.kdRatio ?? t('stats.notAvailable')}</span>
-                    </div>
-                    <div className="stat-item">
-                      <span className="stat-label">{t('stats.winRate')}</span>
-                      <span className="stat-value">{userData.stats?.winRate ? `${userData.stats.winRate}%` : t('stats.notAvailable')}</span>
-                    </div>
-                    <div className="stat-item">
-                      <span className="stat-label">{t('stats.playTime')}</span>
-                      <span className="stat-value">{userData.stats?.playTime ?? t('stats.notAvailable')}</span>
-                    </div>
-                    <div className="stat-item">
-                      <span className="stat-label">{t('stats.favoriteWeapon')}</span>
-                      <span className="stat-value">{userData.stats?.favoriteWeapon ?? t('stats.notAvailable')}</span>
-                    </div>
-                  </div>
-                  
-                  <div className="stats-column">
-                    <div className="stat-item">
-                      <span className="stat-label">{t('stats.wins')}</span>
-                      <span className="stat-value">{userData.stats?.wins ?? t('stats.notAvailable')}</span>
-                    </div>
-                    <div className="stat-item">
-                      <span className="stat-label">{t('stats.losses')}</span>
-                      <span className="stat-value">{userData.stats?.losses ?? t('stats.notAvailable')}</span>
-                    </div>
-                    <div className="stat-item">
-                      <span className="stat-label">В разработке</span>
-                      <span className="stat-value">{t('stats.notAvailable')}</span>
-                    </div>
-                    <div className="stat-item">
-                      <span className="stat-label">В разработке</span>
-                      <span className="stat-value">{t('stats.notAvailable')}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <PublicPlayerStats stats={userData.stats} />
 
             {/* Блок меню кнопок - для гостя */}
             <div className="info-section">
               <div className="info-block">
                 <div className="action-buttons-container">
                   <button className="action-btn">
-                    <span className="btn-text">В избранное</span>
+                    <span className="btn-text">{t('actionButtons.addToFavorites')}</span>
                   </button>
                   <button className="action-btn">
-                    <span className="btn-text">Пожаловаться</span>
+                    <span className="btn-text">{t('actionButtons.report')}</span>
                   </button>
                   <button className="action-btn disabled">
-                    <span className="btn-text disabled-text">В разработке</span>
-                    <span className="coming-soon-indicator">Скоро</span>
+                    <span className="btn-text disabled-text">{t('actionButtons.message')}</span>
+                    <span className="coming-soon-indicator">{t('comingSoon')}</span>
                   </button>
                   <button className="action-btn disabled">
-                    <span className="btn-text disabled-text">В разработке</span>
-                    <span className="coming-soon-indicator">Скоро</span>
+                    <span className="btn-text disabled-text">{t('actionButtons.block')}</span>
+                    <span className="coming-soon-indicator">{t('comingSoon')}</span>
                   </button>
                   <button className="action-btn disabled">
-                    <span className="btn-text disabled-text">В разработке</span>
-                    <span className="coming-soon-indicator">Скоро</span>
+                    <span className="btn-text disabled-text">{t('actionButtons.inviteToTeam')}</span>
+                    <span className="coming-soon-indicator">{t('comingSoon')}</span>
                   </button>
                 </div>
               </div>
@@ -526,27 +481,14 @@ const PublicProfile = () => {
 
           {/* Блок достижений */}
           <div className="info-section achievements-section">
-            <h3 className="section-title">Достижения</h3>
+            <h3 className="section-title">{t('achievements')}</h3>
             <div className="info-block achievements-block">
               <div className="achievements-row">
-                <div className="achievement-item">
-                  <img src="/images/icons/icon-not-information.png" className="achievement-icon" alt="Достижение 1"/>
-                </div>
-                <div className="achievement-item">
-                  <img src="/images/icons/icon-not-information.png" className="achievement-icon" alt="Достижение 2"/>
-                </div>
-                <div className="achievement-item">
-                  <img src="/images/icons/icon-not-information.png" className="achievement-icon" alt="Достижение 3"/>
-                </div>
-                <div className="achievement-item">
-                  <img src="/images/icons/icon-not-information.png" className="achievement-icon" alt="Достижение 4"/>
-                </div>
-                <div className="achievement-item">
-                  <img src="/images/icons/icon-not-information.png" className="achievement-icon" alt="Достижение 5"/>
-                </div>
-                <div className="achievement-item">
-                  <img src="/images/icons/icon-not-information.png" className="achievement-icon" alt="Достижение 6"/>
-                </div>
+                {[1,2,3,4,5,6].map(i => (
+                  <div key={i} className="achievement-item">
+                    <img src="/images/icons/icon-not-information.png" className="achievement-icon" alt={`${t('achievement')} ${i}`}/>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

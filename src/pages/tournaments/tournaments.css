@@ -3,7 +3,7 @@
 
 .tournament-container {
     max-width: 1300px;
-    margin: 100px auto;
+    margin: 50px auto;
     width: 100%;
     border: 1px solid #464646;
     border-radius: 12px;
@@ -79,6 +79,24 @@
     transform: translateY(-1px);
 }
 
+.join-tournament-btn.disabled {
+  background: rgba(70, 70, 70, 0.5);
+  border: 1px solid #464646;
+  color: #a1a194;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.join-tournament-btn.disabled:hover {
+  background: rgba(70, 70, 70, 0.5);
+  border-color: #464646;
+  transform: none;
+}
+
+.join-tournament-btn.disabled .icons-tournaments {
+  filter: grayscale(1) brightness(0.5);
+}
+
 /* --------------------------------------- Стили для второго горизонатльного блока */
 
 .tournament-middle-block {
@@ -110,7 +128,7 @@
     flex-direction: row;
 }
 .mini-block:nth-child(3) {
-    min-width: 210px;
+    min-width: 260px;
 }
 
 /* Левая часть мини-блока */
@@ -209,7 +227,6 @@
     margin-left: 0; /* Первый круг без отступа */
 }
 .team-icon-circle:last-child {
-    margin-right: 8px; /* Первый круг без отступа */
     border: none;
     background-color: #464646;
 }
@@ -224,6 +241,80 @@
     font-family: 'BlackOpsOne', 'BlackOpsOneType', sans-serif;
     font-size: 16px;
     color: #ff6600;
+}
+
+/* кружки вопросов, когда команд нету */
+.question-mark {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #a1a194;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Можно добавить дополнительный стиль для кружков со знаками вопроса */
+.team-icon-circle:has(.question-mark) {
+  background-color: #464646;
+  border-color: #5b605f;
+}
+
+/* Статус "Черновик" - оставляем как есть */
+.tournament-page-status.status-draft {
+  color: #a1a194;
+  background-color: #3c3c3c;
+  border: 1px solid #464646;
+}
+
+/* Статус "Скоро" - оранжевый */
+.tournament-page-status.status-upcoming {
+  color: #ff9800;
+  background-color: rgba(255, 152, 0, 0.1);
+  border: 1px solid rgba(255, 152, 0, 0.3);
+}
+
+/* Статус "Регистрация открыта" - синий */
+.tournament-page-status.status-registration {
+  color: #2196f3;
+  background-color: rgba(33, 150, 243, 0.1);
+  border: 1px solid rgba(33, 150, 243, 0.3);
+}
+
+/* Статус "Активный" - красный с анимацией */
+.tournament-page-status.status-live {
+  color: #f44336;
+  background-color: rgba(244, 67, 54, 0.1);
+  border: 1px solid rgba(244, 67, 54, 0.3);
+  animation: pulse 2s infinite;
+}
+
+/* Статус "Завершен" - зеленый */
+.tournament-page-status.status-completed {
+  color: #4caf50;
+  background-color: rgba(76, 175, 80, 0.1);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+/* Статус "Отменен" - серый как черновик */
+.tournament-page-status.status-cancelled {
+  color: #a1a194;
+  background-color: #3c3c3c;
+  border: 1px solid #464646;
+}
+/* Анимация пульсации для live статуса */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(244, 67, 54, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(244, 67, 54, 0);
+  }
 }
 
 /* ---------------------------- ТРЕТИЙ ГОРИЗОНТАЛЬНЫЙ БЛОК */
@@ -308,11 +399,9 @@
 }
 
 .partner-icon {
-    width: 80px;
-    height: 80px;
+    height: 50px;
     background: transparent;
     object-fit: contain;
-    opacity: 0.3;
 }
 
 .partner-icon:hover {
@@ -996,4 +1085,783 @@ opacity: 1;
         grid-template-columns: 1fr;
         gap: 12px;
     }
+}
+
+/* ------------------------------------------------------------ АДМИН-ПАНЕЛЬ ТУРНИРОВ --------------------------------------- */
+/* -------------------------------------------------------------------------------------------------------------------------- */
+
+/* Мини-админ панель (плашка сверху) */
+.tournament-admin-panel {
+    max-width: 1300px;
+    margin: 20px auto 0;
+    background: rgba(34, 34, 34, 0.98);
+    border: 1px solid #464646;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.admin-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    background: linear-gradient(135deg, rgba(255, 102, 0, 0.1), rgba(255, 102, 0, 0.05));
+}
+
+.admin-panel-header h3 {
+    color: #ff6600;
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-panel-actions {
+    display: flex;
+    gap: 12px;
+}
+
+/* Кнопка Редактировать */
+.admin-edit-btn {
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #ff6600, #e55d00);
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 2px 10px rgba(255, 102, 0, 0.3);
+}
+
+.admin-edit-btn:hover {
+    background: linear-gradient(135deg, #e55d00, #cc5400);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 102, 0, 0.4);
+}
+
+/* Оверлей для полной админки (TournamentAdmin) */
+.full-admin-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 10000;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+/* Стили для контейнера админки в оверлее */
+.full-admin-overlay .tournament-admin {
+    margin: 0;
+    width: 100%;
+    max-width: 1200px;
+    animation: slideIn 0.3s ease;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Анимация появления полной админки */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Кнопка закрытия полной админки (крестик в правом верхнем углу) */
+.full-admin-close-btn {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    z-index: 10001;
+    background: rgba(34, 34, 34, 0.9);
+    border: 1px solid #464646;
+    color: #f6efd9;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.full-admin-close-btn:hover {
+    background: rgba(255, 102, 0, 0.2);
+    border-color: #ff6600;
+    color: #ff6600;
+    transform: scale(1.1);
+}
+
+/* блок партнеров */
+.partner-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.partner-inputs input {
+  padding: 8px 12px;
+  border: 1px solid #464646;
+  border-radius: 6px;
+  background: rgba(44, 44, 44, 0.8);
+  color: #f6efd9;
+}
+
+.file-upload {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.file-upload-label {
+  cursor: pointer;
+}
+
+.file-upload-btn {
+  display: inline-block;
+  padding: 8px 16px;
+  background: rgba(255, 102, 0, 0.2);
+  border: 1px solid rgba(255, 102, 0, 0.4);
+  border-radius: 6px;
+  color: #ff6600;
+  transition: all 0.3s ease;
+}
+
+.file-upload-btn:hover {
+  background: rgba(255, 102, 0, 0.3);
+}
+
+.btn-upload-logo {
+  padding: 8px 16px;
+  background: rgba(76, 175, 80, 0.2);
+  border: 1px solid rgba(76, 175, 80, 0.4);
+  border-radius: 6px;
+  color: #4CAF50;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-upload-logo:hover:not(:disabled) {
+  background: rgba(76, 175, 80, 0.3);
+}
+
+.btn-upload-logo:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.logo-preview {
+  margin-top: 10px;
+  padding: 10px;
+  background: rgba(44, 44, 44, 0.6);
+  border-radius: 8px;
+  border: 1px solid #464646;
+}
+
+.partners-list {
+  margin-top: 20px;
+}
+
+.partner-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px;
+  background: rgba(44, 44, 44, 0.6);
+  border-radius: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #464646;
+}
+
+.partner-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.partner-info small {
+  color: #a1a194;
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.btn-remove-partner {
+  background: rgba(244, 67, 54, 0.2);
+  border: 1px solid rgba(244, 67, 54, 0.4);
+  color: #f44336;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-remove-partner:hover {
+  background: rgba(244, 67, 54, 0.3);
+}
+
+.btn-add-partner {
+  padding: 10px 20px;
+  background: rgba(33, 150, 243, 0.2);
+  border: 1px solid rgba(33, 150, 243, 0.4);
+  border-radius: 6px;
+  color: #2196f3;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: all 0.3s ease;
+}
+
+.btn-add-partner:hover:not(:disabled) {
+  background: rgba(33, 150, 243, 0.3);
+}
+
+.btn-add-partner:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ------------------------------------------ Сектор добавления баннера турнира */
+
+.file-upload-group {
+  margin-bottom: 15px;
+}
+
+.file-upload-label {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.file-upload-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background: rgba(255, 102, 0, 0.2);
+  border: 1px solid rgba(255, 102, 0, 0.4);
+  border-radius: 6px;
+  color: #ff6600;
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+.file-upload-btn:hover {
+  background: rgba(255, 102, 0, 0.3);
+}
+
+.btn-upload-banner {
+  padding: 10px 20px;
+  background: rgba(33, 150, 243, 0.2);
+  border: 1px solid rgba(33, 150, 243, 0.4);
+  border-radius: 6px;
+  color: #2196f3;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+.btn-upload-banner:hover:not(:disabled) {
+  background: rgba(33, 150, 243, 0.3);
+}
+
+.btn-upload-banner:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.banner-preview {
+  overflow: hidden;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.banner-preview img {
+  width: 300px;
+  max-height: 400px;
+  object-fit: cover;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .admin-panel-header {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+    }
+    
+    .admin-panel-actions {
+        justify-content: center;
+    }
+    
+    .admin-edit-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .full-admin-overlay {
+        padding: 10px;
+    }
+    
+    .full-admin-close-btn {
+        top: 15px;
+        right: 15px;
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .full-admin-overlay {
+        padding: 5px;
+    }
+    
+    .full-admin-close-btn {
+        top: 10px;
+        right: 10px;
+        width: 35px;
+        height: 35px;
+    }
+}
+
+/* ------------------------------------------------------------ КАРТОЧКИ ТУРНИРОВ --------------------------------------- */
+
+.tournaments-page {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.tournaments-header {
+  text-align: center;
+  margin: 10px 0 50px;
+  padding: 0 20px;
+}
+
+.tournaments-header h1 {
+  color: #ff6600;
+  font-family: 'BlackOpsOne', sans-serif;
+  font-size: 42px;
+  margin-bottom: 15px;
+  letter-spacing: 1px;
+}
+
+.tournaments-header p {
+  color: #a1a194;
+  font-size: 18px;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Сетка карточек */
+.tournaments-grid-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin-bottom: 60px;
+}
+
+/* Карточка турнира */
+.tournament-card {
+  display: flex;
+  background: rgba(34, 34, 34, 0.8);
+  border: 1px solid #464646;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  min-height: 180px;
+  max-height: 200px;
+}
+
+.tournament-card:hover {
+  border-color: #ff6600;
+  box-shadow: 0 10px 30px rgba(255, 102, 0, 0.15);
+  transform: translateY(-3px);
+}
+
+/* Левая часть - изображение */
+.card-image-section {
+  flex: 0 0 320px;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-tournament-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Строка с названием и статусом */
+.card-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  gap: 15px;
+}
+
+/* Бейдж статуса */
+.card-status-badge {
+  flex-shrink: 0;
+}
+
+.card-status-badge span {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.card-status-badge span {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.status-upcoming {
+  background: rgba(255, 152, 0, 0.2);
+  color: #ff9800;
+  border: 1px solid rgba(255, 152, 0, 0.4);
+}
+
+.status-registration {
+  background: rgba(33, 150, 243, 0.2);
+  color: #2196f3;
+  border: 1px solid rgba(33, 150, 243, 0.4);
+}
+
+.status-live {
+  background: rgba(244, 67, 54, 0.2);
+  color: #f44336;
+  border: 1px solid rgba(244, 67, 54, 0.4);
+  animation: pulse 2s infinite;
+}
+
+.status-completed {
+  background: rgba(76, 175, 80, 0.2);
+  color: #4caf50;
+  border: 1px solid rgba(76, 175, 80, 0.4);
+}
+
+/* Правая часть - контент */
+.card-content-section {
+  flex: 1;
+  padding: 20px 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-header {
+  margin-bottom: 15px;
+}
+
+/* Строка со статистикой и партнерами */
+.card-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-top: 1px solid rgba(70, 70, 70, 0.3);
+}
+
+.card-tournament-name {
+  color: #f6efd9;
+  font-family: 'BlackOpsOne', 'BlackOpsOneType', sans-serif;
+  font-size: 26px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.card-date {
+  color: #ff6600;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.card-game-league {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-game {
+  color: #a1a194;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.card-divider {
+  color: #5b605f;
+  font-size: 16px;
+}
+
+.card-league {
+  color: #ff6600;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Montserrat', sans-serif
+}
+
+/* Статистика (левая часть строки) */
+.card-stats {
+  display: flex;
+  gap: 25px;
+  flex: 1;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-label {
+  color: #a1a194;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  color: #f6efd9;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Партнеры (правая часть строки) */
+.card-partners {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.partners-label {
+  color: #5b605f;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.partners-logos {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+.partner-logo {
+  height: 50px;
+  object-fit: contain;
+  background: transparent;
+  opacity: 0.5;
+}
+
+
+/* Кнопки действий */
+.card-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.btn-view-details,
+.btn-join-tournament {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.btn-view-details {
+  background: rgba(70, 70, 70, 0.5);
+  color: #f6efd9;
+  border: 1px solid #464646;
+  flex: 1;
+}
+
+.btn-view-details:hover {
+  background: rgba(70, 70, 70, 0.7);
+  border-color: #5b605f;
+}
+
+.btn-join-tournament {
+  background: linear-gradient(135deg, #ff6600, #e55d00);
+  color: white;
+  flex: 2;
+}
+
+.btn-join-tournament:hover {
+  background: linear-gradient(135deg, #e55d00, #cc5400);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 102, 0, 0.2);
+}
+
+/* Демо секция с примером турнира */
+.tournament-demo-section {
+  margin-top: 60px;
+  padding-top: 40px;
+  border-top: 1px solid rgba(70, 70, 70, 0.3);
+}
+
+.tournament-demo-section h2 {
+  color: #ff6600;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 24px;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+/* Анимация пульсации для LIVE статуса */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(244, 67, 54, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(244, 67, 54, 0);
+  }
+}
+
+/* Адаптивность */
+@media (max-width: 1100px) {
+  .card-image-section {
+    flex: 0 0 240px;
+  }
+  
+  .card-tournament-name {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 900px) {
+  .tournament-card {
+    flex-direction: column;
+    max-height: none;
+    min-height: auto;
+  }
+  
+  .card-image-section {
+    flex: 0 0 180px;
+  }
+  
+  .card-content-section {
+    padding: 20px;
+  }
+  
+  .card-stats {
+    gap: 15px;
+  }
+  
+  .card-actions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .tournaments-header h1 {
+    font-size: 32px;
+  }
+  
+  .tournaments-header p {
+    font-size: 16px;
+  }
+  
+  .card-image-section {
+    flex: 0 0 150px;
+  }
+  
+  .card-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .card-stats {
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 0;
+  }
+  
+  .card-partners {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tournaments-page {
+    padding: 15px;
+  }
+  
+  .tournaments-header {
+    margin: 20px 0 30px;
+  }
+  
+  .tournaments-header h1 {
+    font-size: 28px;
+  }
+  
+  .card-content-section {
+    padding: 15px;
+  }
+  
+  .card-tournament-name {
+    font-size: 16px;
+  }
+  
+  .btn-view-details,
+  .btn-join-tournament {
+    padding: 12px;
+    font-size: 14px;
+  }
 }

@@ -30,11 +30,6 @@ const useUserStatus = (userId = null) => {
         if (!error && data) {
           // Определяем статус ТОЛЬКО по времени
           const actuallyOnline = checkOnlineByTime(data.last_online);
-          console.log('🔍 Статус по времени:', { 
-            userId, 
-            last_online: data.last_online,
-            actuallyOnline 
-          });
           setIsUserOnline(actuallyOnline);
         }
       } catch (error) {

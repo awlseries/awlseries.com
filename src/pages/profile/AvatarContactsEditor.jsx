@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+  // Блок АВАТАРА и Контактов
+import React, { useState, useEffect } from 'react';
 import { supabase } from '../../supabase';
 import { showSingleNotification } from '/utils/notifications';
+import { useLanguage } from '/utils/language-context.jsx';
 
-const AvatarContactsEditor = ({ userData, onAvatarUpdate }) => {
+const AvatarContactsEditor = ({ userData, onAvatarUpdate, isContactsModalOpen, onCloseContactsModal }) => {
   const [isEditingAvatar, setIsEditingAvatar] = useState(false);
   const [avatarFile, setAvatarFile] = useState(null);
   const [avatarPreview, setAvatarPreview] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
+  const { t } = useLanguage();
 
   // Валидация файла
   const validateFile = (file) => {
@@ -78,7 +81,6 @@ const createOptimizedPreview = (file) => {
       setAvatarPreview(previewUrl);
       setIsEditingAvatar(true);
     } catch (error) {
-      console.error('Ошибка создания preview:', error);
       showSingleNotification('✗ Ошибка обработки изображения', true);
     }
   };
@@ -212,7 +214,197 @@ const handleAvatarRemove = async () => {
     setAvatarPreview(null);
   };
 
+  // Функция обработки кликов по контактам
+  const handleContactClick = (platform, contact) => {
+    if (!contact) return;
+    
+    let url = '';
+    
+    switch (platform) {
+      case 'steam':
+        if (contact.startsWith('https://') || contact.startsWith('http://')) {
+          url = contact;
+        } else {
+          url = `https://steamcommunity.com/id/${contact}`;
+        }
+        break;
+        
+      case 'telegram':
+        if (contact.startsWith('https://') || contact.startsWith('http://') || contact.startsWith('@')) {
+          url = contact.startsWith('@') ? `https://t.me/${contact.slice(1)}` : contact;
+        } else {
+          url = `https://t.me/${contact}`;
+        }
+        break;
+        
+      case 'whatsapp':
+        const cleanPhone = contact.replace(/\D/g, '');
+        
+        if (cleanPhone.length < 10) {
+          showSingleNotification('✗ Неверный формат номера WhatsApp', true);
+          return;
+        }
+        
+        let formattedPhone = cleanPhone;
+        if (formattedPhone.startsWith('8') && formattedPhone.length === 11) {
+          formattedPhone = '7' + formattedPhone.slice(1);
+        }
+        
+        url = `https://wa.me/${formattedPhone}`;
+        break;
+        
+      default:
+        return;
+    }
+    
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
+  // Компонент модального окна контактов
+  const ContactsModal = () => {
+    const [localContactsData, setLocalContactsData] = useState({
+      steam: '',
+      telegram: '',
+      whatsapp: ''
+    });
+
+    useEffect(() => {
+      if (isContactsModalOpen) {
+        setLocalContactsData({
+          steam: userData?.contacts?.steam || '',
+          telegram: userData?.contacts?.telegram || '',
+          whatsapp: userData?.contacts?.whatsapp || ''
+        });
+      }
+    }, [isContactsModalOpen, userData?.contacts]);
+
+    const handleInputChange = (field, value) => {
+      setLocalContactsData(prev => ({...prev, [field]: value}));
+    };
+
+    const handleSaveContacts = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          showSingleNotification(t('notifications.userNotAuthenticated'), true);
+          return;
+        }
+
+        const { error } = await supabase
+          .from('users')
+          .update({
+            contacts: localContactsData,
+            lastUpdate: new Date().toISOString()
+          })
+          .eq('id', user.id);
+
+        if (error) throw error;
+
+        onAvatarUpdate({ contacts: localContactsData });
+        
+        onCloseContactsModal();
+        showSingleNotification(t('contactsModal.saveSuccess'));
+      } catch (error) {
+        showSingleNotification(t('contactsModal.saveError'), true);
+      }
+    };
+
+    if (!isContactsModalOpen) return null;
+
+    return (
+      <div className="modal-overlay">
+        <div className="modal-content contacts-modal">
+          <div className="modal-header">
+            <h3 className="modal-title-contacts">{t('contactsModal.title')}</h3>
+          </div>
+          
+          <div className="modal-body">
+            <div className="contacts-inputs-container">
+              <div className="contact-input-group">
+                <div className="contact-input-label">
+                  <span>Steam</span>
+                </div>
+                <input
+                  type="text"
+                  className="contact-input"
+                  value={localContactsData.steam}
+                  onChange={(e) => handleInputChange('steam', e.target.value)}
+                  placeholder={t('contactsModal.steamPlaceholder')}
+                />
+              </div>
+
+              <div className="contact-input-group">
+                <div className="contact-input-label">
+                  <span>Telegram</span>
+                </div>
+                <input
+                  type="text"
+                  className="contact-input"
+                  value={localContactsData.telegram}
+                  onChange={(e) => handleInputChange('telegram', e.target.value)}
+                  placeholder={t('contactsModal.telegramPlaceholder')}
+                />
+              </div>
+
+              <div className="contact-input-group">
+                <div className="contact-input-label">
+                  <span>WhatsApp</span>
+                </div>
+                <input
+                  type="text"
+                  className="contact-input"
+                  value={localContactsData.whatsapp}
+                  onChange={(e) => handleInputChange('whatsapp', e.target.value)}
+                  placeholder={t('contactsModal.whatsappPlaceholder')}
+                />
+              </div>
+            </div>
+          </div>
+          
+          <div className="modal-actions">
+            <button className="cancel-btn" onClick={onCloseContactsModal}> {t('contactsModal.cancel')}</button>
+            <button className="save-contacts-btn" onClick={handleSaveContacts}> {t('contactsModal.save')}</button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
+    <>
+      <div className="fade-block-container">
+        <h3 className="section-title">{t('contacts')}</h3>
+        <div className="contacts-profile-block">
+          <div className="contacts-container">
+            <div 
+              className={`contact-block ${!userData?.contacts?.steam ? 'disabled' : ''}`}
+              onClick={() => userData?.contacts?.steam && handleContactClick('steam', userData.contacts.steam)}
+              title={userData?.contacts?.steam ? t('goToSteam') : t('contactNotSet')}
+            >
+              <span className="contact-name">Steam</span>
+              <img src="/images/icons/icon-profile-steam.png" alt="Steam" className="contact-icon"/>
+            </div>
+            
+            <div 
+              className={`contact-block middle ${!userData?.contacts?.telegram ? 'disabled' : ''}`}
+              onClick={() => userData?.contacts?.telegram && handleContactClick('telegram', userData.contacts.telegram)}
+              title={userData?.contacts?.telegram ? t('goToTelegram') : t('contactNotSet')}
+            >
+              <span className="contact-name">Telegram</span>
+              <img src="/images/icons/icon-profile-telegram.png" alt="Telegram" className="contact-icon"/>
+            </div>
+            
+            <div 
+              className={`contact-block ${!userData?.contacts?.whatsapp ? 'disabled' : ''}`}
+              onClick={() => userData?.contacts?.whatsapp && handleContactClick('whatsapp', userData.contacts.whatsapp)}
+              title={userData?.contacts?.whatsapp ? t('goToWhatsApp') : t('contactNotSet')}
+            >
+              <span className="contact-name">WhatsApp</span>
+              <img src="/images/icons/icon-profile-whatsup.png" alt="WhatsApp" className="contact-icon"/>
+            </div>
+          </div>
+        </div>
+
     <div className="fade-block">
       <div className="avatar-container">
         {isEditingAvatar ? (
@@ -269,22 +461,16 @@ const handleAvatarRemove = async () => {
   
   {/* Кнопка удаления - показывается только при наведении И если есть аватар */}
   {userData?.avatar_url && (
-    <button 
-      className="avatar-remove-btn"
-      onClick={handleAvatarRemove}
-      title="Удалить фото"
-    >
-      <img 
-        src="/images/icons/icon-redactor2.png" 
-        alt="Удалить фото"
-        className="avatar-delete-btn"
-      />
+    <button className="avatar-remove-btn" onClick={handleAvatarRemove} title="Удалить фото">
+      <img src="/images/icons/icon-redactor2.png" alt="Удалить фото" className="avatar-delete-btn"/>
     </button>
   )}
 </div>
         )}
       </div>
     </div>
+    </div>
+    <ContactsModal /></>
   );
 };
 

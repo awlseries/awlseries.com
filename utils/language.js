@@ -179,7 +179,17 @@ export const translations = {
       feedback_error: 'Ошибка отправки',
       logout_success: "Вы успешно вышли из системы",
       authorization_required: "✗ Для доступа к профилю требуется авторизация",
-      logout_error: "Ошибка при выходе из системы"
+      logout_error: "Ошибка при выходе из системы",
+      authorizationRequired: "✗ Требуется авторизация",
+      profileLoadError: "✗ Ошибка загрузки профиля",
+      profileNotFound: "✗ Профиль не найден",
+      userNotAuthenticated: "✗ Пользователь не авторизован",
+      signOutSuccess: "✗ Вы вышли из системы",
+      emailNotVerified: "✗ Подтвердите email для доступа к профилю",
+      classChanged: "✓ Класс изменен на {className}",
+      classChangeError: "✗ Ошибка сохранения класса",
+      deleteAccountSuccess: "✓ Аккаунт успешно удален",
+      deleteAccountError: "✗ Ошибка удаления аккаунта"
     },
 
     // СТРАНИЦА ТРАНСФЕРОВ
@@ -189,7 +199,8 @@ export const translations = {
     details_back_button: 'Свернуть',
     details_button: 'Детали',
 
-    // СТРАНИЦА ПРОФИЛЯ
+    // ------------------------------------ СТРАНИЦА ПРОФИЛЯ --------------------------------------
+    // Блок профиля "Игрок" (Статистика)
     stats: {
       notAvailable: "Н/д",
       kdRatio: "У/С",
@@ -198,8 +209,274 @@ export const translations = {
       favoriteWeapon: "Любимое оружие",
       wins: "Побед",
       losses: "Поражений",
-      inDevelopment: "В разработке"
+      inDevelopment: "В разработке",
+      title: "Статистика",
+      loadingStats: "Загрузка статистики...",
+      noPublicStats: "Игрок еще не добавил статистику",
+      noStats: {
+        message1: "Загрузите скриншот",
+        message1_2: "игровой статистики с ресурса",
+        message2: "Система автоматически определит необходимые данные.",
+        message3: "Никнейм, указанный в профиле и на скриншоте, должны быть идентичными.",
+        uploadButton: "Загрузить данные",
+        uploading: "Загрузка...",
+        example: "пример",
+        processing: "Обработка...",
+        noNickname: "Укажите никнейм в профиле"
+      },
+      upload: {
+        button: "Обновить данные",
+        uploading: "Загрузка...",
+        processing: "Обработка...",
+        fileFormat: "Формат файла должен быть PNG",
+        fileSize: "Размер файла не должен превышать 1MB",
+        noNickname: "Не указан никнейм в профиле",
+        success: "Статистика успешно обновлена!",
+        error: "Ошибка проверки статистики",
+        exampleTitle: "Пример скриншота статистики",
+        exampleHint: "Убедитесь, что ваш никнейм виден на скриншоте"
+      },
+      banWarning: "За подделку статистики игрока предусмотрен перманентный бан",
+      kills: "Убийств",
+      assists: "Помощи",
+      rank: "Ранг",
+      matches: "Матчи",
+      kd: "К/Д",
+      playTimeValue: "ч"
     },
+
+    // Блок профиля "Игрок" (Изменение никнейма)
+    nickname: {
+      edit: "Редактировать никнейм",
+      save: "Сохранить",
+      cancel: "Отмена",
+      placeholder: "Введите никнейм",
+      empty: "Ник не указан",
+      required: "Введите никнейм",
+      noSpaces: "Никнейм не должен содержать пробелы",
+      minLength: "Никнейм должен содержать минимум 2 символа",
+      maxLength: "Никнейм не должен превышать 20 символов",
+      sameAsCurrent: "Это ваш текущий никнейм",
+      alreadyExists: "Никнейм уже занят",
+      changeSuccess: "Никнейм успешно изменен! Следующее изменение возможно через 30 дней",
+      changeError: "Ошибка сохранения никнейма",
+      checkError: "Ошибка проверки никнейма",
+      nextChangeIn: "Следующее изменение через {days} дней",
+      notAuthenticated: "Пользователь не авторизован",
+      cooldown: "д"
+    },
+    
+    // Блок профиля "Игрок" (общие данные)
+    player: {
+      player: "Игрок",
+      class: "Класс",
+      country: "Страна",
+      age: "Возраст",
+      team: "Команда",
+      selectCountry: "Выберите страну",
+      countrySet: "Страна установлена",
+      setAge: "Изменить",
+      ageSet: "Возраст установлен",
+      freeAgent: "Свободный агент",
+      online: "Онлайн",
+      offline: "Оффлайн",
+      fullnameNotSet: "Имя не указано"
+    },
+
+    // Блок профиля "Игрок" (возраст)
+    age: {
+      years: "{count} {form}",
+      yearForms: {
+        year: "год",
+        years2_4: "года",
+        years5_20: "лет"
+      },
+      notSet: "Не указан",
+      setAge: "Изменить",
+      ageSet: "Возраст установлен",
+      minAge: "Минимальный возраст - 16 лет"
+    },
+
+    // Блок профиля "Игрок" (модалка изменения возраста)
+    profile: {
+  setBirthDate: "Выберите дату рождения",
+  ageSetOnce: "Возраст можно установить только один раз!",
+  day: "День",
+  month: "Месяц",
+  year: "Год",
+  agePreview: "Возраст:",
+  lessThan16: "Меньше 16 лет",
+  cancel: "Отмена",
+  save_age_notification: "✓ Возраст установлен",
+  error_age_notification: "✗ Ошибка сохранения возраста",
+  save: "Сохранить",
+  freeAgent: "Свободный агент"
+},
+
+// Блок профиля "Игрок" (Модалка выбора стран)
+countryPicker: {
+  modalTitle: "Выберите страну",
+  searchPlaceholder: "Поиск страны...",
+  countryNotice: "Страну можно выбрать только один раз",
+  cancelButton: "Отмена",
+  notifications: {
+    countryChanged: "✓ Страна изменена на {countryName}",
+    userNotFound: "✗ Пользователь не найден",
+    saveError: "✗ Ошибка сохранения страны"
+  }
+},
+
+countries: {
+    ru: "Россия",
+    us: "США",
+    de: "Германия",
+    fr: "Франция",
+    gb: "Великобритания",
+    jp: "Япония",
+    kr: "Корея",
+    cn: "Китай",
+    br: "Бразилия",
+    in: "Индия",
+    ca: "Канада",
+    au: "Австралия",
+    it: "Италия",
+    es: "Испания",
+    ua: "Украина",
+    kz: "Казахстан",
+    by: "Беларусь",
+    pl: "Польша",
+    tr: "Турция",
+    nl: "Нидерланды",
+    se: "Швеция",
+    no: "Норвегия",
+    fi: "Финляндия",
+    dk: "Дания",
+    mx: "Мексика",
+    id: "Индонезия",
+    sa: "Саудовская Аравия",
+    za: "Южная Африка",
+    eg: "Египет",
+    ar: "Аргентина",
+    pt: "Португалия",
+    gr: "Греция",
+    cz: "Чехия",
+    ch: "Швейцария",
+    at: "Австрия",
+    be: "Бельгия",
+    il: "Израиль",
+    th: "Таиланд",
+    vn: "Вьетнам",
+    my: "Малайзия",
+    sg: "Сингапур",
+    ph: "Филиппины",
+    ie: "Ирландия",
+    hu: "Венгрия",
+    ro: "Румыния",
+    bg: "Болгария",
+    hr: "Хорватия",
+    rs: "Сербия",
+    sk: "Словакия",
+    si: "Словения",
+    ee: "Эстония",
+    lv: "Латвия",
+    lt: "Литва",
+    is: "Исландия",
+    lu: "Люксембург",
+    mt: "Мальта",
+    ae: "Объединенные Арабские Эмираты",
+    pk: "Пакистан",
+    ng: "Нигерия",
+    ir: "Иран",
+    iq: "Ирак",
+    af: "Афганистан",
+    ke: "Кения",
+    et: "Эфиопия",
+    co: "Колумбия",
+    pe: "Перу",
+    ve: "Венесуэла",
+    cl: "Чили",
+    nz: "Новая Зеландия",
+    bd: "Бангладеш",
+    vg: "Виетнам",
+    ma: "Марокко",
+    tn: "Тунис",
+    dz: "Алжир",
+    lb: "Ливан",
+    jo: "Иордания"
+  },
+
+  // Блок профиля "Игрок" (Награды MVP)
+  mvpAwards: {
+      title: "Награды MVP",
+      noAwards: {
+        title: "Наград пока нет",
+        subtitle: "Побеждайте в турнирах, чтобы получить первые награды",
+        iconAlt: "без наград"
+      },
+      award: {
+        tournament: "Турнир",
+        medalType: "Медаль"
+      },
+      loading: "Загрузка наград MVP..."
+    },
+
+      division: "Дивизион",
+      calibration: "Калибровка",
+      contacts: "Контакты",
+      achievements: "Достижения",
+      contactNotSet: "Контакт не указан",
+      goToSteam: "Перейти в Steam",
+      goToTelegram: "Перейти в Telegram",
+      goToWhatsApp: "Перейти в WhatsApp",
+
+      // Блок профиля "Игрок" (Меню)
+      actionButtons: {
+        contacts: "Контакты",
+        team: "Команда",
+        tournaments: "Турниры",
+        privacy: "Приватность",
+        deleteAccount: "Удалить аккаунт",
+        addToFavorites: "В избранное",
+        report: "Пожаловаться",
+        block: "Заблокировать",
+        message: "Написать сообщение",
+        inviteToTeam: "Пригласить в команду"
+      },
+      comingSoon: "Скоро",
+
+      // Блок профиля "Игрок" (Модалка удаления аккаунта)
+      deleteAccount: {
+        title: "Удаление аккаунта",
+        warning: "Вы уверены, что хотите удалить свой аккаунт?",
+        consequences: "Это действие приведет к:",
+        listItem1: "Полному удалению всех ваших данных",
+        listItem2: "Удалению статистики и достижений",
+        listItem3: "Удалению информации о команде (если вы в ней состоите)",
+        listItem4: "Потере доступа ко всем турнирам",
+        finalWarning: "Это действие нельзя отменить!",
+        cancel: "Отмена",
+        confirm: "Да, удалить все данные"
+      },
+
+      // Блок профиля "Игрок" (Модалка контактов)
+      contactsModal: {
+        title: "Редактирование контактов",
+        steamPlaceholder: "Введите Steam никнейм",
+        telegramPlaceholder: "Введите никнейм Telegram без @",
+        whatsappPlaceholder: "Введите номер с кодом страны без +",
+        cancel: "Отмена",
+        save: "Сохранить",
+        saveSuccess: "✓ Контакты сохранены",
+        saveError: "✗ Ошибка сохранения контактов"
+      },
+      
+      // Блок профиля "Игрок" (Классы)
+      classes: {
+        assault: "Штурмовик",
+        medic: "Медик",
+        recon: "Разведчик",
+        engineer: "Инженер"
+      },
 
     // СТРАНИЦА РЕЙТИНГА
     rating: {
@@ -252,7 +529,7 @@ export const translations = {
     // ТИКЕРЫ
     ticker: {
       message1: "Открыт набор в команду дизайна и back/front-end разработки! Присоединяйся к Arena Warborn League",
-      message2: "Осенью стартует первая серия турниров выходного дня « WKND CHALLENGE Series 24/25 »",
+      message2: "Осенью стартует первая серия турниров выходного дня « WKND CHALLENGE Series 25/26 »",
       message3: "Все вопросы сотрудничества через форму обратной связи", 
       message4: "Ищешь команду? В разделе 'Трансферы' найдешь напарников"
     },
@@ -514,7 +791,17 @@ verification_success: {
       feedback_error: 'Sending error',
       logout_success: "You have successfully logged out",
       authorization_required: "✗ Authorization is required to access the profile",
-      logout_error: "Logout error"
+      logout_error: "Logout error",
+      authorizationRequired: "✗ Authorization required",
+      profileLoadError: "✗ Profile loading error",
+      profileNotFound: "✗ Profile not found",
+      userNotAuthenticated: "✗ User not authenticated",
+      signOutSuccess: "✗ You have signed out",
+      emailNotVerified: "✗ Confirm email to access profile",
+      classChanged: "✓ Class changed to {className}",
+      classChangeError: "✗ Error saving class",
+      deleteAccountSuccess: "✓ Account successfully deleted",
+      deleteAccountError: "✗ Error deleting account"
     },
 
     // HOME PAGE
@@ -524,17 +811,283 @@ verification_success: {
     details_back_button: 'Back',
     details_button: 'Details',
 
-    // PROFILE PAGE
+    // -------------------------------------------- PROFILE PAGE ----------------------------------
+    // Block "Player" (Статистика)
     stats: {
       notAvailable: "N/a",
-  kdRatio: "K/D Ratio",
-  winRate: "Win Rate", 
-  playTime: "Play Time",
-  favoriteWeapon: "Favorite Weapon",
-  wins: "Wins",
-  losses: "Loses",
-  inDevelopment: "In Development"
+      kdRatio: "K/D Ratio",
+      winRate: "Win Rate", 
+      playTime: "Play Time",
+      favoriteWeapon: "Favorite Weapon",
+      wins: "Wins",
+      losses: "Loses",
+      inDevelopment: "In Development",
+      title: "Statistics",
+      loadingStats: "Loading statistics...",
+      noPublicStats: "No information available",
+      noStats: {
+        message1: "Upload a screenshot",
+        message1_2: "of game statistics from the resource",
+        message2: "The system will automatically determine the necessary data.",
+        message3: "The nickname specified in the profile and in the screenshot must be identical.",
+        uploadButton: "Upload data",
+        uploading: "Uploading...",
+        processing: "Processing...",
+        example: "example",
+        noNickname: "Specify nickname in profile"
+      },
+      upload: {
+        button: "Update data",
+        uploading: "Uploading...",
+        processing: "Processing...",
+        fileFormat: "File format must be PNG",
+        fileSize: "File size must not exceed 1MB",
+        noNickname: "Nickname not specified in profile",
+        success: "Statistics successfully updated!",
+        error: "Statistics verification error",
+        exampleTitle: "Example statistics screenshot",
+        exampleHint: "Make sure your nickname is visible in the screenshot"
+      },
+      banWarning: "Forgery of player statistics results in a permanent ban",
+      kills: "Kills",
+      assists: "Assists",
+      rank: "Rank",
+      matches: "Matches",
+      kd: "K/D",
+      playTimeValue: "h"
     },
+    
+    // Block "Player" (никнейм)
+    nickname: {
+      edit: "Edit nickname",
+      save: "Save",
+      cancel: "Cancel",
+      placeholder: "Enter nickname",
+      empty: "Nickname not set",
+      required: "Enter nickname",
+      noSpaces: "Nickname should not contain spaces",
+      minLength: "Nickname must contain at least 2 characters",
+      maxLength: "Nickname should not exceed 20 characters",
+      sameAsCurrent: "This is your current nickname",
+      alreadyExists: "Nickname already taken",
+      changeSuccess: "Nickname successfully changed! Next change possible in 30 days",
+      changeError: "Error saving nickname",
+      checkError: "Error checking nickname",
+      nextChangeIn: "Next change in {days} days",
+      notAuthenticated: "User not authenticated",
+      cooldown: "d"
+    },
+    
+    // Block "Player" (общие настройки)
+    player: {
+      player: "Player",
+      class: "Class",
+      country: "Country",
+      age: "Age",
+      team: "Team",
+      selectCountry: "Select country",
+      countrySet: "Country is set",
+      setAge: "Set age",
+      ageSet: "Age is set",
+      freeAgent: "Free Agent",
+      online: "Online",
+      offline: "Offline",
+      fullnameNotSet: "Name not specified"
+    },
+
+    // Block "Player" (возраст)
+    age: {
+      years: "{count} {form}",
+      yearForms: {
+        year: "year",
+        years: "years"
+      },
+      notSet: "Not specified",
+      setAge: "Set age",
+      ageSet: "Age is set",
+      minAge: "Minimum age - 16 years"
+    },
+
+      // Block "Player" (модалка изменения возраста)
+    profile: {
+      setBirthDate: "Select Date of Birth",
+      ageSetOnce: "Age can be set only once!",
+      day: "Day",
+      month: "Month", 
+      year: "Year",
+      agePreview: "Age:",
+      lessThan16: "Less than 16 years",
+      cancel: "Cancel",
+      save_age_notification: "✓ The age is set",
+      error_age_notification: "✗ Age saving error",
+      save: "Save",
+      freeAgent: "Free Agent"
+    },
+
+    // Модалка выбора стран ENG
+countryPicker: {
+  modalTitle: "Select country",
+  searchPlaceholder: "Search country...",
+  countryNotice: "Country can be selected only once",
+  cancelButton: "Cancel",
+  notifications: {
+    countryChanged: "✓ Country changed to {countryName}",
+    userNotFound: "✗ User not found",
+    saveError: "✗ Error saving country"
+  }
+},
+
+countries: {
+    ru: "Russia",
+    us: "USA",
+    de: "Germany",
+    fr: "France",
+    gb: "United Kingdom",
+    jp: "Japan",
+    kr: "South Korea",
+    cn: "China",
+    br: "Brazil",
+    in: "India",
+    ca: "Canada",
+    au: "Australia",
+    it: "Italy",
+    es: "Spain",
+    ua: "Ukraine",
+    kz: "Kazakhstan",
+    by: "Belarus",
+    pl: "Poland",
+    tr: "Turkey",
+    nl: "Netherlands",
+    se: "Sweden",
+    no: "Norway",
+    fi: "Finland",
+    dk: "Denmark",
+    mx: "Mexico",
+    id: "Indonesia",
+    sa: "Saudi Arabia",
+    za: "South Africa",
+    eg: "Egypt",
+    ar: "Argentina",
+    pt: "Portugal",
+    gr: "Greece",
+    cz: "Czech Republic",
+    ch: "Switzerland",
+    at: "Austria",
+    be: "Belgium",
+    il: "Israel",
+    th: "Thailand",
+    vn: "Vietnam",
+    my: "Malaysia",
+    sg: "Singapore",
+    ph: "Philippines",
+    ie: "Ireland",
+    hu: "Hungary",
+    ro: "Romania",
+    bg: "Bulgaria",
+    hr: "Croatia",
+    rs: "Serbia",
+    sk: "Slovakia",
+    si: "Slovenia",
+    ee: "Estonia",
+    lv: "Latvia",
+    lt: "Lithuania",
+    is: "Iceland",
+    lu: "Luxembourg",
+    mt: "Malta",
+    ae: "United Arab Emirates",
+    pk: "Pakistan",
+    ng: "Nigeria",
+    ir: "Iran",
+    iq: "Iraq",
+    af: "Afghanistan",
+    ke: "Kenya",
+    et: "Ethiopia",
+    co: "Colombia",
+    pe: "Peru",
+    ve: "Venezuela",
+    cl: "Chile",
+    nz: "New Zealand",
+    bd: "Bangladesh",
+    vg: "Vietnam",
+    ma: "Morocco",
+    tn: "Tunisia",
+    dz: "Algeria",
+    lb: "Lebanon",
+    jo: "Jordan"
+  },
+
+  // Block MVP Awards
+    mvpAwards: {
+      title: "MVP Awards",
+      noAwards: {
+        title: "No awards yet",
+        subtitle: "Win tournaments to get your first awards",
+        iconAlt: "no awards"
+      },
+      award: {
+        tournament: "Tournament",
+        medalType: "Medal"
+      },
+      loading: "Loading MVP awards..."
+    },
+
+      division: "Division",
+      calibration: "Calibration",
+      contacts: "Contacts",
+      achievements: "Achievements",
+      contactNotSet: "Contact not set",
+      goToSteam: "Go to Steam",
+      goToTelegram: "Go to Telegram",
+      goToWhatsApp: "Go to WhatsApp",
+
+      // Block Action buttons (MENU)
+      actionButtons: {
+        contacts: "Contacts",
+        team: "Team",
+        tournaments: "Tournaments",
+        privacy: "Privacy",
+        deleteAccount: "Delete account",
+        addToFavorites: "Add to favorites",
+        report: "Report",
+        block: "Block",
+        message: "Message",
+        inviteToTeam: "Invite to team"
+      },
+      comingSoon: "Soon",
+
+      // PROFILE (Delete account modal)
+      deleteAccount: {
+        title: "Delete Account",
+        warning: "Are you sure you want to delete your account?",
+        consequences: "This action will lead to:",
+        listItem1: "Complete deletion of all your data",
+        listItem2: "Deletion of statistics and achievements",
+        listItem3: "Deletion of team information (if you are in a team)",
+        listItem4: "Loss of access to all tournaments",
+        finalWarning: "This action cannot be undone!",
+        cancel: "Cancel",
+        confirm: "Yes, delete all data"
+      },
+      
+      // PROFILE (Contacts modal)
+      contactsModal: {
+        title: "Edit Contacts",
+        steamPlaceholder: "Enter Steam nickname",
+        telegramPlaceholder: "Enter Telegram username without @",
+        whatsappPlaceholder: "Enter phone number with country code without +",
+        cancel: "Cancel",
+        save: "Save",
+        saveSuccess: "✓ Contacts saved",
+        saveError: "✗ Error saving contacts"
+      },
+      
+      // Block "Player" (classes)
+      classes: {
+        assault: "Assault",
+        medic: "Medic",
+        recon: "Recon",
+        engineer: "Engineer"
+      },
 
     // TRANSFERS PAGE
     freeAgents: 'Free Agents',
@@ -603,7 +1156,7 @@ verification_success: {
     // TICKERS
     ticker: {
       message1: "Open recruitment for design and back/front-end development team! Join Arena Warborn League",
-      message2: "The first series of weekend tournaments « WKND CHALLENGE Series 24/25 » starts in autumn",
+      message2: "The first series of weekend tournaments « WKND CHALLENGE Series 25/26 » starts in autumn",
       message3: "All cooperation questions through the feedback form",
       message4: "Looking for a team? Find partners in the 'Transfers' section"
     },

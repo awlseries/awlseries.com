@@ -83,7 +83,7 @@ const TeamHeader = ({ team, userRole, captainName }) => {
             </div>
             <div className="stat-item-team">
               <span className="stat-label-team">Рейтинг</span>
-              <span className="stat-value-team">#{team.rating || ' /'}</span>
+              <span className="stat-value-team">#{team.rating || ''}</span>
             </div>
             <div className="stat-item-team">
               <span className="stat-label-team">Очки</span>

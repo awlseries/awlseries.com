@@ -12,7 +12,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: 15px;
 }
 
 .spinner-circle {
@@ -38,7 +38,6 @@
 }
 
 .loading-container p {
-  margin-top: 10px;
   color: #666;
   font-family: 'Montserrat', sans-serif;
   font-size: 12px;

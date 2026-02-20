@@ -1,0 +1,77 @@
+/* В ProfileInfo.css добавьте: */
+
+/* Стили для публичной статистики */
+.player-stats-block.public-stats-block {
+  min-height: auto;
+}
+
+.player-stats-empty.public-profile {
+  background: transparent;
+}
+
+.player-stats-empty.public-profile .no-stats-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 25px 20px;
+}
+
+.player-stats-empty.public-profile .no-stats-icon {
+  width: 40px;
+  height: 40px;
+  opacity: 0.4;
+  filter: brightness(0) invert(0.7);
+}
+
+.player-stats-empty.public-profile .no-stats-text {
+  color: #b2ad9c;
+  font-size: 12px;
+  text-align: center;
+  margin: 0;
+}
+
+/* Стили для футера статистики */
+.player-stats-footer {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(178, 173, 156, 0.2);
+}
+
+.player-stat-item.inline {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  padding: 5px 10px;
+}
+
+.player-stat-item.inline .player-stat-label {
+  color: #b2ad9c;
+  font-size: 13px;
+}
+
+.player-stat-item.inline .player-stat-value {
+  color: #f6efd9;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 768px) {
+  .player-stats-footer {
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .player-stat-item.inline {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

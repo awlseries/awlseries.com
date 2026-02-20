@@ -1,17 +1,15 @@
+// Блок предстоящих матчей
 import React, { useState } from 'react';
 import { supabase } from '../../supabase';
 import { showSingleNotification } from '/utils/notifications';
 import { EmptyContacts, EmptyMatches, EmptyUpcomingMatches } from './EmptyState';
 
 const TeamContent = ({ team, userRole }) => {
-  // Проверяем есть ли предстоящие матчи
   const hasUpcomingMatches = team.upcomingMatches && team.upcomingMatches.length > 0;
 
   return (
     <div className="team-content-columns">
-      {/* Левая колонка - теперь пустая, так как контакты и матчи перенесены в Header */}
       <div className="team-left-column">
-        {/* Можно добавить другой контент здесь, если нужно */}
       </div>
       
       {/* Правая колонка - Предстоящие матчи */}

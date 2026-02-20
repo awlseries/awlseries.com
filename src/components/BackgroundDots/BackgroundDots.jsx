@@ -10,7 +10,7 @@ const AdvancedBackgroundDots = () => {
   useEffect(() => {
     const getContentWidth = () => {
       // Ищем ВНУТРЕННИЕ контейнеры контента, а не внешние
-      const content = document.querySelector('.main-content-home, .centered-container, .player-information, .tournament-container, .rating-system');
+      const content = document.querySelector('.main-content-home, .centered-container, .player-information, .tournament-container, .rating-system, .tournament-header-block');
       
       if (content) {
         return content.offsetWidth;
